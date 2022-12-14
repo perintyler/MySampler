@@ -76,7 +76,7 @@ def main():
 
   argument_parser.add_argument('--install-to',
     help = 'the directory where all Piano960 samples will be installed to',
-    default = './Resources/samples'
+    default = './Resources'
   )
 
   argument_parser.add_argument('-v', '--verbose', 
