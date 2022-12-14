@@ -4,3 +4,6 @@
 [submodule "Libraries/JUCE"]
 	path = Libraries/JUCE
 	url = git@github.com:juce-framework/JUCE.git
+[submodule "Resources/Piano960-Sample-Packs"]
+	path = Piano960-Sample-Packs
+	url = git@github.com:perintyler/Piano960-Sample-Packs.git
