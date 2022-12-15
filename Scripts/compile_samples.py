@@ -71,10 +71,10 @@ def main():
 
   argument_parser.add_argument('--sample-packs',
     help = 'a directory containing samples and packs, which will be installed',
-    default = './Resources/Piano960-Sample-Packs'
+    default = './Piano960-Sample-Packs'
   )
 
-  argument_parser.add_argument('--install-to',
+  argument_parser.add_argument('--compile-to',
     help = 'the directory where all Piano960 samples will be installed to',
     default = './Resources'
   )
