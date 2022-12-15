@@ -30,7 +30,7 @@ const int NUM_SAMPLES = []{
 juce::File getRandomSample()
 {
     int sampleID = juce::Random::getSystemRandom().nextInt(NUM_SAMPLES);
-    std::string fileName = "piano960-sample-" + std::to_string(sampleID) + ".wav";
+    std::string fileName = std::to_string(sampleID) + ".wav";
     filesystem::path filePath = filesystem::path { SAMPLES_DIRECTORY } / filesystem::path { fileName };
     return juce::File { filePath.string() };
 }
