@@ -2,7 +2,7 @@
 
 #
 #
-# Utility script for quickly/easily building Piano960 
+# Convenience script for quickly/easily building Piano960 
 #
 #
 
@@ -29,6 +29,7 @@ echo_help_message()
     echo "s   Supress cmake output";
     echo "t   Build and run unit tests";
     echo "i   Add 'install' to the cmake command to install the samples";
+    echo "c   Clean any existing and build the plugin from scratch";
 }
 
 pushd_silently() { command pushd "$@" > /dev/null; }
@@ -96,7 +97,7 @@ make_piano960()
 
 # TODO: support full word options (e.g. --verbose)
 
-make_parameters="" # this gets passed to the 'make' command
+make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
 while getopts "hvscit" option; do

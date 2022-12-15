@@ -22,7 +22,6 @@ PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
 
 PATH_TO_LOG_FILE = PATH_TO_PIANO960_REPO.joinpath('sample-log.json').resolve()
 
-
 def generate_WAV_file_paths(sample_pack_directory, print_details=False) -> Set[pathlib.PosixPath]:
   """returns the absolute path of all WAV files contained anywhere inside the sample pack directory""" 
   sample_paths = set()
