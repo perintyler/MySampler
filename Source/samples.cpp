@@ -14,8 +14,7 @@
 #include <filesystem>
 
 #include "samples.h"
-
-const std::string SAMPLES_DIRECTORY = "/usr/local/share/Piano960/samples";
+#include "paths.h"
 
 namespace filesystem = std::__fs::filesystem; // TODO: investigate why I need to use std::__fs
 
