@@ -13,9 +13,10 @@ import functools
 import operator
 import json
 import argparse
+import random
 from typing import Set
 
-MAX_NUM_SAMPLES = 100
+NUM_SAMPLES = 200 # TODO: make this a command line argument
 
 PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
 
@@ -37,7 +38,8 @@ def generate_WAV_file_paths(sample_pack_directory, print_details=False) -> Set[p
         sample_paths.add(absolute_path)
         num_samples_found_in_directory += 1
 
-    if num_samples_found_in_directory: print(f'found {num_samples_found_in_directory} samples in {path_to_directory}')
+    if print_details and num_samples_found_in_directory: print(
+        f'found {num_samples_found_in_directory} samples in {path_to_directory}')
 
   crawl(sample_pack_directory)
   return sample_paths
@@ -49,33 +51,31 @@ def compile_samples(installation_directory, sample_packs_directory, print_detail
   names will follow this format: `<Sample-Number>.wav`.
   """
   installation_log = {} # name of installed file -> path to the copied audio file
-  sample_iterator = enumerate(generate_WAV_file_paths(sample_packs_directory, print_details=print_details))
-  for sample_number, path_to_sample in sample_iterator:
-    # posix_path = pathlib.Path(path_to_sample)
-    # relative_path = posix_path.relative_to(sample_packs_directory)
-    # assert posix_path.suffix == '.wav'
+  all_samples = generate_WAV_file_paths(sample_packs_directory, print_details=print_details)
+  sample_set = random.sample(sorted(all_samples), NUM_SAMPLES)
+  for sample_number, path_to_sample in enumerate(sample_set):
+    if sample_number >= NUM_SAMPLES: break
     compiled_file_name = f'{sample_number}.wav'
     compiled_file_path = os.path.join(installation_directory, compiled_file_name)
     installation_log[compiled_file_name] = str(path_to_sample)
     # os.symlink(path_to_sample, compiled_file_path)
     shutil.copy2(path_to_sample, compiled_file_path)
-    if print_details: print(f'linking {path_to_sample} to {compiled_file_path}')
-    if sample_number >= MAX_NUM_SAMPLES: break
+    if print_details: print(f'copying {path_to_sample} to {compiled_file_path}')
 
   with open(PATH_TO_LOG_FILE, 'w') as logfile:
     json.dump(installation_log, logfile, indent=4)
     if print_details: print(f'refer to {PATH_TO_LOG_FILE} for sample installation logs')
 
 def main():
-  argument_parser = argparse.ArgumentParser('Piano960 Sample Installation Script')
+  argument_parser = argparse.ArgumentParser('Piano960 Sample Compilation Script')
 
   argument_parser.add_argument('--sample-packs',
-    help = 'a directory containing samples and packs, which will be installed',
-    default = './Piano960-Sample-Packs'
+    help = 'a directory containing samples and packs',
+    default = './Sample-Packs'
   )
 
   argument_parser.add_argument('--compile-to',
-    help = 'the directory where all Piano960 samples will be installed to',
+    help = 'the directory where all Piano960 samples will be compile to',
     default = './Resources'
   )
 
@@ -86,7 +86,7 @@ def main():
 
   args = argument_parser.parse_args()
 
-  installation_directory = str(pathlib.Path(args.install_to).resolve())
+  installation_directory = str(pathlib.Path(args.compile_to).resolve())
   sample_packs_directory = str(pathlib.Path(args.sample_packs).resolve())
   
   if not os.path.exists(installation_directory):
@@ -96,6 +96,6 @@ def main():
     print(f'sample pack path is not a directory ({sample_packs_directory})')
   else:
     compile_samples(installation_directory, args.sample_packs, print_details=args.verbose)
-    print(f'succesfully installed {len(os.listdir(installation_directory))} samples to {installation_directory}')
+    print(f'succesfully compiled {NUM_SAMPLES} samples to {installation_directory}')
 
 if __name__ == '__main__': main()
