@@ -2,11 +2,26 @@
 
 Piano960 is a cross platform audio plugin: a virtual instrument that randomly assigns a unique, random sample to each key on a MIDI keyboard.
 
-Supported Formats: AU, VST, VST3
-
-This is a work in progress.
+__This is a work in progress.__
 
 ![plugin demo GIF](Resources/demo.gif "Piano960 Plugin Demo")
+
+---
+
+<div align="center">
+  <b> Here's a short audio clip demonstrating one example of what the instrument can sound like. </b>
+  <br>
+  <br>
+</div>
+
+https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-ad29-069673584649.mp4
+
+---
+
+## Supported Formats:
+- [AU](https://en.wikipedia.org/wiki/Audio_Units)
+- [VST](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
+- [VST3](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
 
 ## Building the Plugin
 
