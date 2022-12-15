@@ -2,7 +2,7 @@
 
 #
 #
-# Utility script for quickly building Piano960 
+# Utility script for quickly/easily building Piano960 
 #
 #
 
@@ -106,7 +106,7 @@ while getopts "hvscit" option; do
       s) SILENT=true;;                                  # -s : turn on silent mode
       c) CLEAN_BUILD=true;;                             # -c : make clean build
       i) add_make_parameter "install";;                 # -i : install samples
-      t) add_make_parameter "tests"; RUN_TESTS=true;;   # -t : build and run unit tests
+      t) add_make_parameter "unit-tests"; RUN_TESTS=true;;   # -t : build and run unit tests
    esac
 done
 
@@ -127,13 +127,13 @@ elif [ "$CLEAN_BUILD" = true ]; then
     cmake_piano960;
 fi
 
-# 3) --- build and/or run the executable(s) ---
+# 3) --- build the executable(s) ---
 
 make_piano960 $make_parameters;
 
 if [ "$RUN_TESTS" = true ]; then
+    # if -t option was set, run the newly built unit tests 
     $PIANO960_BUILD_DIRECTORY/Tests/unit-tests
-    # /usr/local/bin/Piano/Tests/unit-tests;
 fi
 
 echo_build_message "Successfully built Piano960 to" $PIANO960_BUILD_DIRECTORY;
