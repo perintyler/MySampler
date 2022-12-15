@@ -1,11 +1,5 @@
 project(Source)
 
-if(APPLE)
-        set(TOBANTEAUDIO_SHOULD_COPY TRUE)
-else()
-        set(TOBANTEAUDIO_SHOULD_COPY FALSE)
-endif(APPLE)
-
 juce_add_plugin(Piano960Plugin
     VERSION 0.0.1
     FORMATS AU # VST3
@@ -19,12 +13,7 @@ juce_add_plugin(Piano960Plugin
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS TRUE # Does the editor need keyboard focus?
     VST3_CATEGORIES Instrument Sampler
-    # AU_MAIN_TYPE                              # Should be one or more, separated by spaces, of the following:
-                                                # kAudioUnitType_Effect, kAudioUnitType_FormatConverter, kAudioUnitType_Generator,
-                                                # kAudioUnitType_MIDIProcessor, kAudioUnitType_Mixer, kAudioUnitType_MusicDevice,
-                                                # kAudioUnitType_MusicEffect, kAudioUnitType_OfflineEffect, kAudioUnitType_Output,
-                                                # kAudioUnitType_Panner#     # Should the plugin be installed to a default location after building? 
-    COPY_PLUGIN_AFTER_BUILD TOBANTEAUDIO_SHOULD_COPY # NOTE: Writing to the default install locations might require administrator privileges on Windows.
+    COPY_PLUGIN_AFTER_BUILD APPLE # copy to default plugin location for IOS
 )
 
 set(Piano960Plugin_SOURCES 
