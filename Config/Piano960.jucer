@@ -6,24 +6,24 @@
               pluginFormats="buildAU,buildAUv3,buildVST3" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
               pluginVST3Category="Instrument">
   <MAINGROUP id="gfHjMe" name="Piano960">
-    <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="Source">
-      <FILE id="FOmJth" name="piano.cpp" compile="1" resource="0" file="Source/piano.cpp"/>
-      <FILE id="Y1Ncbs" name="piano.h" compile="0" resource="0" file="Source/piano.h"/>
-      <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="Libraries/AudioFFT/AudioFFT.cpp"/>
-      <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="Libraries/AudioFFT/AudioFFT.h"/>
+    <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="../Source">
+      <FILE id="FOmJth" name="piano.cpp" compile="1" resource="0" file="../Source/piano.cpp"/>
+      <FILE id="Y1Ncbs" name="piano.h" compile="0" resource="0" file="../Source/piano.h"/>
+      <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="../Libraries/AudioFFT/AudioFFT.cpp"/>
+      <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="../Libraries/AudioFFT/AudioFFT.h"/>
       <FILE id="JIvbFF" name="pitch_detection.cpp" compile="1" resource="0"
-            file="Source/pitch_detection.cpp"/>
+            file="../Source/pitch_detection.cpp"/>
       <FILE id="SDBC4B" name="pitch_detection.h" compile="0" resource="0"
-            file="Source/pitch_detection.h"/>
-      <FILE id="iiM5iF" name="samples.cpp" compile="1" resource="0" file="Source/samples.cpp"/>
-      <FILE id="YybXYt" name="samples.h" compile="0" resource="0" file="Source/samples.h"/>
+            file="../Source/pitch_detection.h"/>
+      <FILE id="iiM5iF" name="samples.cpp" compile="1" resource="0" file="../Source/samples.cpp"/>
+      <FILE id="YybXYt" name="samples.h" compile="0" resource="0" file="../Source/samples.h"/>
       <FILE id="gCYTnU" name="plugin_processor.cpp" compile="1" resource="0"
-            file="Source/plugin_processor.cpp"/>
+            file="../Source/plugin_processor.cpp"/>
       <FILE id="Y40Ti4" name="plugin_processor.h" compile="0" resource="0"
-            file="Source/plugin_processor.h"/>
+            file="../Source/plugin_processor.h"/>
       <FILE id="pqTZIR" name="plugin_editor.cpp" compile="1" resource="0"
-            file="Source/plugin_editor.cpp"/>
-      <FILE id="OlBmza" name="plugin_editor.h" compile="0" resource="0" file="Source/plugin_editor.h"/>
+            file="../Source/plugin_editor.cpp"/>
+      <FILE id="OlBmza" name="plugin_editor.h" compile="0" resource="0" file="../Source/plugin_editor.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
@@ -35,18 +35,18 @@
         <CONFIGURATION isDebug="0" name="Release" targetName="Piano960"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../Libraries/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
