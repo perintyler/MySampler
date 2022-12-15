@@ -8,7 +8,7 @@
 
 PROJECT_NAME="Piano960"
 
-PIANO960_REPO=$(dirname $( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) );
+PIANO960_REPO=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd );
 
 PIANO960_BUILD_DIRECTORY=$PIANO960_REPO/build
 
@@ -101,12 +101,12 @@ function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
 while getopts "hvscit" option; do
    case $option in
-      h) echo_help_message; exit;;                      # -h : display help message
-      v) VERBOSE=true;;                                 # -v : turn on verbose mode
-      s) SILENT=true;;                                  # -s : turn on silent mode
-      c) CLEAN_BUILD=true;;                             # -c : make clean build
-      i) add_make_parameter "install";;                 # -i : install samples
-      t) add_make_parameter "unit-tests"; RUN_TESTS=true;;   # -t : build and run unit tests
+      h) echo_help_message; exit;;                          # -h : display help message
+      v) VERBOSE=true;;                                     # -v : turn on verbose mode
+      s) SILENT=true;;                                      # -s : turn on silent mode
+      c) CLEAN_BUILD=true;;                                 # -c : make clean build
+      i) add_make_parameter "install";;                     # -i : install samples
+      t) add_make_parameter "unit-tests"; RUN_TESTS=true;;  # -t : build and run unit tests
    esac
 done
 
