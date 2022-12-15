@@ -37,7 +37,7 @@ float get_frequency(std::filesystem::path fileName)
     );
 
     juce::AudioSampleBuffer audioBuffer;
-    int bufferSize = 8192; // std::min((int) audioReader->lengthInSamples, (int) (audioReader->sampleRate));
+    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (audioReader->sampleRate));
     audioBuffer.clear(); // Why again?
     audioBuffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
