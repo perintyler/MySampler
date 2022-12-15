@@ -4,3 +4,5 @@ JuceLibraryCode/
 build/
 sample-log.json
 Resources/samples/
+
+.DS_Store
