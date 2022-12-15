@@ -31,13 +31,14 @@ float get_frequency(std::filesystem::path fileName)
     juce::File wavFile { filePath.string() };
 
     assert(wavFile.existsAsFile());
+
     juce::WavAudioFormat wavFormat;
     std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
         wavFormat.createReaderFor(wavFile.createInputStream().release(), true)
     );
 
     juce::AudioSampleBuffer audioBuffer;
-    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (audioReader->sampleRate));
+    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (0.10*audioReader->sampleRate)); // (audioReader->sampleRate));
     audioBuffer.clear(); // Why again?
     audioBuffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
@@ -66,7 +67,7 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
     REQUIRE(frequency < 466.16);
 }
 
-TEST_CASE("Piano: C3", "[pitch_detection]")
+TEST_CASE("Guitar: C3", "[pitch_detection]")
 {
     float frequency = get_frequency("C3-guitar-oneshot.wav");
     REQUIRE(123.47 < frequency);
@@ -80,18 +81,18 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
     REQUIRE(frequency < 69.30);
 }
 
-TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
-{
-    float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
-    REQUIRE(246.94 < frequency);
-    REQUIRE(frequency < 277.18);
-}
-
 TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
 {
     float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
     REQUIRE(123.47 < frequency);
     REQUIRE(frequency < 138.59);
+}
+
+TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
+{
+    float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
+    REQUIRE(246.94 < frequency);
+    REQUIRE(frequency < 277.18);
 }
 
 TEST_CASE("Piano: C6", "[pitch_detection]") 
@@ -103,7 +104,7 @@ TEST_CASE("Piano: C6", "[pitch_detection]")
 
 TEST_CASE("Piano: G3", "[pitch_detection]") 
 {
-    float frequency = get_frequency("C3-piano-oneshot.wav");
+    float frequency = get_frequency("G3-piano-oneshot.wav");
     REQUIRE(185.00 < frequency);
     REQUIRE(frequency < 207.65);
 }
@@ -111,7 +112,6 @@ TEST_CASE("Piano: G3", "[pitch_detection]")
 TEST_CASE("Guitar: A2", "[pitch_detection]") 
 {
     float frequency = get_frequency("A2-guitar-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(103.83 < frequency);
     REQUIRE(frequency < 116.54);
 }
