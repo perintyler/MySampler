@@ -11,4 +11,6 @@
 
 #pragma once
 
+static const float PITCH_DETECTION_TOLERANCE = 0.10f;
+
 float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate);

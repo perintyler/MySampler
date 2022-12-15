@@ -13,8 +13,6 @@
 
 #include "pitch_detection.h"
 
-static const float PITCH_DETECTION_TOLERANCE = 0.10f;
-
 float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, int bufferSize)
 {
     assert(startIndex >= 0 && startIndex <= bufferSize);

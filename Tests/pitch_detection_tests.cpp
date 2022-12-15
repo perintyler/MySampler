@@ -48,7 +48,6 @@ float get_frequency(std::filesystem::path fileName)
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
 {
     float frequency = get_frequency("G5-female-vocal-chop.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(174.61 < frequency);
     REQUIRE(frequency < 196.00);
 }
@@ -56,7 +55,6 @@ TEST_CASE("Female Vocal: G5", "[pitch_detection]")
 TEST_CASE("Female Vocal: G#3", "[pitch_detection]") 
 {
     float frequency = get_frequency("G#3-female-vocal-chop.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(739.99 < frequency);
     REQUIRE(frequency < 830.61);
 }
@@ -64,7 +62,6 @@ TEST_CASE("Female Vocal: G#3", "[pitch_detection]")
 TEST_CASE("Male Vocal: A4", "[pitch_detection]") 
 {
     float frequency = get_frequency("A4-male-vocal-chop.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(415.30 < frequency);
     REQUIRE(frequency < 466.16);
 }
@@ -72,7 +69,6 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
 TEST_CASE("Piano: C3", "[pitch_detection]")
 {
     float frequency = get_frequency("C3-guitar-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(123.47 < frequency);
     REQUIRE(frequency < 138.59);
 }
@@ -80,7 +76,6 @@ TEST_CASE("Piano: C3", "[pitch_detection]")
 TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
 {
     float frequency = get_frequency("C2-uprite-bass-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(61.74 < frequency);
     REQUIRE(frequency < 69.30);
 }
@@ -88,7 +83,6 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
 TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
 {
     float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(246.94 < frequency);
     REQUIRE(frequency < 277.18);
 }
@@ -96,7 +90,6 @@ TEST_CASE("Exchange Bass: C4", "[pitch_detection]")
 TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
 {
     float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(123.47 < frequency);
     REQUIRE(frequency < 138.59);
 }
@@ -104,7 +97,6 @@ TEST_CASE("Acoustic Bass: C3", "[pitch_detection]")
 TEST_CASE("Piano: C6", "[pitch_detection]") 
 {
     float frequency = get_frequency("C6-piano-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(987.77 < frequency);
     REQUIRE(frequency < 1108.73);
 }
@@ -112,7 +104,6 @@ TEST_CASE("Piano: C6", "[pitch_detection]")
 TEST_CASE("Piano: G3", "[pitch_detection]") 
 {
     float frequency = get_frequency("C3-piano-oneshot.wav");
-    std::cout << piano::getKeyNumber(frequency) << std::endl;
     REQUIRE(185.00 < frequency);
     REQUIRE(frequency < 207.65);
 }
