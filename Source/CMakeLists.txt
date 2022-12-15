@@ -2,7 +2,7 @@ project(Source)
 
 juce_add_plugin(Piano960Plugin
     VERSION 0.0.1
-    FORMATS AU # VST3
+    FORMATS AU VST3
     PRODUCT_NAME "Piano960"
     COMPANY_NAME soundvoyager
     COMPANY_WEBSITE "soundvoyager.xyz"
