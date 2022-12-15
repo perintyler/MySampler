@@ -23,6 +23,8 @@ Piano960Editor::Piano960Editor(Piano960Processor& processor)
     addAndMakeVisible(keyboardComponent);
         
     setSize(1220, 160);
+
+    processor.randomize_samples();
 }
 
 // render the UI

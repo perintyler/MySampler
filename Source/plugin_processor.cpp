@@ -16,10 +16,8 @@ Piano960Processor::Piano960Processor()
     : AudioProcessor (BusesProperties().withInput("Input",  juce::AudioChannelSet::stereo(), true)
                                        .withOutput("Output", juce::AudioChannelSet::stereo(), true))
 {
-    for (auto i = 0; i < NUM_VOICES; ++i) {
+    for (auto i = 0; i < NUM_VOICES; ++i)
         synthesiser.addVoice (new juce::SamplerVoice());
-    }
-    randomize_samples();
 }
 
 void Piano960Processor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -52,7 +50,7 @@ void Piano960Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mid
 void Piano960Processor::randomize_samples()
 {
     synthesiser.clearSounds();
-    for (int keyNumber = piano::C2; keyNumber < piano::C7; ++keyNumber)
+    for (int keyNumber = piano::C3; keyNumber < piano::C7; ++keyNumber)
         synthesiser.addSound(getRandomSamplerSound(keyNumber));
 }
 
