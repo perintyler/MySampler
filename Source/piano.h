@@ -13,6 +13,14 @@
 
 namespace piano {
 
+    enum Semitone { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B };
+
+    constexpr Semitone Csharp = Db;
+    constexpr Semitone Dsharp = Eb;
+    constexpr Semitone Fsharp = Gb;
+    constexpr Semitone Gsharp = Ab;
+    constexpr Semitone Asharp = Bb;
+
     const int OCTAVE_SIZE = 12;
     
     const int C0 = 12;
@@ -33,13 +41,7 @@ namespace piano {
 
     const int G8 = G0 + 7*OCTAVE_SIZE;
 
-    enum Semitone { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B };
-
-    constexpr Semitone Csharp = Db;
-    constexpr Semitone Dsharp = Eb;
-    constexpr Semitone Fsharp = Gb;
-    constexpr Semitone Gsharp = Ab;
-    constexpr Semitone Asharp = Bb;
+    Semitone get_semitone(float frequency);
 
     float getFrequency(int keyNumber);
 
