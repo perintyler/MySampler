@@ -28,8 +28,13 @@ void Piano960Processor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
 bool Piano960Processor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono()
-        && layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
+    if (layouts.getMainInputChannelSet() == juce::AudioChannelSet::disabled()
+     || layouts.getMainOutputChannelSet() == juce::AudioChannelSet::disabled())
+    {
+        return false;
+    }
+ 
+    return layouts.getMainInputChannelSet() == layouts.getMainOutputChannelSet();
 }
 
 void Piano960Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)

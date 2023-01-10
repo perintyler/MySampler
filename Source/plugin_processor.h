@@ -27,6 +27,8 @@ const int FIRST_KEY = piano::C1;
 
 const int LAST_KEY = piano::C7;
 
+const juce::String PLUGIN_NAME { "Piano960" };
+
 class Piano960Processor: public juce::AudioProcessor {
 public:
 
@@ -48,7 +50,7 @@ public:
 
     bool hasEditor() const override { return true; }
 
-    const juce::String getName() const override { return JucePlugin_Name; }
+    const juce::String getName() const override { return PLUGIN_NAME; }
 
     bool acceptsMidi() const override { return true; }
     
