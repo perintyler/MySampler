@@ -36,19 +36,6 @@ float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, i
     return startIndex + 0.5*(s0 - s2) / (s0 - 2.0*s1 + s2);
 }
 
-// TODO: find minimal sample in `getFundementalFrequency` loop
-unsigned int getIndexOfMinimumSample(const float *buffer, int bufferSize)
-{
-    unsigned int indexOfMinimumSample = 0;
-    float minimumSample = buffer[0];
-    for (int index = 0; index < bufferSize; index++)
-    {
-        indexOfMinimumSample = (minimumSample < buffer[index]) ? indexOfMinimumSample : index;
-        minimumSample        = (minimumSample < buffer[index]) ? minimumSample        : buffer[index];
-    }
-    return indexOfMinimumSample;
-}
-
 // helper function
 float getFundementalFrequency(float positionOfQuadraticPeak, int sampleRate)
 {
@@ -62,12 +49,13 @@ float getFundementalFrequency(float positionOfQuadraticPeak, int sampleRate)
  **/
 float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate)
 {
-    int period;
+    int period = 0;
+    int indexOfMinSample = 0;
     float delta = 0.0;
     float rollingSum = 0.0;
     float processedSignal[bufferSize];
     processedSignal[0] = 1.0;
-        
+
     for (int tau = 1; tau < bufferSize; tau++) {
         processedSignal[tau] = 0.0;
 
@@ -75,9 +63,13 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
             delta = signal[shiftedIndex] - signal[shiftedIndex + tau];
             processedSignal[tau] += (delta * delta);
         }
+
+        if (processedSignal[tau] < processedSignal[indexOfMinSample]) {
+            indexOfMinSample = tau;
+        }
         
         rollingSum += processedSignal[tau];
-        
+
         if (rollingSum != 0) processedSignal[tau] *= tau / rollingSum;
         else                 processedSignal[tau] = 1.0;
 
@@ -86,13 +78,17 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
         if ((tau > 4) && (processedSignal[period] < PITCH_DETECTION_TOLERANCE)
                       && (processedSignal[period] < processedSignal[period + 1]))
         {
-            float peakPosition = getPositionOfQuadraticPeak(processedSignal, period, bufferSize);
-            return getFundementalFrequency(peakPosition, sampleRate);
+            indexOfMinSample = period;
+            break;
         }
     }
 
-    // TODO: compute min sample in the for loop above rather than iterating through the buffer again
-    int indexOfMinSample = getIndexOfMinimumSample(processedSignal, bufferSize);
-    float peakPosition = getPositionOfQuadraticPeak(processedSignal, indexOfMinSample, bufferSize);
+    float peakPosition = getPositionOfQuadraticPeak(
+        processedSignal, 
+        indexOfMinSample, 
+        bufferSize
+    );
+
     return getFundementalFrequency(peakPosition, sampleRate);
 }
+
