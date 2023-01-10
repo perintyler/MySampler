@@ -25,6 +25,8 @@
 #include "piano.h"
 #include "paths.h"
 
+bool ONLY_TEST_SEMITONES = true;
+
 float get_frequency(std::filesystem::path fileName)
 {
     std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } / std::filesystem::path { fileName };
@@ -46,94 +48,174 @@ float get_frequency(std::filesystem::path fileName)
     return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
 }
 
+piano::Semitone get_semitone();
+
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
 {
     float frequency = get_frequency("G5-female-vocal-chop.wav");
-    REQUIRE(174.61 < frequency);
-    REQUIRE(frequency < 196.00);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(174.61 < frequency);
+        REQUIRE(frequency < 196.00);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::G);
 }
 
 TEST_CASE("Female Vocal: G#3", "[pitch_detection]") 
 {
     float frequency = get_frequency("G#3-female-vocal-chop.wav");
-    REQUIRE(739.99 < frequency);
-    REQUIRE(frequency < 830.61);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(739.99 < frequency);
+        REQUIRE(frequency < 830.61);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::Gsharp);
 }
 
 TEST_CASE("Male Vocal: A4", "[pitch_detection]") 
 {
     float frequency = get_frequency("A4-male-vocal-chop.wav");
-    REQUIRE(415.30 < frequency);
-    REQUIRE(frequency < 466.16);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(415.30 < frequency);
+        REQUIRE(frequency < 466.16);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::A);
 }
 
 TEST_CASE("Guitar: C3", "[pitch_detection]")
 {
     float frequency = get_frequency("C3-guitar-oneshot.wav");
-    REQUIRE(123.47 < frequency);
-    REQUIRE(frequency < 138.59);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(123.47 < frequency);
+        REQUIRE(frequency < 138.59);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
 {
     float frequency = get_frequency("C2-uprite-bass-oneshot.wav");
-    REQUIRE(61.74 < frequency);
-    REQUIRE(frequency < 69.30);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(61.74 < frequency);
+        REQUIRE(frequency < 69.30);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
 {
     float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
-    REQUIRE(123.47 < frequency);
-    REQUIRE(frequency < 138.59);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(123.47 < frequency);
+        REQUIRE(frequency < 138.59);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
 {
     float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
-    REQUIRE(246.94 < frequency);
-    REQUIRE(frequency < 277.18);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(246.94 < frequency);
+        REQUIRE(frequency < 277.18);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Piano: C6", "[pitch_detection]") 
 {
     float frequency = get_frequency("C6-piano-oneshot.wav");
-    REQUIRE(987.77 < frequency);
-    REQUIRE(frequency < 1108.73);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(987.77 < frequency);
+        REQUIRE(frequency < 1108.73);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Piano: G3", "[pitch_detection]") 
 {
     float frequency = get_frequency("G3-piano-oneshot.wav");
-    REQUIRE(185.00 < frequency);
-    REQUIRE(frequency < 207.65);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(185.00 < frequency);
+        REQUIRE(frequency < 207.65);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::G);
 }
 
 TEST_CASE("Guitar: A2", "[pitch_detection]") 
 {
     float frequency = get_frequency("A2-guitar-oneshot.wav");
-    REQUIRE(103.83 < frequency);
-    REQUIRE(frequency < 116.54);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(103.83 < frequency);
+        REQUIRE(frequency < 116.54);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::A);
 }
 
 TEST_CASE("Guitar: E4", "[pitch_detection]") 
 {
     float frequency = get_frequency("E4-guitar-oneshot.wav");
-    REQUIRE(311.13 < frequency);
-    REQUIRE(frequency < 349.23);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(311.13 < frequency);
+        REQUIRE(frequency < 349.23);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::E);
 }
 
 
 TEST_CASE("Keyboard: C5", "[pitch_detection]") 
 {
     float frequency = get_frequency("C5-keyboard-oneshot.wav");
-    REQUIRE(493.88 < frequency);
-    REQUIRE(frequency < 554.37);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(493.88 < frequency);
+        REQUIRE(frequency < 554.37);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
 
 TEST_CASE("Keyboard: C6", "[pitch_detection]") 
 {
     float frequency = get_frequency("C6-keyboard-oneshot.wav");
-    REQUIRE(987.77 < frequency);
-    REQUIRE(frequency < 1108.73);
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(987.77 < frequency);
+        REQUIRE(frequency < 1108.73);
+    }
+
+    piano::Semitone semitone = piano::get_semitone(frequency);
+    REQUIRE(semitone == piano::C);
 }
