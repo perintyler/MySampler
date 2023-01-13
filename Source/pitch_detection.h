@@ -15,4 +15,4 @@ struct FrequencyNotDetectedException : public std::exception {
     const char * what () const throw ();
 };
 
-float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate);
+float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate, bool doubleCheck = false);
