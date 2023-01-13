@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   pitch_detection.cpp
 //   ~~~~~~~~~~~~~~~~~~~
@@ -12,6 +8,7 @@
 #include <cassert>
 
 #include "pitch_detection.h"
+#include "piano.h"
 
 float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, int bufferSize)
 {
@@ -47,7 +44,7 @@ float getFundementalFrequency(float positionOfQuadraticPeak, int sampleRate)
  * This function implements the YIN Pitch Dection algorithm.
  *   - http://audition.ens.fr/adc/pdf/2002_JASA_YIN.pdf
  **/
-float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate)
+float getFundementalFrequency(const float* signal, int bufferSize, int indexOfFirstSample, int sampleRate)
 {
     int period = 0;
     int indexOfMinSample = 0;
@@ -91,4 +88,27 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
 
     return getFundementalFrequency(peakPosition, sampleRate);
 }
+
+
+const char * FrequencyNotDetectedException::what () const throw ()
+{
+    return "TODO";
+}
+
+float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate, bool doubleCheck)
+{
+    if (!doubleCheck) {
+        return getFundementalFrequency(signal, bufferSize, 0, sampleRate);
+    }
+
+    float frequencyOfFirstHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0, sampleRate);
+    float frequencyOfSecondHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0.5*bufferSize, sampleRate);
+
+    if (piano::getSemitone(frequencyOfFirstHalf) != piano::getSemitone(frequencyOfSecondHalf)) {
+        throw FrequencyNotDetectedException();
+    }
+
+    return (frequencyOfFirstHalf + frequencyOfSecondHalf) / 2.0;
+}
+
 

@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   piano.h
 //   ~~~~~~~
@@ -41,7 +37,7 @@ namespace piano {
 
     const int G8 = G0 + 7*OCTAVE_SIZE;
 
-    Semitone get_semitone(float frequency);
+    Semitone getSemitone(float frequency);
 
     float getFrequency(int keyNumber);
 

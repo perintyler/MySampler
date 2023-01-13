@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   samples.cpp
 //   ~~~~~~~~~~~
@@ -73,7 +69,6 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
     while ((audioReader == nullptr)
         || (rootNoteOfSample <= piano::C0)
         || (rootNoteOfSample >= piano::C8)
-     // || (std::abs(keyNumber - rootNoteOfSample) > PITCH_SHIFT_LIMIT)
     ) {
         juce::File randomSample = getRandomSample();
         audioReader = createWAVReader(randomSample);

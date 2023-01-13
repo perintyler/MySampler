@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   piano.cpp
 //   ~~~~~~~~~
@@ -61,7 +57,7 @@ int piano::getKeyNumber(float frequency)
     return piano::C0 + noteNumber;
 }
 
-piano::Semitone piano::get_semitone(float frequency)
+piano::Semitone piano::getSemitone(float frequency)
 {
     int keyNumber = getKeyNumber(frequency);
     int semitoneNumber = keyNumber % piano::OCTAVE_SIZE;
