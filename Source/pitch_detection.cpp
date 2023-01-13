@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   pitch_detection.cpp
 //   ~~~~~~~~~~~~~~~~~~~
@@ -92,3 +88,8 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
     return getFundementalFrequency(peakPosition, sampleRate);
 }
 
+
+const char * FrequencyNotDetectedException::what () const throw ()
+{
+    return "TODO";
+}
