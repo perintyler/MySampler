@@ -48,8 +48,6 @@ float get_frequency(std::filesystem::path fileName)
     return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
 }
 
-piano::Semitone get_semitone();
-
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
 {
     float frequency = get_frequency("G5-female-vocal-chop.wav");
@@ -59,7 +57,7 @@ TEST_CASE("Female Vocal: G5", "[pitch_detection]")
         REQUIRE(frequency < 196.00);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::G);
 }
 
@@ -72,7 +70,7 @@ TEST_CASE("Female Vocal: G#3", "[pitch_detection]")
         REQUIRE(frequency < 830.61);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::Gsharp);
 }
 
@@ -85,7 +83,7 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
         REQUIRE(frequency < 466.16);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::A);
 }
 
@@ -98,7 +96,7 @@ TEST_CASE("Guitar: C3", "[pitch_detection]")
         REQUIRE(frequency < 138.59);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -111,7 +109,7 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
         REQUIRE(frequency < 69.30);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -124,7 +122,7 @@ TEST_CASE("Acoustic Bass: C3", "[pitch_detection]")
         REQUIRE(frequency < 138.59);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -137,7 +135,7 @@ TEST_CASE("Exchange Bass: C4", "[pitch_detection]")
         REQUIRE(frequency < 277.18);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -150,7 +148,7 @@ TEST_CASE("Piano: C6", "[pitch_detection]")
         REQUIRE(frequency < 1108.73);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -163,7 +161,7 @@ TEST_CASE("Piano: G3", "[pitch_detection]")
         REQUIRE(frequency < 207.65);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::G);
 }
 
@@ -176,7 +174,7 @@ TEST_CASE("Guitar: A2", "[pitch_detection]")
         REQUIRE(frequency < 116.54);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::A);
 }
 
@@ -189,7 +187,7 @@ TEST_CASE("Guitar: E4", "[pitch_detection]")
         REQUIRE(frequency < 349.23);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::E);
 }
 
@@ -203,7 +201,7 @@ TEST_CASE("Keyboard: C5", "[pitch_detection]")
         REQUIRE(frequency < 554.37);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
 
@@ -216,6 +214,6 @@ TEST_CASE("Keyboard: C6", "[pitch_detection]")
         REQUIRE(frequency < 1108.73);
     }
 
-    piano::Semitone semitone = piano::get_semitone(frequency);
+    piano::Semitone semitone = piano::getSemitone(frequency);
     REQUIRE(semitone == piano::C);
 }
