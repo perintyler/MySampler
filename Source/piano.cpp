@@ -61,6 +61,7 @@ piano::Semitone piano::getSemitone(float frequency)
 {
     int keyNumber = getKeyNumber(frequency);
     int semitoneNumber = keyNumber % piano::OCTAVE_SIZE;
-    assert(0 <= semitoneNumber < piano::OCTAVE_SIZE);
+    assert(0 <= semitoneNumber);
+    assert(semitoneNumber < piano::OCTAVE_SIZE);
     return (piano::Semitone) semitoneNumber;
 }
