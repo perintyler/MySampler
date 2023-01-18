@@ -56,6 +56,12 @@ Randomness seeded to: 4098072686
 All tests passed (32 assertions in 28 test cases)
 ```
 
+## Xcode Integration
+
+To integrate and build the plugin with Xcode, use [Projucer](https://docs.juce.com/master/tutorial_new_projucer_project.html) along with the `Piano960.jucer` file, which can be found in the `Config` directory.
+
+This is completely optional, and unit testing is not supported by this build process. 
+
 ## Samples
 
 Samples are randomly compiled from [Piano960-Sample-Sets](https://github.com/perintyler/Piano960-Sample-Packs/tree/3cd9a87cd744546126fbd789f81a77e3cdff23df) to the [`Resources`](https://github.com/perintyler/Piano960/tree/main/Resources) directory via the [`compile_samples.py` script](https://github.com/perintyler/Piano960/blob/main/Scripts/compile_samples.py). Any set of samples and sample packs can be used by using the script's `--sample-packs` argument.
