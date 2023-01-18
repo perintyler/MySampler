@@ -12,6 +12,13 @@
 #include "samples.h"
 #include "paths.h"
 
+// paths are configured in the CMakeLists file, so when the plugin
+// is built using JUCER (for xcode integration), paths won't be defined
+// TODO: figure out if the 2 build processes can be consolidated
+#ifndef SAMPLES_DIRECTORY
+  #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#endif
+
 namespace filesystem = std::__fs::filesystem; // TODO: investigate why I need to use std::__fs
 
 const int NUM_SAMPLES = []{
