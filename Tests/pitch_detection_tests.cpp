@@ -1,8 +1,4 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   pitch_detection_tests.cpp
 //   ~~~~~~~~~~~~~~~~~~~~~~~~~
