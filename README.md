@@ -1,6 +1,6 @@
 # Piano960
 
-Piano960 is a cross platform audio plugin: a virtual instrument that randomly assigns a unique, random sample to each key on a MIDI keyboard.
+Piano960 is a cross platform audio plugin: a virtual keyboard instrument where every key plays a different, random sample. Each of these samples is transposed to match the pitch of the key it's assigned to.
 
 ![plugin demo GIF](Resources/demo.gif "Piano960 Plugin Demo")
 
