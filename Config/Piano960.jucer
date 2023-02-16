@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="iT4mh4" name="Piano960" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              companyName="Sound Voyager" companyWebsite="soundvoyager.xyz"
-              pluginFormats="buildAU,buildAUv3,buildVST3" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              pluginVST3Category="Instrument" cppLanguageStandard="17">
-  <MAINGROUP id="gfHjMe" name="Piano960">
+<JUCERPROJECT id="iT4mh4" name="Piano960D" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Sound Voyage"
+              companyWebsite="soundvoyager.xyz" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginVST3Category="Instrument" cppLanguageStandard="17" displaySplashScreen="1"
+              pluginCode="Tyle" pluginFormats="buildAU,buildStandalone,buildVST3">
+  <MAINGROUP id="gfHjMe" name="Piano960D">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="../Source">
-      <FILE id="FOmJth" name="piano.cpp" compile="1" resource="0" file="../Source/piano.cpp"/>
+      <FILE id="FOmJth" name="piano.cpp" compile="1" resource="0" file="../Source/piano.cpp"
+            xcodeResource="0"/>
       <FILE id="Y1Ncbs" name="piano.h" compile="0" resource="0" file="../Source/piano.h"/>
       <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="../Libraries/AudioFFT/AudioFFT.cpp"/>
       <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="../Libraries/AudioFFT/AudioFFT.h"/>
@@ -30,8 +31,7 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="Piano960" macOSDeploymentTarget="12.0"
-                       osxCompatibility="12.0 SDK"/>
+        <CONFIGURATION isDebug="1" name="Debug" macOSDeploymentTarget="12.0" osxCompatibility="12.0 SDK"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="Piano960"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
@@ -51,18 +51,18 @@
     </XCODE_MAC>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
             useGlobalPath="0"/>
-    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_core" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_events" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
-    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="1" useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
 </JUCERPROJECT>
