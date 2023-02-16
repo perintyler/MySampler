@@ -1,4 +1,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
+// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
+// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //
 //   samples.cpp
 //   ~~~~~~~~~~~
@@ -10,14 +14,9 @@
 #include <filesystem>
 
 #include "samples.h"
-#include "paths.h"
+// #include "paths.h"
 
-// paths are configured in the CMakeLists file, so when the plugin
-// is built using JUCER (for xcode integration), paths won't be defined
-// TODO: figure out if the 2 build processes can be consolidated
-#ifndef SAMPLES_DIRECTORY
-  #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
-#endif
+#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
 
 namespace filesystem = std::__fs::filesystem; // TODO: investigate why I need to use std::__fs
 
@@ -74,19 +73,25 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
     std::unique_ptr<juce::AudioFormatReader> audioReader;
 
     while ((audioReader == nullptr)
-        || (rootNoteOfSample <= piano::C0)
-        || (rootNoteOfSample >= piano::C8)
+//        || (rootNoteOfSample <= piano::C0)
+//        || (rootNoteOfSample >= piano::C8)
+     // || (std::abs(keyNumber - rootNoteOfSample) > PITCH_SHIFT_LIMIT)
     ) {
         juce::File randomSample = getRandomSample();
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);
         juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
-        int frequencyOfSample = getFundementalFrequency(buffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
-        rootNoteOfSample = piano::getKeyNumber(frequencyOfSample);
-        
-        if (DEBUG_MODE) juce::Logger::writeToLog(juce::String{"Frequency = "}    + std::to_string(frequencyOfSample)
-                                               + juce::String{" | Root Note = "} + std::to_string(rootNoteOfSample)
-                                               + juce::String{" | "} + randomSample.getFileName());
+        try {
+            int frequencyOfSample = getFundementalFrequency(
+                buffer.getReadPointer(0),
+                bufferSize,
+                audioReader->sampleRate,
+                true
+            );
+            rootNoteOfSample = piano::getKeyNumber(frequencyOfSample);
+        } catch (FrequencyNotDetectedException) {
+            juce::Logger::writeToLog("Could not detect fundemental frequency of sample:" + randomSample.getFileName());
+        }
     }
 
     juce::BigInteger keyRange;

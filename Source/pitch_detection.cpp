@@ -1,9 +1,4 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   pitch_detection.cpp
-//   ~~~~~~~~~~~~~~~~~~~
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/* pitch_detection.cpp */
 
 #include <cassert>
 
@@ -33,6 +28,18 @@ float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, i
     return startIndex + 0.5*(s0 - s2) / (s0 - 2.0*s1 + s2);
 }
 
+unsigned int getIndexOfMinimumSample(const float *buffer, int bufferSize)
+{
+    unsigned int indexOfMinimumSample = 0;
+    float minimumSample = buffer[0];
+    for (int index = 0; index < bufferSize; index++)
+    {
+        indexOfMinimumSample = (minimumSample < buffer[index]) ? indexOfMinimumSample : index;
+        minimumSample        = (minimumSample < buffer[index]) ? minimumSample        : buffer[index];
+    }
+    return indexOfMinimumSample;
+}
+
 // helper function
 float getFundementalFrequency(float positionOfQuadraticPeak, int sampleRate)
 {
@@ -44,10 +51,10 @@ float getFundementalFrequency(float positionOfQuadraticPeak, int sampleRate)
  * This function implements the YIN Pitch Dection algorithm.
  *   - http://audition.ens.fr/adc/pdf/2002_JASA_YIN.pdf
  **/
-float getFundementalFrequency(const float* signal, int bufferSize, int indexOfFirstSample, int sampleRate)
+float getFundementalFrequency(const float* signal, int bufferSize, int startSample, int sampleRate)
 {
+//    assert(bufferSize > startSample);
     int period = 0;
-    int indexOfMinSample = 0;
     float delta = 0.0;
     float rollingSum = 0.0;
     float processedSignal[bufferSize];
@@ -57,13 +64,13 @@ float getFundementalFrequency(const float* signal, int bufferSize, int indexOfFi
         processedSignal[tau] = 0.0;
 
         for (int shiftedIndex = 0; shiftedIndex < bufferSize; shiftedIndex++) {
-            delta = signal[shiftedIndex] - signal[shiftedIndex + tau];
+            delta = signal[startSample + shiftedIndex] - signal[startSample + shiftedIndex + tau];
             processedSignal[tau] += (delta * delta);
         }
 
-        if (processedSignal[tau] < processedSignal[indexOfMinSample]) {
-            indexOfMinSample = tau;
-        }
+//        if (processedSignal[tau] < processedSignal[indexOfMinSample]) {
+//            indexOfMinSample = tau;
+//        }
         
         rollingSum += processedSignal[tau];
 
@@ -75,20 +82,20 @@ float getFundementalFrequency(const float* signal, int bufferSize, int indexOfFi
         if ((tau > 4) && (processedSignal[period] < PITCH_DETECTION_TOLERANCE)
                       && (processedSignal[period] < processedSignal[period + 1]))
         {
-            indexOfMinSample = period;
-            break;
+            float peakPosition = getPositionOfQuadraticPeak(processedSignal, period, bufferSize);
+            return getFundementalFrequency(peakPosition, sampleRate);
         }
     }
 
+    int indexOfMinSample = getIndexOfMinimumSample(processedSignal, bufferSize);
     float peakPosition = getPositionOfQuadraticPeak(
-        processedSignal, 
-        indexOfMinSample, 
+        processedSignal,
+        indexOfMinSample,
         bufferSize
     );
 
     return getFundementalFrequency(peakPosition, sampleRate);
 }
-
 
 const char * FrequencyNotDetectedException::what () const throw ()
 {
@@ -110,5 +117,4 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
 
     return (frequencyOfFirstHalf + frequencyOfSecondHalf) / 2.0;
 }
-
 
