@@ -26,8 +26,8 @@
             file="../Source/plugin_editor.cpp"/>
       <FILE id="OlBmza" name="plugin_editor.h" compile="0" resource="0" file="../Source/plugin_editor.h"/>
     </GROUP>
-    <FILE id="lgsv4E" name="locked.png" compile="0" resource="1" file="../Assets/locked.png"/>
-    <FILE id="MOv1sH" name="unlocked.png" compile="0" resource="1" file="../Assets/unlocked.png"/>
+    <FILE id="MBPcrW" name="locked.png" compile="0" resource="1" file="../Assets/locked.png"/>
+    <FILE id="PSrqcX" name="unlocked.png" compile="0" resource="1" file="../Assets/unlocked.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

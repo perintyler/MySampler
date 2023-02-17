@@ -43,5 +43,7 @@ private:
     
     juce::TextButton randomizeButton;
 
+    std::vector<std::unique_ptr<juce::ImageButton>> lockButtons;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Piano960Editor)
 };
