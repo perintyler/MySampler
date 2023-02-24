@@ -9,6 +9,9 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install Dependencies
+      run: apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
+
     - name: Create Build Directory
       run: mkdir ${{github.workspace}}/build
 
