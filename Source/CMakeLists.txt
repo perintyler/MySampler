@@ -34,6 +34,8 @@ set(Piano960Plugin_SOURCES
     midi.cpp
     samples.h
     samples.cpp
+    lock_buttons.cpp
+    lock_buttons.h
 )
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
