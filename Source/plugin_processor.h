@@ -69,11 +69,11 @@ public:
     
     void randomize_samples();
 
-    bool isKeyLocked(int keyNumber) const;
+    bool isKeyLocked(midi::MidiNumber) const;
     
-    void lockKey(int keyNumber);
+    void lockKey(midi::MidiNumber);
     
-    void unlockKey(int keyNumber);
+    void unlockKey(midi::MidiNumber);
     
     void logSamples() const;
     

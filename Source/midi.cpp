@@ -18,23 +18,22 @@ const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
 
 const int BLACK_NOTE_NUMBERS[5] { 1, 3, 6, 8, 10 };
 
-bool midi::isBlackNote(int keyNumber)
+bool midi::isBlackNote(MidiNumber midiNumber)
 {
-    int noteNumber = keyNumber % 12;
-    return std::find(std::begin(BLACK_NOTE_NUMBERS), std::end(BLACK_NOTE_NUMBERS), noteNumber)
-        != std::end(BLACK_NOTE_NUMBERS);
+    int noteNumber = midiNumber % 12;
+    return std::find(std::begin(BLACK_NOTE_NUMBERS), std::end(BLACK_NOTE_NUMBERS), noteNumber) != std::end(BLACK_NOTE_NUMBERS);
 }
 
-float midi::getFrequency(int keyNumber)
+float midi::getFrequency(MidiNumber midiNumber)
 {
-    assert(keyNumber > 0);
-    assert(keyNumber < B8);
-    return NOTE_FREQUENCIES[keyNumber];
+    assert(midiNumber > 0);
+    assert(midiNumber < B8);
+    return NOTE_FREQUENCIES[midiNumber];
 }
 
 /* TODO: this needs a docstring
  */
-int midi::getKeyNumber(float frequency)
+int midi::getMidiNumber(float frequency)
 {
     if (frequency <= NOTE_FREQUENCIES[0])
         return midi::C0;
@@ -63,8 +62,7 @@ int midi::getKeyNumber(float frequency)
 
 midi::Semitone midi::getSemitone(float frequency)
 {
-    int keyNumber = getKeyNumber(frequency);
-    int semitoneNumber = keyNumber % midi::OCTAVE_SIZE;
+    int semitoneNumber = getMidiNumber(frequency) % midi::OCTAVE_SIZE;
     assert(0 <= semitoneNumber);
     assert(semitoneNumber < midi::OCTAVE_SIZE);
     return (midi::Semitone) semitoneNumber;

@@ -66,7 +66,7 @@ juce::AudioSampleBuffer createAudioBuffer(std::unique_ptr<juce::AudioFormatReade
 
 /* TODO: this needs a docstring
  */
-juce::SamplerSound* getRandomSamplerSound(int keyNumber)
+juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
 {
     juce::File randomSample;
     int rootNoteOfSample;
@@ -86,7 +86,7 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
                 audioReader->sampleRate,
                 true
             );
-            rootNoteOfSample = midi::getKeyNumber(frequencyOfSample);
+            rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
         } catch (FrequencyNotDetectedException) {
             juce::Logger::writeToLog(
                 "Could not detect fundemental frequency of sample:" + fileName
@@ -95,7 +95,7 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
     }
 
     juce::BigInteger keyRange;
-    keyRange.setRange(keyNumber, keyNumber+1, true);
+    keyRange.setRange(midiNumber, midiNumber+1, true);
     
     return new juce::SamplerSound(
         fileName, *audioReader,

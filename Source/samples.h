@@ -22,4 +22,4 @@ const int MAX_TRANSPOSITION_SIZE = 3*midi::OCTAVE_SIZE;
 
 const bool DEBUG_MODE = true; // TODO: make this a Precompiled Variable
 
-juce::SamplerSound* getRandomSamplerSound(int keyNumber);
+juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber);

@@ -17,10 +17,11 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 
 #include "plugin_processor.h"
+#include "midi.h"
 
-const int FIRST_MIDI_NOTE = 24;
+const midi::MidiNumber FIRST_MIDI_NOTE = midi::C0;
 
-const int LAST_MIDI_NOTE = 48;
+const midi::MidiNumber LAST_MIDI_NOTE = midi::C3;
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 

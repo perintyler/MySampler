@@ -42,12 +42,12 @@ void setLockButtonImage(juce::ImageButton* lockButton, bool isBlack, bool isLock
 
 void layoutLockButton(
     juce::ImageButton* lockButton,
-    const int keyNumber,
+    midi::MidiNumber midiNumber,
     const juce::Rectangle<float> keyBounds,
-    const float blackKeyWidth,
-    const float blackKeyHeight
+    float blackKeyWidth,
+    float blackKeyHeight
 ) {
-    const bool isBlackKey = midi::isBlackNote(keyNumber);
+    const bool isBlackKey = midi::isBlackNote(midiNumber);
     const float keyXCoord = keyBounds.getX();
     const float keyYCoord = keyBounds.getY();
     const float keyWidth = isBlackKey ? blackKeyWidth : keyBounds.getWidth();
@@ -55,10 +55,9 @@ void layoutLockButton(
 
     const float buttonSize = 0.25*keyWidth;
     const float xCoord = keyXCoord + 0.5*(keyWidth-buttonSize) - LOCK_BUTTON_OFFSET;
-    const float yCoord =
-          isBlackKey
-        ? keyYCoord + 0.12*blackKeyHeight
-        : blackKeyHeight + 0.5*(keyHeight-blackKeyHeight) - 0.5*buttonSize;
+    const float yCoord = isBlackKey
+                       ? keyYCoord + 0.12*blackKeyHeight
+                       : blackKeyHeight + 0.5*(keyHeight-blackKeyHeight) - 0.5*buttonSize;
         
     lockButton->setSize(buttonSize, buttonSize);
     lockButton->setCentrePosition(xCoord, yCoord);
@@ -66,30 +65,28 @@ void layoutLockButton(
 
 void addAndMakeLockButtonsVisible(juce::MidiKeyboardComponent& keyboard, Piano960Processor& processor)
 {
-    for (int keyNumber = keyboard.getRangeStart();
-         keyNumber <= keyboard.getRangeEnd();
-         keyNumber++
+    for (midi::MidiNumber midiNumber = keyboard.getRangeStart();
+         midiNumber <= keyboard.getRangeEnd();
+         midiNumber++
     ) {
-        juce::String lockButtonName = juce::String("lock-button") + juce::String(keyNumber);
+        juce::String lockButtonName = juce::String("lock-button") + juce::String(midiNumber);
         juce::ImageButton* lockButton = new juce::ImageButton(lockButtonName);
         lockButton->setToggleable(true);
         lockButton->setClickingTogglesState(true);
         
-        lockButton->onClick = [keyNumber, lockButton, &processor] {
-            if (processor.isKeyLocked(keyNumber))
-                processor.unlockKey(keyNumber);
+        lockButton->onClick = [midiNumber, lockButton, &processor] {
+            if (processor.isKeyLocked(midiNumber))
+                processor.unlockKey(midiNumber);
             else
-                processor.lockKey(keyNumber);
+                processor.lockKey(midiNumber);
         };
 
         layoutLockButton(
-            lockButton, keyNumber,
-            keyboard.getRectangleForKey(keyNumber),
-            keyboard.getBlackNoteWidth(),
-            keyboard.getBlackNoteLength()
+            lockButton, midiNumber, keyboard.getRectangleForKey(midiNumber),
+            keyboard.getBlackNoteWidth(), keyboard.getBlackNoteLength()
         );
         
-        setLockButtonImage(lockButton, !midi::isBlackNote(keyNumber), false);
+        setLockButtonImage(lockButton, !midi::isBlackNote(midiNumber), false);
 
         keyboard.addAndMakeVisible(lockButton);
     }

@@ -9,7 +9,7 @@
 #include "plugin_editor.h"
 
 Piano960Processor::Piano960Processor()
-    : AudioProcessor (BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    : AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
 {
     for (auto i = 0; i < NUM_VOICES; ++i)
         synthesiser.addVoice (new juce::SamplerVoice());
@@ -53,36 +53,36 @@ void Piano960Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mid
 void Piano960Processor::randomize_samples()
 {
     synthesiser.clearSounds();
-    for (int keyNumber = FIRST_MIDI_NOTE; keyNumber <= LAST_MIDI_NOTE; keyNumber++) {
-        if (!isKeyLocked(keyNumber)) {
-            juce::SamplerSound* sound = getRandomSamplerSound(keyNumber);
-            sampleNames[keyNumber] = sound->getName();
+    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
+        if (!isKeyLocked(midiNumber)) {
+            juce::SamplerSound* sound = getRandomSamplerSound(midiNumber);
+            sampleNames[midiNumber] = sound->getName();
             synthesiser.addSound(sound);
         }
     }
 }
 
-bool Piano960Processor::isKeyLocked(int keyNumber) const
+bool Piano960Processor::isKeyLocked(midi::MidiNumber midiNumber) const
 {
-    jassert(lockedKeys.count(keyNumber));
-    return lockedKeys.at(keyNumber) == true;
+    jassert(lockedKeys.count(midiNumber));
+    return lockedKeys.at(midiNumber) == true;
 }
 
-void Piano960Processor::lockKey(int keyNumber)
+void Piano960Processor::lockKey(midi::MidiNumber midiNumber)
 {
-    jassert(lockedKeys.count(keyNumber));
-    lockedKeys[keyNumber] = true;
+    jassert(lockedKeys.count(midiNumber));
+    lockedKeys[midiNumber] = true;
 }
 
-void Piano960Processor::unlockKey(int keyNumber)
+void Piano960Processor::unlockKey(midi::MidiNumber midiNumber)
 {
-    jassert(lockedKeys.count(keyNumber));
-    lockedKeys[keyNumber] = false;
+    jassert(lockedKeys.count(midiNumber));
+    lockedKeys[midiNumber] = false;
 }
 
 void Piano960Processor::logSamples() const
 {
-    for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
+    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
         if (isKeyLocked(midiNumber)) {
             juce::String logLine = juce::String { midiNumber } + ": " + sampleNames.at(midiNumber);
             juce::Logger::writeToLog(logLine);
