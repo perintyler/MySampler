@@ -31,15 +31,18 @@ float midi::getFrequency(MidiNumber midiNumber)
     return NOTE_FREQUENCIES[midiNumber];
 }
 
+bool midi::isValidNote(float frequency)
+{
+    return frequency >= NOTE_FREQUENCIES[0]
+        && frequency <= NOTE_FREQUENCIES[NOTE_FREQUENCIES.size()-1];
+}
+
 /* TODO: this needs a docstring
  */
-int midi::getMidiNumber(float frequency)
+midi::MidiNumber midi::getMidiNumber(float frequency)
 {
-    if (frequency <= NOTE_FREQUENCIES[0])
-        return midi::C0;
-    else if (frequency >= NOTE_FREQUENCIES[NOTE_FREQUENCIES.size()-1])
-        return midi::G8;
-
+    assert(midi::isValidNote(frequency));
+    
     int noteNumber;
     for (noteNumber = 0; noteNumber < NOTE_FREQUENCIES.size()-1; ++noteNumber) {
         

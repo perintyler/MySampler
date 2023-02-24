@@ -46,6 +46,7 @@ namespace midi {
 
     float getFrequency(MidiNumber);
 
-    int getMidiNumber(float frequency);
-
+    midi::MidiNumber getMidiNumber(float frequency);
+    
+    bool isValidNote(float frequency);
 } // piano namespace

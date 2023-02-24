@@ -110,8 +110,11 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
 
     float frequencyOfFirstHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0, sampleRate);
     float frequencyOfSecondHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0.5*bufferSize, sampleRate);
-
-    if (midi::getSemitone(frequencyOfFirstHalf) != midi::getSemitone(frequencyOfSecondHalf)) {
+    
+    if (    !midi::isValidNote(frequencyOfFirstHalf)
+         || !midi::isValidNote(frequencyOfSecondHalf)
+         ||  midi::getSemitone(frequencyOfFirstHalf) != midi::getSemitone(frequencyOfSecondHalf)
+    ) {
         throw FrequencyNotDetectedException();
     }
 
