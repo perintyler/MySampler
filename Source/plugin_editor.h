@@ -18,11 +18,25 @@
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
-const int LEFT_MARGIN_SIZE = 10; // pixels
+const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
 
-const int TOP_MARGIN_SIZE = 5; // pixels
+const int VERTICAL_MARGIN_SIZE = 5; // pixels
+
+const int FIRST_MIDI_NOTE = 24;
+
+const int LAST_MIDI_NOTE = 96;
+
+const float WHITE_KEY_WIDTH = 40.0;
+
+const float BLACK_KEY_WIDTH_RATIO = 1.0;
+
+const int LOCK_BUTTON_OFFSET = 2; // pixels
 
 const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
+
+const juce::Colour BLACK = juce::Colour::fromRGB(juce::uint8(256), juce::uint8(256), juce::uint8(256));
+
+const juce::Colour WHITE = juce::Colour::fromRGB(juce::uint8(0), juce::uint8(0), juce::uint8(0));
 
 class Piano960Editor: public juce::AudioProcessorEditor {
 public:
@@ -35,8 +49,14 @@ public:
 
     void resized() override;
     
-private:
+    int getFirstMidiKey() const;
     
+    int getLastMidiKey() const;
+    
+private:
+
+    juce::ImageButton* getLockButton(int keyNumber) const;
+
     Piano960Processor& audioProcessor;
     
     juce::MidiKeyboardComponent keyboardComponent;

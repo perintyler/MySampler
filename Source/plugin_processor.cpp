@@ -9,8 +9,7 @@
 #include "plugin_editor.h"
 
 Piano960Processor::Piano960Processor()
-    : AudioProcessor (BusesProperties().withInput("Input",  juce::AudioChannelSet::stereo(), true)
-                                       .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    : AudioProcessor (BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true))
 {
     for (auto i = 0; i < NUM_VOICES; ++i)
         synthesiser.addVoice (new juce::SamplerVoice());
@@ -51,7 +50,7 @@ void Piano960Processor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mid
 void Piano960Processor::randomize_samples()
 {
     synthesiser.clearSounds();
-    for (int keyNumber = piano::C3; keyNumber < piano::C7; ++keyNumber)
+    for (int keyNumber = FIRST_MIDI_NOTE; keyNumber <= LAST_MIDI_NOTE; ++keyNumber)
         synthesiser.addSound(getRandomSamplerSound(keyNumber));
 }
 
