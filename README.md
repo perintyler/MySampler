@@ -48,7 +48,7 @@ For Ubuntu/Debian-like distributions, the JUCE framework has couple of dependenc
 Install the dependencies with `apt-get`:
 
 ```console
-apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
+apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
 ```
 
 ## Unit Testing
