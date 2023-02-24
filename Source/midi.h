@@ -6,6 +6,12 @@
 
 namespace midi {
 
+    using MidiNumber = int; // TODO: replace ints with these
+
+    struct InvalidMidiNoteException : public std::exception {
+        const char * what () const throw ();
+    };
+
     enum Semitone { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B };
 
     constexpr Semitone Csharp = Db;
@@ -14,15 +20,13 @@ namespace midi {
     constexpr Semitone Gsharp = Ab;
     constexpr Semitone Asharp = Bb;
 
-    using MidiNumber = int; // TODO: replace ints with these
-
     const int OCTAVE_SIZE = 12;
+
+    const MidiNumber B0 = 11;
     
-    const MidiNumber B0 = 23;
+    const MidiNumber C0 = 12;
     
-    const MidiNumber C0 = 24;
-    
-    const MidiNumber G0 = 31;
+    const MidiNumber G0 = 19;
     
     const MidiNumber C1 = C0 + 1*OCTAVE_SIZE;
 

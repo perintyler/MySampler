@@ -17,7 +17,7 @@
 
 TEST_CASE("lower frequency than lowest note")
 {
-    REQUIRE(midi::getMidiNumber(10.0) == 12);
+    REQUIRE_THROWS_AS(midi::getMidiNumber(10.0), midi::InvalidMidiNoteException);
 }
 
 TEST_CASE("inbetween B3 and C4", "[note_numbers]") 

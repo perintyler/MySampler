@@ -22,6 +22,11 @@ const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
 
 const int BLACK_NOTE_NUMBERS[5] { 1, 3, 6, 8, 10 };
 
+const char * midi::InvalidMidiNoteException::what () const throw ()
+{
+    return "Semitone does not exist on a standard MIDI keyboard";
+}
+
 bool midi::isBlackNote(MidiNumber midiNumber)
 {
     int noteNumber = midiNumber % 12;
@@ -37,15 +42,18 @@ float midi::getFrequency(MidiNumber midiNumber)
 
 bool midi::isValidNote(float frequency)
 {
-    return frequency >= NOTE_FREQUENCIES[0]
-        && frequency <= NOTE_FREQUENCIES[NOTE_FREQUENCIES.size()-1];
+    return frequency >= NOTE_FREQUENCIES.at(0)
+        && frequency <= NOTE_FREQUENCIES.at(NOTE_FREQUENCIES.size()-1);
 }
 
-/* TODO: this needs a docstring
- */
+/** returns the Midi note with a frequency closest to the parameterized
+ ** fundemental frequency
+ **/
 midi::MidiNumber midi::getMidiNumber(float frequency)
 {
-    assert(midi::isValidNote(frequency));
+    if (!midi::isValidNote(frequency)) {
+        throw midi::InvalidMidiNoteException();
+    }
     
     int noteNumber;
     for (noteNumber = 0; noteNumber < NOTE_FREQUENCIES.size()-1; ++noteNumber) {
@@ -64,6 +72,7 @@ midi::MidiNumber midi::getMidiNumber(float frequency)
             break;
         }
     }
+    
     return midi::C0 + noteNumber;
 }
 
