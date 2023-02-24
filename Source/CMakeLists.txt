@@ -53,6 +53,7 @@ target_compile_definitions(Piano960Plugin
 )
 
 target_link_libraries(Piano960Plugin PRIVATE
+    Piano960PluginBinaryData
     juce::juce_audio_utils
     juce::juce_dsp
     ff_meters
