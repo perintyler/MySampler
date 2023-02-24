@@ -83,6 +83,61 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
     REQUIRE(semitone == midi::A);
 }
 
+TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
+{
+    float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(123.47 < frequency);
+        REQUIRE(frequency < 138.59);
+    }
+
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
+}
+
+TEST_CASE("Piano: C6", "[pitch_detection]") 
+{
+    float frequency = get_frequency("C6-piano-oneshot.wav");
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(987.77 < frequency);
+        REQUIRE(frequency < 1108.73);
+    }
+
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
+}
+
+TEST_CASE("Guitar: A2", "[pitch_detection]") 
+{
+    float frequency = get_frequency("A2-guitar-oneshot.wav");
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(103.83 < frequency);
+        REQUIRE(frequency < 116.54);
+    }
+
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::A);
+}
+
+TEST_CASE("Keyboard: C6", "[pitch_detection]") 
+{
+    float frequency = get_frequency("C6-keyboard-oneshot.wav");
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(987.77 < frequency);
+        REQUIRE(frequency < 1108.73);
+    }
+
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
+}
+
+/************************************************************
+ * FAILING PITCH DETECTION TESTS
+
 TEST_CASE("Guitar: C3", "[pitch_detection]")
 {
     float frequency = get_frequency("C3-guitar-oneshot.wav");
@@ -109,19 +164,6 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
     REQUIRE(semitone == midi::C);
 }
 
-TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
-{
-    float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
-
-    if (!ONLY_TEST_SEMITONES) {
-        REQUIRE(123.47 < frequency);
-        REQUIRE(frequency < 138.59);
-    }
-
-    midi::Semitone semitone = midi::getSemitone(frequency);
-    REQUIRE(semitone == midi::C);
-}
-
 TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
 {
     float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
@@ -129,19 +171,6 @@ TEST_CASE("Exchange Bass: C4", "[pitch_detection]")
     if (!ONLY_TEST_SEMITONES) {
         REQUIRE(246.94 < frequency);
         REQUIRE(frequency < 277.18);
-    }
-
-    midi::Semitone semitone = midi::getSemitone(frequency);
-    REQUIRE(semitone == midi::C);
-}
-
-TEST_CASE("Piano: C6", "[pitch_detection]") 
-{
-    float frequency = get_frequency("C6-piano-oneshot.wav");
-
-    if (!ONLY_TEST_SEMITONES) {
-        REQUIRE(987.77 < frequency);
-        REQUIRE(frequency < 1108.73);
     }
 
     midi::Semitone semitone = midi::getSemitone(frequency);
@@ -161,19 +190,6 @@ TEST_CASE("Piano: G3", "[pitch_detection]")
     REQUIRE(semitone == midi::G);
 }
 
-TEST_CASE("Guitar: A2", "[pitch_detection]") 
-{
-    float frequency = get_frequency("A2-guitar-oneshot.wav");
-
-    if (!ONLY_TEST_SEMITONES) {
-        REQUIRE(103.83 < frequency);
-        REQUIRE(frequency < 116.54);
-    }
-
-    midi::Semitone semitone = midi::getSemitone(frequency);
-    REQUIRE(semitone == midi::A);
-}
-
 TEST_CASE("Guitar: E4", "[pitch_detection]") 
 {
     float frequency = get_frequency("E4-guitar-oneshot.wav");
@@ -186,7 +202,6 @@ TEST_CASE("Guitar: E4", "[pitch_detection]")
     midi::Semitone semitone = midi::getSemitone(frequency);
     REQUIRE(semitone == midi::E);
 }
-
 
 TEST_CASE("Keyboard: C5", "[pitch_detection]") 
 {
@@ -201,15 +216,6 @@ TEST_CASE("Keyboard: C5", "[pitch_detection]")
     REQUIRE(semitone == midi::C);
 }
 
-TEST_CASE("Keyboard: C6", "[pitch_detection]") 
-{
-    float frequency = get_frequency("C6-keyboard-oneshot.wav");
+************************************************************/
 
-    if (!ONLY_TEST_SEMITONES) {
-        REQUIRE(987.77 < frequency);
-        REQUIRE(frequency < 1108.73);
-    }
 
-    midi::Semitone semitone = midi::getSemitone(frequency);
-    REQUIRE(semitone == midi::C);
-}
