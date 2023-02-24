@@ -5,42 +5,59 @@
 #include "plugin_editor.h"
 #include "lock_buttons.h"
 
-Piano960Editor::Piano960Editor(Piano960Processor& processor)
-    : AudioProcessorEditor (&processor)
-    , audioProcessor       (processor)
-    , keyboardComponent    (audioProcessor.getKeyboardState(), juce::MidiKeyboardComponent::horizontalKeyboard)
+const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
+
+const int VERTICAL_MARGIN_SIZE = 5; // pixels
+
+const float WHITE_KEY_WIDTH = 40.0;
+
+const float BLACK_KEY_WIDTH_RATIO = 1.0;
+
+const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
+
+const juce::String SAVE_BUTTON_LABEL { "save" };
+
+Piano960Editor::Piano960Editor(Piano960Processor& audioProcessor)
+    : AudioProcessorEditor (&audioProcessor)
+    , processor            (audioProcessor)
+    , keyboard             (audioProcessor.getKeyboardState(), juce::MidiKeyboardComponent::horizontalKeyboard)
     , randomizeButton      (RANDOMIZE_BUTTON_LABEL)
     , saveButton           (SAVE_BUTTON_LABEL)
 {
     saveButton.onClick = [&]() { processor.logSamples(); };
     randomizeButton.onClick = [&]() { processor.randomize_samples(); };
 
-    keyboardComponent.setScrollButtonsVisible(false);
-    keyboardComponent.setKeyWidth(WHITE_KEY_WIDTH);
-    keyboardComponent.setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
-    keyboardComponent.setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
+    // configure MIDI keyboard
+    keyboard.setScrollButtonsVisible(false);
+    keyboard.setKeyWidth(WHITE_KEY_WIDTH);
+    keyboard.setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
+    keyboard.setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
 
+    // the editor's sub-components use plugin dimensions to set their
+    // own bounds, so the plugin size must be set before adding sub-components
     setSize(
-        keyboardComponent.getTotalKeyboardWidth() + 2*HORIZONTAL_MARGIN_SIZE,
+        keyboard.getTotalKeyboardWidth() + 2*HORIZONTAL_MARGIN_SIZE,
         250.0
     );
 
     addAndMakeVisible(saveButton);
     addAndMakeVisible(randomizeButton);
-    addAndMakeVisible(keyboardComponent, 0);
-    addAndMakeLockButtonsVisible(keyboardComponent, processor);
+    addAndMakeVisible(keyboard, 0);
+    addAndMakeLockButtonsVisible(keyboard, processor);
 
     processor.randomize_samples();
 }
 
-// render the UI
+/** Render the UI
+ **/
 void Piano960Editor::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     g.setColour(BACKGROUND_COLOR);
 }
 
-// lay out the subcomponents
+/** Lay out subcomponents
+ **/
 void Piano960Editor::resized()
 {
     int keyboardWidth = getWidth() - HORIZONTAL_MARGIN_SIZE*2;
@@ -61,7 +78,7 @@ void Piano960Editor::resized()
     int saveButtonXCoord = HORIZONTAL_MARGIN_SIZE + randomizeButtonWidth + 5;
     int saveButtonYCoord = VERTICAL_MARGIN_SIZE;
 
-    keyboardComponent.setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
+    keyboard.setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
     randomizeButton.setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
     saveButton.setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
 }

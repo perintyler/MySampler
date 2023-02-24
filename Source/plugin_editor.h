@@ -18,23 +18,11 @@
 
 #include "plugin_processor.h"
 
-const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
-
-const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
-
-const int VERTICAL_MARGIN_SIZE = 5; // pixels
-
 const int FIRST_MIDI_NOTE = 24;
 
 const int LAST_MIDI_NOTE = 48;
 
-const float WHITE_KEY_WIDTH = 40.0;
-
-const float BLACK_KEY_WIDTH_RATIO = 1.0;
-
-const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
-
-const juce::String SAVE_BUTTON_LABEL { "save" };
+const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
 class Piano960Editor: public juce::AudioProcessorEditor {
 public:
@@ -49,9 +37,9 @@ public:
     
 private:
 
-    Piano960Processor& audioProcessor;
+    Piano960Processor& processor;
     
-    juce::MidiKeyboardComponent keyboardComponent;
+    juce::MidiKeyboardComponent keyboard;
     
     juce::TextButton randomizeButton;
     
