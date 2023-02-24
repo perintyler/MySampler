@@ -1,0 +1,23 @@
+name: Unit Tests
+on: [push]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create Build Directory
+      run: mkdir ${{github.workspace}}/build
+
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}/build
+      run: cmake ${{github.workspace}} 
+
+    - name: Build Plugin & Unit-Tests
+      working-directory: ${{github.workspace}}/build
+      run: make unit-tests
+
+    - name: Run Unit-Tests
+      working-directory: ${{github.workspace}}/build
+      run: ./Tests/unit-tests
