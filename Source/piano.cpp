@@ -21,6 +21,15 @@ const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
     6644.88, 7040.00, 7458.62, 7902.13
 };
 
+const int BLACK_NOTE_NUMBERS[5] { 1, 3, 6, 8, 10 };
+
+bool piano::isBlackNote(int keyNumber)
+{
+    int noteNumber = keyNumber % 12;
+    return std::find(std::begin(BLACK_NOTE_NUMBERS), std::end(BLACK_NOTE_NUMBERS), noteNumber)
+        != std::end(BLACK_NOTE_NUMBERS);
+}
+
 float piano::getFrequency(int keyNumber)
 {
     assert(keyNumber > 0);

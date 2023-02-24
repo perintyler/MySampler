@@ -37,6 +37,8 @@ namespace piano {
 
     const int G8 = G0 + 7*OCTAVE_SIZE;
 
+    bool isBlackNote(int keyNumber);
+    
     Semitone getSemitone(float frequency);
 
     float getFrequency(int keyNumber);
