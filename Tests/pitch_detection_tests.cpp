@@ -18,7 +18,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 
 #include "pitch_detection.h"
-#include "piano.h"
+#include "midi.h"
 #include "paths.h"
 
 bool ONLY_TEST_SEMITONES = true;
@@ -53,8 +53,8 @@ TEST_CASE("Female Vocal: G5", "[pitch_detection]")
         REQUIRE(frequency < 196.00);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::G);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::G);
 }
 
 TEST_CASE("Female Vocal: G#3", "[pitch_detection]") 
@@ -66,8 +66,8 @@ TEST_CASE("Female Vocal: G#3", "[pitch_detection]")
         REQUIRE(frequency < 830.61);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::Gsharp);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::Gsharp);
 }
 
 TEST_CASE("Male Vocal: A4", "[pitch_detection]") 
@@ -79,8 +79,8 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
         REQUIRE(frequency < 466.16);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::A);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::A);
 }
 
 TEST_CASE("Guitar: C3", "[pitch_detection]")
@@ -92,8 +92,8 @@ TEST_CASE("Guitar: C3", "[pitch_detection]")
         REQUIRE(frequency < 138.59);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
@@ -105,8 +105,8 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
         REQUIRE(frequency < 69.30);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
@@ -118,8 +118,8 @@ TEST_CASE("Acoustic Bass: C3", "[pitch_detection]")
         REQUIRE(frequency < 138.59);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
@@ -131,8 +131,8 @@ TEST_CASE("Exchange Bass: C4", "[pitch_detection]")
         REQUIRE(frequency < 277.18);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Piano: C6", "[pitch_detection]") 
@@ -144,8 +144,8 @@ TEST_CASE("Piano: C6", "[pitch_detection]")
         REQUIRE(frequency < 1108.73);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Piano: G3", "[pitch_detection]") 
@@ -157,8 +157,8 @@ TEST_CASE("Piano: G3", "[pitch_detection]")
         REQUIRE(frequency < 207.65);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::G);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::G);
 }
 
 TEST_CASE("Guitar: A2", "[pitch_detection]") 
@@ -170,8 +170,8 @@ TEST_CASE("Guitar: A2", "[pitch_detection]")
         REQUIRE(frequency < 116.54);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::A);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::A);
 }
 
 TEST_CASE("Guitar: E4", "[pitch_detection]") 
@@ -183,8 +183,8 @@ TEST_CASE("Guitar: E4", "[pitch_detection]")
         REQUIRE(frequency < 349.23);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::E);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::E);
 }
 
 
@@ -197,8 +197,8 @@ TEST_CASE("Keyboard: C5", "[pitch_detection]")
         REQUIRE(frequency < 554.37);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }
 
 TEST_CASE("Keyboard: C6", "[pitch_detection]") 
@@ -210,6 +210,6 @@ TEST_CASE("Keyboard: C6", "[pitch_detection]")
         REQUIRE(frequency < 1108.73);
     }
 
-    piano::Semitone semitone = piano::getSemitone(frequency);
-    REQUIRE(semitone == piano::C);
+    midi::Semitone semitone = midi::getSemitone(frequency);
+    REQUIRE(semitone == midi::C);
 }

@@ -13,24 +13,24 @@
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
 
-#include "piano.h"
+#include "midi.h"
 
 TEST_CASE("lower frequency than lowest note")
 {
-    REQUIRE(piano::getKeyNumber(10.0) == 12);
+    REQUIRE(midi::getMidiNumber(10.0) == 12);
 }
 
 TEST_CASE("inbetween B3 and C4", "[note_numbers]") 
 {
-    REQUIRE(piano::getKeyNumber(250.7) == 59);
+    REQUIRE(midi::getMidiNumber(250.7) == 59);
 }
 
 TEST_CASE("G4", "[note_numbers]") 
 {
-    REQUIRE(piano::getKeyNumber(392.0) == 67);
+    REQUIRE(midi::getMidiNumber(392.0) == 67);
 }
 
 TEST_CASE("close to Csharp6", "[note_numbers]") 
 {
-    REQUIRE(piano::getKeyNumber(1100.8) == 85);
+    REQUIRE(midi::getMidiNumber(1100.8) == 85);
 }
