@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.16)
+
 project(Source)
 
 juce_add_plugin(Piano960Plugin
