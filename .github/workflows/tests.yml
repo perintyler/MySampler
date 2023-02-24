@@ -17,11 +17,11 @@ jobs:
 
     - name: Configure CMake
       working-directory: ${{github.workspace}}/build
-      run: cmake ${{github.workspace}} 
+      run: cmake ${{github.workspace}} -DCMAKE_INSTALL_PREFIX=/usr/local
 
-    - name: Build Plugin & Unit-Tests
+    - name: Build Plugin & Unit-Tests and Install Samples
       working-directory: ${{github.workspace}}/build
-      run: make unit-tests
+      run: make unit-tests install
 
     - name: Run Unit-Tests
       working-directory: ${{github.workspace}}/build
