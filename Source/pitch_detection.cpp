@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "pitch_detection.h"
-#include "piano.h"
+#include "midi.h"
 
 float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, int bufferSize)
 {
@@ -111,7 +111,7 @@ float getFundementalFrequency(const float* signal, int bufferSize, int sampleRat
     float frequencyOfFirstHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0, sampleRate);
     float frequencyOfSecondHalf = getFundementalFrequency(signal, 0.5*bufferSize, 0.5*bufferSize, sampleRate);
 
-    if (piano::getSemitone(frequencyOfFirstHalf) != piano::getSemitone(frequencyOfSecondHalf)) {
+    if (midi::getSemitone(frequencyOfFirstHalf) != midi::getSemitone(frequencyOfSecondHalf)) {
         throw FrequencyNotDetectedException();
     }
 

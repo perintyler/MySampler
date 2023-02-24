@@ -1,21 +1,18 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   piano.h
-//   ~~~~~~~
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/* midi.h */
 
 #pragma once
 
-namespace piano {
+namespace midi {
 
     enum Semitone { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B };
-
+        
     constexpr Semitone Csharp = Db;
     constexpr Semitone Dsharp = Eb;
     constexpr Semitone Fsharp = Gb;
     constexpr Semitone Gsharp = Ab;
     constexpr Semitone Asharp = Bb;
+
+    using MidiNumber = int; // TODO: replace ints with these
 
     const int OCTAVE_SIZE = 12;
     

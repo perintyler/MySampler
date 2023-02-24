@@ -10,9 +10,9 @@
       <FILE id="xoCzzb" name="lock_buttons.cpp" compile="1" resource="0"
             file="../Source/lock_buttons.cpp"/>
       <FILE id="L71iRm" name="lock_buttons.h" compile="0" resource="0" file="../Source/lock_buttons.h"/>
-      <FILE id="FOmJth" name="piano.cpp" compile="1" resource="0" file="../Source/piano.cpp"
+      <FILE id="FOmJth" name="midi.cpp" compile="1" resource="0" file="../Source/midi.cpp"
             xcodeResource="0"/>
-      <FILE id="Y1Ncbs" name="piano.h" compile="0" resource="0" file="../Source/piano.h"/>
+      <FILE id="Y1Ncbs" name="midi.h" compile="0" resource="0" file="../Source/midi.h"/>
       <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="../Libraries/AudioFFT/AudioFFT.cpp"/>
       <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="../Libraries/AudioFFT/AudioFFT.h"/>
       <FILE id="JIvbFF" name="pitch_detection.cpp" compile="1" resource="0"

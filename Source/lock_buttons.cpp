@@ -2,7 +2,7 @@
 
 #include "lock_buttons.h"
 #include "BinaryData.h"
-#include "piano.h"
+#include "midi.h"
 
 const int LOCK_BUTTON_OFFSET = 2; // pixels
 
@@ -47,7 +47,7 @@ void layoutLockButton(
     const float blackKeyWidth,
     const float blackKeyHeight
 ) {
-    const bool isBlackKey = piano::isBlackNote(keyNumber);
+    const bool isBlackKey = midi::isBlackNote(keyNumber);
     const float keyXCoord = keyBounds.getX();
     const float keyYCoord = keyBounds.getY();
     const float keyWidth = isBlackKey ? blackKeyWidth : keyBounds.getWidth();
@@ -89,7 +89,7 @@ void addAndMakeLockButtonsVisible(juce::MidiKeyboardComponent& keyboard, Piano96
             keyboard.getBlackNoteLength()
         );
         
-        setLockButtonImage(lockButton, !piano::isBlackNote(keyNumber), false);
+        setLockButtonImage(lockButton, !midi::isBlackNote(keyNumber), false);
 
         keyboard.addAndMakeVisible(lockButton);
     }

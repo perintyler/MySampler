@@ -1,14 +1,9 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   piano.cpp
-//   ~~~~~~~~~
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/* midi.cpp */
 
 #include <vector>
 #include <cassert>
 
-#include "piano.h"
+#include "midi.h"
 
 const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
     16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.50, 25.96, 27.50, 29.14, 30.87, 32.70, 34.65, 36.71, 38.89, 41.20,
@@ -23,14 +18,14 @@ const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
 
 const int BLACK_NOTE_NUMBERS[5] { 1, 3, 6, 8, 10 };
 
-bool piano::isBlackNote(int keyNumber)
+bool midi::isBlackNote(int keyNumber)
 {
     int noteNumber = keyNumber % 12;
     return std::find(std::begin(BLACK_NOTE_NUMBERS), std::end(BLACK_NOTE_NUMBERS), noteNumber)
         != std::end(BLACK_NOTE_NUMBERS);
 }
 
-float piano::getFrequency(int keyNumber)
+float midi::getFrequency(int keyNumber)
 {
     assert(keyNumber > 0);
     assert(keyNumber < B8);
@@ -39,12 +34,12 @@ float piano::getFrequency(int keyNumber)
 
 /* TODO: this needs a docstring
  */
-int piano::getKeyNumber(float frequency)
+int midi::getKeyNumber(float frequency)
 {
     if (frequency <= NOTE_FREQUENCIES[0])
-        return piano::C0;
+        return midi::C0;
     else if (frequency >= NOTE_FREQUENCIES[NOTE_FREQUENCIES.size()-1])
-        return piano::G8;
+        return midi::G8;
 
     int noteNumber;
     for (noteNumber = 0; noteNumber < NOTE_FREQUENCIES.size()-1; ++noteNumber) {
@@ -63,14 +58,14 @@ int piano::getKeyNumber(float frequency)
             break;
         }
     }
-    return piano::C0 + noteNumber;
+    return midi::C0 + noteNumber;
 }
 
-piano::Semitone piano::getSemitone(float frequency)
+midi::Semitone midi::getSemitone(float frequency)
 {
     int keyNumber = getKeyNumber(frequency);
-    int semitoneNumber = keyNumber % piano::OCTAVE_SIZE;
+    int semitoneNumber = keyNumber % midi::OCTAVE_SIZE;
     assert(0 <= semitoneNumber);
-    assert(semitoneNumber < piano::OCTAVE_SIZE);
-    return (piano::Semitone) semitoneNumber;
+    assert(semitoneNumber < midi::OCTAVE_SIZE);
+    return (midi::Semitone) semitoneNumber;
 }

@@ -15,7 +15,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "piano.h"
+#include "midi.h"
 #include "samples.h"
 
 const int NUM_VOICES = 8;

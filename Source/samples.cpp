@@ -86,7 +86,7 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
                 audioReader->sampleRate,
                 true
             );
-            rootNoteOfSample = piano::getKeyNumber(frequencyOfSample);
+            rootNoteOfSample = midi::getKeyNumber(frequencyOfSample);
         } catch (FrequencyNotDetectedException) {
             juce::Logger::writeToLog(
                 "Could not detect fundemental frequency of sample:" + fileName
