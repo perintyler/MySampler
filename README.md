@@ -17,6 +17,7 @@ https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-
 ---
 
 ## Supported Formats:
+
 - [AU](https://en.wikipedia.org/wiki/Audio_Units)
 - [VST](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
 - [VST3](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
@@ -35,6 +36,19 @@ or, to build/install the plugin manually with cmake:
 mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 make install
+```
+
+### Building with Ubuntu/Debian-like Distributions
+
+For Ubuntu/Debian-like distributions, the JUCE framework has couple of dependencies that must be installed.
+
+- libgl1-mesa-dev
+- xorg-dev
+
+Install the dependencies with `apt-get`:
+
+```console
+apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
 ```
 
 ## Unit Testing

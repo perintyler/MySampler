@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
 
 project(Piano960 VERSION 0.0.1)
 
@@ -37,11 +37,9 @@ endif()
 
 set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
-set(PIANO960_SAMPLES_DIR "${PIANO960_INSTALLATION_DIR}/samples")
-
 install(
    DIRECTORY          ${CMAKE_CURRENT_SOURCE_DIR}/Resources/
-   DESTINATION        ${PIANO960_SAMPLES_DIR}
+   DESTINATION        ${PIANO960_INSTALLATION_DIR}
    FILES_MATCHING     PATTERN "*.wav"
 )
 

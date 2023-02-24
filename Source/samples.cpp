@@ -14,17 +14,17 @@
 #include <filesystem>
 
 #include "samples.h"
-// #include "paths.h"
+#include "paths.h"
 
-#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
-
-namespace filesystem = std::__fs::filesystem; // TODO: investigate why I need to use std::__fs
+#ifndef SAMPLES_DIRECTORY
+    #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#endif
 
 const int NUM_SAMPLES = []{
     int numNonAudioFiles = 2; // every directory includes a '.' and '..' file link
     int numFilesInDirectory = (int) std::distance(
-        filesystem::directory_iterator(SAMPLES_DIRECTORY),
-        filesystem::directory_iterator {}
+        std::filesystem::directory_iterator(SAMPLES_DIRECTORY),
+        std::filesystem::directory_iterator {}
     );
     return numFilesInDirectory - numNonAudioFiles;
 }();
@@ -33,7 +33,8 @@ juce::File getRandomSample()
 {
     int sampleID = juce::Random::getSystemRandom().nextInt(NUM_SAMPLES);
     std::string fileName = std::to_string(sampleID) + ".wav";
-    filesystem::path filePath = filesystem::path { SAMPLES_DIRECTORY } / filesystem::path { fileName };
+    std::filesystem::path filePath = 
+        std::filesystem::path { SAMPLES_DIRECTORY } / std::filesystem::path { fileName };
     return juce::File { filePath.string() };
 }
 
@@ -43,10 +44,10 @@ std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 
     if (!wavFile.existsAsFile()) {
         juce::String errorMessage = "wav file does not exist: " + wavFile.getFullPathName();
-        throw filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
+        throw std::filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
     } else if (wavFile.getFileExtension() != ".wav") {
         juce::String errorMessage = "sample is not a wav file: " + wavFile.getFullPathName();
-        throw filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
+        throw std::filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
     }
 
     return std::unique_ptr<juce::AudioFormatReader>(
