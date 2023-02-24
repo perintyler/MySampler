@@ -99,7 +99,7 @@ float getFundementalFrequency(const float* signal, int bufferSize, int startSamp
 
 const char * FrequencyNotDetectedException::what () const throw ()
 {
-    return "TODO";
+    return "The sample's fundemental frequency could not be reliably detected";
 }
 
 float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate, bool doubleCheck)
