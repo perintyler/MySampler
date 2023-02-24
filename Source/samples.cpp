@@ -14,9 +14,11 @@
 #include <filesystem>
 
 #include "samples.h"
-// #include "paths.h"
+#include "paths.h"
 
-#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#ifndef SAMPLES_DIRECTORY
+    #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#endif
 
 const int NUM_SAMPLES = []{
     int numNonAudioFiles = 2; // every directory includes a '.' and '..' file link
