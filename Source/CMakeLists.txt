@@ -16,17 +16,24 @@ juce_add_plugin(Piano960Plugin
     COPY_PLUGIN_AFTER_BUILD APPLE # copy to default plugin location for IOS
 )
 
+juce_add_binary_data(Piano960PluginBinaryData SOURCES
+    ../Assets/locked-black.png
+    ../Assets/locked-white.png
+    ../Assets/unlocked-black.png 
+    ../Assets/unlocked-white.png
+)
+
 set(Piano960Plugin_SOURCES 
-        plugin_editor.h
-        plugin_editor.cpp 
-        plugin_processor.h
-        plugin_processor.cpp
-        pitch_detection.h
-        pitch_detection.cpp
-        piano.h
-        piano.cpp
-        samples.h
-        samples.cpp
+    plugin_editor.h
+    plugin_editor.cpp 
+    plugin_processor.h
+    plugin_processor.cpp
+    pitch_detection.h
+    pitch_detection.cpp
+    midi.h
+    midi.cpp
+    samples.h
+    samples.cpp
 )
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
