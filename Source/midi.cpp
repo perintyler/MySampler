@@ -5,6 +5,10 @@
 
 #include "midi.h"
 
+static const char * SEMITONE_STRINGS[] = {
+    "C", "D#", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
+};
+
 const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
     16.35, 17.32, 18.35, 19.45, 20.60, 21.83, 23.12, 24.50, 25.96, 27.50, 29.14, 30.87, 32.70, 34.65, 36.71, 38.89, 41.20,
     43.65, 46.25, 49.00, 51.91, 55.00, 58.27, 61.74, 65.41, 69.30, 73.42, 77.78, 82.41, 87.31, 92.50, 98.00, 103.83, 110.00,
@@ -69,4 +73,9 @@ midi::Semitone midi::getSemitone(float frequency)
     assert(0 <= semitoneNumber);
     assert(semitoneNumber < midi::OCTAVE_SIZE);
     return (midi::Semitone) semitoneNumber;
+}
+
+std::string midi::getSemitoneString(Semitone semitone)
+{
+    return std::string { SEMITONE_STRINGS[semitone] };
 }

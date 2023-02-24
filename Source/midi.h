@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include <string>
+
 namespace midi {
 
     enum Semitone { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B };
-        
+
     constexpr Semitone Csharp = Db;
     constexpr Semitone Dsharp = Eb;
     constexpr Semitone Fsharp = Gb;
@@ -49,4 +51,7 @@ namespace midi {
     midi::MidiNumber getMidiNumber(float frequency);
     
     bool isValidNote(float frequency);
+    
+    std::string getSemitoneString(Semitone);
+    
 } // piano namespace
