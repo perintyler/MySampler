@@ -1,7 +1,6 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   plugin_processor.h
-//   ~~~~~~~~~~~~~~~~~~
+/* plugin_processor.h */
+
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
 // This file declares the `Piano960Processor` class, which is
 // responsible for processing MIDI input and producing audio
@@ -11,6 +10,8 @@
 
 #pragma once
 
+#include <map>
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 
@@ -18,10 +19,6 @@
 #include "samples.h"
 
 const int NUM_VOICES = 8;
-
-const int FIRST_KEY = piano::C1;
-
-const int LAST_KEY = piano::C7;
 
 const juce::String PLUGIN_NAME { "Piano960" };
 
@@ -39,8 +36,6 @@ public:
     bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
 
     void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
-
-    void randomize_samples();
     
     juce::AudioProcessorEditor* createEditor() override;
 
@@ -71,7 +66,17 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override {}
 
     juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
+    
+    void randomize_samples();
 
+    bool isKeyLocked(int keyNumber) const;
+    
+    void lockKey(int keyNumber);
+    
+    void unlockKey(int keyNumber);
+    
+    void logSamples() const;
+    
 private:
     
     juce::MidiKeyboardState keyboardState;
@@ -79,6 +84,10 @@ private:
     juce::MidiMessageCollector midiCollector;
 
     juce::Synthesiser synthesiser;
+    
+    std::unordered_map<int, bool> lockedKeys {};
+
+    std::unordered_map<int, juce::String> sampleNames {};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Piano960Processor)
 };

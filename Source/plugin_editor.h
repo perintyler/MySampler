@@ -1,14 +1,16 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   plugin_editor.h
-//   ~~~~~~~~~~~~~~~
+/* plugin_editor.h */
+
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
 // This file declares the `Piano960Editor` class, which is
-// responsible for the plugin's user interface.
+// responsible for laying out and rendering the plugin's
+// user interface.
 //
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 #pragma once
+
+#include <map>
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_graphics/juce_graphics.h>
@@ -24,19 +26,15 @@ const int VERTICAL_MARGIN_SIZE = 5; // pixels
 
 const int FIRST_MIDI_NOTE = 24;
 
-const int LAST_MIDI_NOTE = 96;
+const int LAST_MIDI_NOTE = 48;
 
 const float WHITE_KEY_WIDTH = 40.0;
 
 const float BLACK_KEY_WIDTH_RATIO = 1.0;
 
-const int LOCK_BUTTON_OFFSET = 2; // pixels
-
 const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
-const juce::Colour BLACK = juce::Colour::fromRGB(juce::uint8(256), juce::uint8(256), juce::uint8(256));
-
-const juce::Colour WHITE = juce::Colour::fromRGB(juce::uint8(0), juce::uint8(0), juce::uint8(0));
+const juce::String SAVE_BUTTON_LABEL { "save" };
 
 class Piano960Editor: public juce::AudioProcessorEditor {
 public:
@@ -49,19 +47,15 @@ public:
 
     void resized() override;
     
-    int getFirstMidiKey() const;
-    
-    int getLastMidiKey() const;
-    
 private:
-
-    juce::ImageButton* getLockButton(int keyNumber) const;
 
     Piano960Processor& audioProcessor;
     
     juce::MidiKeyboardComponent keyboardComponent;
     
     juce::TextButton randomizeButton;
+    
+    juce::TextButton saveButton;
 
     std::vector<std::unique_ptr<juce::ImageButton>> lockButtons;
 

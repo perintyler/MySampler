@@ -71,13 +71,11 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
     juce::File randomSample;
     int rootNoteOfSample;
     std::unique_ptr<juce::AudioFormatReader> audioReader;
+    juce::String fileName;
 
-    while ((audioReader == nullptr)
-//        || (rootNoteOfSample <= piano::C0)
-//        || (rootNoteOfSample >= piano::C8)
-     // || (std::abs(keyNumber - rootNoteOfSample) > PITCH_SHIFT_LIMIT)
-    ) {
+    while ((audioReader == nullptr)) {
         juce::File randomSample = getRandomSample();
+        fileName = randomSample.getFileName();
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);
         juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
@@ -90,15 +88,17 @@ juce::SamplerSound* getRandomSamplerSound(int keyNumber)
             );
             rootNoteOfSample = piano::getKeyNumber(frequencyOfSample);
         } catch (FrequencyNotDetectedException) {
-            juce::Logger::writeToLog("Could not detect fundemental frequency of sample:" + randomSample.getFileName());
+            juce::Logger::writeToLog(
+                "Could not detect fundemental frequency of sample:" + fileName
+            );
         }
     }
 
     juce::BigInteger keyRange;
     keyRange.setRange(keyNumber, keyNumber+1, true);
-
+    
     return new juce::SamplerSound(
-        randomSample.getFileName(), *audioReader,
+        fileName, *audioReader,
         keyRange, rootNoteOfSample,
         ATTACK, RELEASE, MAX_SAMPLE_LENGTH
     );
