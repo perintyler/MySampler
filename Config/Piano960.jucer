@@ -7,6 +7,8 @@
               pluginCode="Tyle" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="gfHjMe" name="Piano960D">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="../Source">
+      <FILE id="j0Sc1t" name="logs.cpp" compile="1" resource="0" file="../Source/logs.cpp"/>
+      <FILE id="ri8sRM" name="logs.h" compile="0" resource="0" file="../Source/logs.h"/>
       <FILE id="xoCzzb" name="lock_buttons.cpp" compile="1" resource="0"
             file="../Source/lock_buttons.cpp"/>
       <FILE id="L71iRm" name="lock_buttons.h" compile="0" resource="0" file="../Source/lock_buttons.h"/>

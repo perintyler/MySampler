@@ -1,0 +1,38 @@
+/* logs.cpp */
+
+#include "logs.h"
+
+/** A `NonDebugLogger`  is just like a `juce::FileLogger`, except log messages don't
+ ** get written to the debug stream (i.e. stdout)
+ **/
+class NonDebugLogger: public juce::FileLogger {
+public:
+    NonDebugLogger(const juce::String pathToFile, const juce::String& welcomeMessage = "")
+        : juce::FileLogger(juce::File { pathToFile }, welcomeMessage)
+    {}
+
+    void logMessage (const juce::String& message) override
+    {
+        juce::FileOutputStream out (getLogFile().getFullPathName(), 256);
+        out << message << juce::newLine;
+    }
+};
+
+// TODO: define more-dynamic log paths in config file
+NonDebugLogger badSampleLogger("/Users/tylerperin/garage/Piano960/logs/bad-samples.txt");
+NonDebugLogger goodSampleLogger("/Users/tylerperin/garage/Piano960/logs/good-samples.txt");
+
+void logs::newBadSample(juce::String sampleName)
+{
+    badSampleLogger.logMessage(sampleName);
+}
+
+void logs::newGoodSample(juce::String sampleName)
+{
+    goodSampleLogger.logMessage(sampleName);
+}
+
+void logs::debug(juce::String message)
+{
+    juce::Logger::outputDebugString(message);
+}
