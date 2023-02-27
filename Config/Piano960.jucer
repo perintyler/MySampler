@@ -11,6 +11,8 @@
       <FILE id="Buusbf" name="app.cpp" compile="1" resource="0" file="../Source/app.cpp"/>
       <FILE id="j0Sc1t" name="logs.cpp" compile="1" resource="0" file="../Source/logs.cpp"/>
       <FILE id="ri8sRM" name="logs.h" compile="0" resource="0" file="../Source/logs.h"/>
+      <FILE id="Bu3a1I" name="random.cpp" compile="1" resource="0" file="../Source/random.cpp"/>
+      <FILE id="F3MrFx" name="random.h" compile="0" resource="0" file="../Source/random.h"/>
       <FILE id="xoCzzb" name="lock_buttons.cpp" compile="1" resource="0"
             file="../Source/lock_buttons.cpp"/>
       <FILE id="L71iRm" name="lock_buttons.h" compile="0" resource="0" file="../Source/lock_buttons.h"/>
