@@ -18,3 +18,10 @@ public:
     }
 };
 
+NonDebugLogger badSampleLogger("/Users/tylerperin/garage/Piano960/logs/bad-samples.txt");
+
+void logs::newBadSample(juce::String sampleName)
+{
+    badSampleLogger.logMessage(sampleName);
+}
+
