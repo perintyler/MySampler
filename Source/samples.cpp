@@ -14,28 +14,16 @@
 #include <filesystem>
 
 #include "samples.h"
-#include "paths.h"
+#include "logs.h"
+#include "random.h"
 
 #ifndef SAMPLES_DIRECTORY
     #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
 #endif
 
-const int NUM_SAMPLES = []{
-    int numNonAudioFiles = 2; // every directory includes a '.' and '..' file link
-    int numFilesInDirectory = (int) std::distance(
-        std::filesystem::directory_iterator(SAMPLES_DIRECTORY),
-        std::filesystem::directory_iterator {}
-    );
-    return numFilesInDirectory - numNonAudioFiles;
-}();
-
 juce::File getRandomSample()
 {
-    int sampleID = juce::Random::getSystemRandom().nextInt(NUM_SAMPLES);
-    std::string fileName = std::to_string(sampleID) + ".wav";
-    std::filesystem::path filePath = 
-        std::filesystem::path { SAMPLES_DIRECTORY } / std::filesystem::path { fileName };
-    return juce::File { filePath.string() };
+    return juce::File { getPathToRandomFile(SAMPLES_DIRECTORY) };
 }
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
@@ -72,11 +60,11 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
     juce::File randomSample;
     int rootNoteOfSample;
     std::unique_ptr<juce::AudioFormatReader> audioReader;
-    juce::String fileName;
+    juce::String pathToFile;
 
     while ((audioReader == nullptr)) {
         juce::File randomSample = getRandomSample();
-        fileName = randomSample.getFileName();
+        pathToFile = randomSample.getFullPathName();
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);
         juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
@@ -89,9 +77,7 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
             );
             rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
         } catch (FrequencyNotDetectedException) {
-            juce::Logger::writeToLog(
-                "Could not detect fundemental frequency of sample:" + fileName
-            );
+            logs::newBadSample(pathToFile);
         }
     }
 
@@ -99,7 +85,7 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
     keyRange.setRange(midiNumber, midiNumber+1, true);
     
     return new juce::SamplerSound(
-        fileName, *audioReader,
+        pathToFile, *audioReader,
         keyRange, rootNoteOfSample,
         ATTACK, RELEASE, MAX_SAMPLE_LENGTH
     );
