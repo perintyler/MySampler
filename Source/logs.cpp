@@ -19,9 +19,14 @@ public:
 };
 
 NonDebugLogger badSampleLogger("/Users/tylerperin/garage/Piano960/logs/bad-samples.txt");
+NonDebugLogger goodSampleLogger("/Users/tylerperin/garage/Piano960/logs/good-samples.txt");
 
 void logs::newBadSample(juce::String sampleName)
 {
     badSampleLogger.logMessage(sampleName);
 }
 
+void logs::newGoodSample(juce::String sampleName)
+{
+    goodSampleLogger.logMessage(sampleName);
+}
