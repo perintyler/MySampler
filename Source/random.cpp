@@ -28,3 +28,21 @@ std::string getPathToRandomFile(const std::string& directory)
     assert(!path.empty());
     return path;
 }
+
+std::string getPathToRandomFile(std::string directory)
+{
+    std::string path;
+    size_t numFilesTraversed = 1;
+    std::filesystem::recursive_directory_iterator fileIterator(directory);
+    
+    for (const std::filesystem::directory_entry &entry: fileIterator) {
+        if (!std::filesystem::is_directory(entry)) {
+            if (getRandomDecimalBetween0And1() < 1.0 / numFilesTraversed) {
+               path = entry.path().string();
+            }
+            numFilesTraversed++;
+        }
+    }
+
+    return path;
+}
