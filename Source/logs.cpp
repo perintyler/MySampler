@@ -30,3 +30,8 @@ void logs::newGoodSample(juce::String sampleName)
 {
     goodSampleLogger.logMessage(sampleName);
 }
+
+void logs::debug(juce::String message)
+{
+    juce::Logger::outputDebugString(message);
+}
