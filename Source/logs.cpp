@@ -18,6 +18,7 @@ public:
     }
 };
 
+// TODO: define more-dynamic log paths in config file
 NonDebugLogger badSampleLogger("/Users/tylerperin/garage/Piano960/logs/bad-samples.txt");
 NonDebugLogger goodSampleLogger("/Users/tylerperin/garage/Piano960/logs/good-samples.txt");
 

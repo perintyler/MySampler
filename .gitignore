@@ -2,6 +2,7 @@ build/
 Builds/
 JuceLibraryCode/
 sample-log.json
+logs/
 
 .DS_Store
 
