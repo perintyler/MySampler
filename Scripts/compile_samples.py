@@ -47,7 +47,8 @@ SAMPLE_CATEGORIES = {
   'Woodwind': ['woodwind', 'woodwinds'],
   'Glockenspiel': ['glockenspiel', 'glockenspiels'],
   'Trumpet': ['trumpet', 'trumpets', 'horn', 'horns'],
-  'Cello': ['cello', 'cellos']
+  'Cello': ['cello', 'cellos'],
+  'Nature': ['space', 'nebula', 'jwst', 'water', 'leaves', 'wind', 'animal']
 }
 
 CATEGORIES_TO_AVOID = (
