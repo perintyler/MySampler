@@ -83,9 +83,11 @@ void Piano960Processor::unlockKey(midi::MidiNumber midiNumber)
 void Piano960Processor::logSamples() const
 {
     for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
+        juce::String sampleName = sampleNames.at(midiNumber);
         if (isKeyLocked(midiNumber)) {
-            juce::String logLine = juce::String { midiNumber } + ": " + sampleNames.at(midiNumber);
-            juce::Logger::writeToLog(logLine);
+            logs::newGoodSample(sampleName);
+        } else {
+            logs::newBadSample(sampleName);
         }
     }
 }
