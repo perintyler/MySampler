@@ -7,6 +7,7 @@
 
 #include "plugin_processor.h"
 #include "plugin_editor.h"
+#include "logs.h"
 
 Piano960Processor::Piano960Processor()
     : AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
