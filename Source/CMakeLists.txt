@@ -25,6 +25,7 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
     ../Assets/unlocked-white.png
 )
 
+# TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
 set(Piano960Plugin_SOURCES 
     plugin_editor.h
     plugin_editor.cpp 
@@ -38,6 +39,10 @@ set(Piano960Plugin_SOURCES
     samples.cpp
     lock_buttons.cpp
     lock_buttons.h
+    logs.cpp
+    logs.h
+    random.cpp
+    random.h
 )
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})

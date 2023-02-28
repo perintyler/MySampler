@@ -7,7 +7,7 @@
  **/
 class NonDebugLogger: public juce::FileLogger {
 public:
-    NonDebugLogger(const juce::String pathToFile, const juce::String& welcomeMessage = "")
+    NonDebugLogger(juce::String pathToFile, const juce::String& welcomeMessage = "")
         : juce::FileLogger(juce::File { pathToFile }, welcomeMessage)
     {}
 
@@ -18,21 +18,21 @@ public:
     }
 };
 
-// TODO: define more-dynamic log paths in config file
-NonDebugLogger badSampleLogger("/Users/tylerperin/garage/Piano960/logs/bad-samples.txt");
-NonDebugLogger goodSampleLogger("/Users/tylerperin/garage/Piano960/logs/good-samples.txt");
+static NonDebugLogger goodSampleLogger("/var/log/Piano960/good-samples.txt");
+static NonDebugLogger badSampleLogger("/var/log/Piano960/bad-samples.txt");
 
-void logs::newBadSample(juce::String sampleName)
-{
-    badSampleLogger.logMessage(sampleName);
-}
-
-void logs::newGoodSample(juce::String sampleName)
+void logs::newGoodSample(const juce::String& sampleName)
 {
     goodSampleLogger.logMessage(sampleName);
 }
 
-void logs::debug(juce::String message)
+void logs::newBadSample(const juce::String& sampleName)
+{
+    badSampleLogger.logMessage(sampleName);
+}
+
+void logs::debug(const juce::String& message)
 {
     juce::Logger::outputDebugString(message);
 }
+

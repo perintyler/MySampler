@@ -5,7 +5,7 @@
 #include <juce_core/juce_core.h>
 
 namespace logs {
-    void newBadSample  (juce::String);
-    void newGoodSample (juce::String);
-    void debug         (juce::String);
+    void newGoodSample (const juce::String& sampleName);
+    void newBadSample  (const juce::String& sampleName);
+    void debug         (const juce::String& message);
 }
