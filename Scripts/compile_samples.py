@@ -15,33 +15,85 @@ import json
 import argparse
 import random
 from typing import Set
+import re
 
-NUM_SAMPLES = 200 # TODO: make this a command line argument
+NUM_SAMPLES = 500 # TODO: make this a command line argument
 
 PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
 
 PATH_TO_LOG_FILE = PATH_TO_PIANO960_REPO.joinpath('sample-log.json').resolve()
 
-def generate_WAV_file_paths(sample_pack_directory, print_details=False) -> Set[pathlib.PosixPath]:
-  """returns the absolute path of all WAV files contained anywhere inside the sample pack directory""" 
-  sample_paths = set()
+SAMPLE_CATEGORIES = {
+  'Guitar': ['guitar', 'guitars'],
+  'Keyboard': ['keys', 'key'],
+  'Mallet': ['mallet', 'mallets'],
+  'Vocal' : ['vocal', 'vocals', 'vo', 'choir', 'choirs'],
+  'Voilin': ['violin', 'violins', 'strings'],
+  'Synth': ['synth', 'synths', 'leads', 'lead'],
+  'Texture': ['texture', 'textures'],
+  'Bass': ['bass', 'basses'],
+  'Pluck': ['plucked', 'pluck', 'plucks'],
+  'World': ['world', 'ethnic'],
+  'Bell': ['bell', 'bells'],
+  'Accent': ['accent', 'accents'],
+  'Flute': ['flute', 'flutes'],
+  'SFX': ['sfx', 'fx', 'effect', 'effects', 'noise'],
+  'Brass': ['brass'],
+  'Pad': ['pad', 'pads'],
+  'Trombone': ['trombone', 'trombones'],
+  'Arp': ['arp', 'arps'],
+  'Piano': ['piano', 'pianos', 'upright', 'grand'],
+  'Organ': ['organ', 'organs'],
+  'Woodwind': ['woodwind', 'woodwinds'],
+  'Glockenspiel': ['glockenspiel', 'glockenspiels'],
+  'Trumpet': ['trumpet', 'trumpets', 'horn', 'horns'],
+  'Cello': ['cello', 'cellos']
+}
 
-  def crawl(path_to_directory):
-    num_samples_found_in_directory = 0
-    for file_name in os.listdir(path_to_directory):
-      absolute_path = os.path.join(path_to_directory, file_name)
-      if os.path.isdir(absolute_path):
-        posix_path = pathlib.Path(absolute_path).resolve()
-        crawl(posix_path)
-      elif file_name.endswith('.wav'):
-        sample_paths.add(absolute_path)
-        num_samples_found_in_directory += 1
+CATEGORIES_TO_AVOID = (
+  'accents',
+)
 
-    if print_details and num_samples_found_in_directory: print(
-        f'found {num_samples_found_in_directory} samples in {path_to_directory}')
+SAMPLE_PACKS_TO_IGNORE = (
+  'eclipse-oneshots-by-kindobands',
+)
 
-  crawl(sample_pack_directory)
-  return sample_paths
+def is_sample_from_valid_pack(path_to_sample, sample_packs_directory):
+  relative_path = os.path.relpath(path_to_sample, sample_packs_directory)
+  for pack_to_ignore in SAMPLE_PACKS_TO_IGNORE:
+    if relative_path.startswith(pack_to_ignore):
+      return False
+  return True
+
+def generate_sample_paths(sample_packs_directory):
+  sample_paths = list(pathlib.Path(sample_packs_directory).glob(f"**/*.wav"))
+  assert len(sample_paths) > 0
+
+  while sample_paths:
+    random_index = random.randint(0, len(sample_paths) - 1)
+    path_to_sample = sample_paths.pop(random_index)
+    if is_sample_from_valid_pack(path_to_sample, sample_packs_directory):
+      yield path_to_sample
+
+def get_categories(sample_path) -> list:
+  path = str(sample_path).lower()
+  for deliminator in ('/', ',', '.', '-', '_', '~'):
+    path = path.replace(deliminator, ' ')
+
+  potential_category_identifiers = path.split(' ')
+  categorizations  = set()
+  for potential_category_id in potential_category_identifiers:
+    for category, category_identifiers in SAMPLE_CATEGORIES.items():
+      if potential_category_id in category_identifiers:
+        categorizations.add(category)
+
+  return categorizations
+
+def valid_category_exists(categories):
+  for category in categories:
+    if category not in CATEGORIES_TO_AVOID:
+      return True
+  return False
 
 def compile_samples(installation_directory, sample_packs_directory, print_details=False):
   """
@@ -49,52 +101,76 @@ def compile_samples(installation_directory, sample_packs_directory, print_detail
   installation directory. Each of the installed files will have a unique ID. The new file 
   names will follow this format: `<Sample-Number>.wav`.
   """
-  installation_log = {} # name of installed file -> path to the copied audio file
-  all_samples = generate_WAV_file_paths(sample_packs_directory, print_details=print_details)
-  sample_set = random.sample(sorted(all_samples), NUM_SAMPLES)
-  for sample_number, path_to_sample in enumerate(sample_set):
-    if sample_number >= NUM_SAMPLES: break
-    compiled_file_name = f'{sample_number}.wav'
-    compiled_file_path = os.path.join(installation_directory, compiled_file_name)
-    installation_log[compiled_file_name] = str(path_to_sample)
-    # os.symlink(path_to_sample, compiled_file_path)
-    shutil.copy2(path_to_sample, compiled_file_path)
-    if print_details: print(f'copying {path_to_sample} to {compiled_file_path}')
+  numCompiledSamples = 0
 
-  with open(PATH_TO_LOG_FILE, 'w') as logfile:
-    json.dump(installation_log, logfile, indent=4)
-    if print_details: print(f'refer to {PATH_TO_LOG_FILE} for sample installation logs')
+  for sample_number, path_to_sample in enumerate(generate_sample_paths(sample_packs_directory)):
+    if numCompiledSamples >= NUM_SAMPLES: break
+    categories = get_categories(path_to_sample)
+    if len(categories) == 0:
+      print(f'could not categorize {path_to_sample}')
+    elif valid_category_exists(categories):
+      relative_path = os.path.relpath(path_to_sample, sample_packs_directory)
+      path_components = relative_path.split(os.sep)
+      compiled_file_name = '.'.join(path_components)
+      for category in categories:
+        compiled_file_path = os.path.join(installation_directory, category, compiled_file_name)
+        shutil.copy2(path_to_sample, compiled_file_path)
+      if print_details: print(f'copying {path_to_sample} to {compiled_file_path}')
+      numCompiledSamples += 1
+
+  print(f'succesfully compiled {numCompiledSamples} samples to {installation_directory}')
 
 def main():
   argument_parser = argparse.ArgumentParser('Piano960 Sample Compilation Script')
 
   argument_parser.add_argument('--sample-packs',
     help = 'a directory containing samples and packs',
-    default = './Sample-Packs'
+    default = os.path.join(PATH_TO_PIANO960_REPO, 'Sample-Packs')
   )
 
   argument_parser.add_argument('--compile-to',
     help = 'the directory where all Piano960 samples will be compile to',
-    default = './Resources'
+    default = os.path.join(PATH_TO_PIANO960_REPO, 'Resources')
   )
 
   argument_parser.add_argument('-v', '--verbose', 
     action = 'store_true',
-    help = 'use this flag to print out extra information about the installation'
+    help = 'use this flag to print out extra information about the compilation'
   )
 
   args = argument_parser.parse_args()
 
-  installation_directory = str(pathlib.Path(args.compile_to).resolve())
+  compilation_directory = str(pathlib.Path(args.compile_to).resolve())
   sample_packs_directory = str(pathlib.Path(args.sample_packs).resolve())
-  
-  if not os.path.exists(installation_directory):
-    os.mkdir(installation_directory)
+
+  stupid_mac_generated_file = os.path.join(compilation_directory, '.DS_Store')
+  if os.path.exists(stupid_mac_generated_file): os.remove(stupid_mac_generated_file)
+
+  if not os.path.exists(compilation_directory):
+    os.mkdir(compilation_directory)
+  elif len(os.listdir(compilation_directory)) > 0 and input("clear samples directory (y/n)?") == 'y':
+    for filename in os.listdir(compilation_directory):
+      path_to_file = os.path.join(compilation_directory, filename)
+      if filename.endswith('.wav'):
+        print(f'deleting wav file: {path_to_file}')
+        os.remove(path_to_file)
+      if os.path.isdir(path_to_file):
+        print(f'deleting catagory directory {path_to_file}')
+        shutil.rmtree(path_to_file)
+
+  for category in SAMPLE_CATEGORIES.keys():
+    category_directory = os.path.join(compilation_directory, category)
+    if not os.path.exists(category_directory):
+      os.mkdir(category_directory)
 
   if not os.path.isdir(sample_packs_directory):
     print(f'sample pack path is not a directory ({sample_packs_directory})')
   else:
-    compile_samples(installation_directory, args.sample_packs, print_details=args.verbose)
-    print(f'succesfully compiled {NUM_SAMPLES} samples to {installation_directory}')
+    compile_samples(compilation_directory, args.sample_packs, print_details=args.verbose)
+
+  for category in SAMPLE_CATEGORIES.keys():
+    category_directory = os.path.join(compilation_directory, category)
+    if len(os.listdir(category_directory)) == 0:
+      os.rmdir(category_directory)
 
 if __name__ == '__main__': main()
