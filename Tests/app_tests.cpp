@@ -30,6 +30,11 @@ TEST_CASE_METHOD(AppTestFixture, "app: is showing")
     REQUIRE(app.isShowing() == true);
 }
 
+TEST_CASE_METHOD(AppTestFixture, "app: is unclipped")
+{
+    REQUIRE(app.isPaintingUnclipped() == true);
+}
+
 TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
 {
     REQUIRE(app.isResizable() == false);
