@@ -7,7 +7,7 @@
 
 class AppTestFixture {
 public:
-     AppFixture()
+     AppTestFixture()
         : processor ()
         , app (processor) 
      {}
@@ -25,7 +25,6 @@ TEST_CASE_METHOD(AppTestFixture, "app: is visibile")
     REQUIRE(app.isVisible() == true);
 }
 
-
 TEST_CASE_METHOD(AppTestFixture, "app: is showing")
 {
     REQUIRE(app.isShowing() == true);
@@ -34,6 +33,12 @@ TEST_CASE_METHOD(AppTestFixture, "app: is showing")
 TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
 {
     REQUIRE(app.isResizable() == false);
+}
+
+TEST_CASE_METHOD(AppTestFixture, "app: has size")
+{
+    auto appRectangle = app.getBounds();
+    REQUIRE(appRectangle.getWidth()*appRectangle.getHeight() > 0);
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: keyboard is sub-component") 
