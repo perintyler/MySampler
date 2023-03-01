@@ -8,34 +8,34 @@
 AudioProcessor processor {};
 App app(processor);
 
-TEST("app: is visibile")
+TEST_CASE("app: is visibile")
 {
     REQUIRE(app.isVisible() == false);
 }
 
-TEST("app: is not resizable")
+TEST_CASE("app: is not resizable")
 {
     REQUIRE(app.isResizable() == false);
 }
 
-TEST("app: keyboard is sub-component") 
+TEST_CASE("app: keyboard is sub-component") 
 {}
 
-TEST("app: randomize button is sub-component") 
+TEST_CASE("app: randomize button is sub-component") 
 {}
 
-TEST("app: paints keyboard") 
+TEST_CASE("app: paints keyboard") 
 {}
 
-TEST("app: paints randomize button") 
+TEST_CASE("app: paints randomize button") 
 {}
 
-TEST("app: lays out keyboard") 
+TEST_CASE("app: lays out keyboard") 
 {}
 
-TEST("app: lays out randomize button") 
+TEST_CASE("app: lays out randomize button") 
 {}
 
-TEST("app: cleans up sub-components upon destuction") 
+TEST_CASE("app: cleans up sub-components upon destuction") 
 {}
 
