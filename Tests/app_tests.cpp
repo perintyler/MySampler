@@ -18,7 +18,7 @@ private:
 protected:
    App app;
 
- };
+};
 
 TEST_CASE_METHOD(AppTestFixture, "app: is visibile")
 {
@@ -50,4 +50,3 @@ TEST_CASE_METHOD("app: lays out randomize button")
 
 TEST_CASE_METHOD("app: cleans up sub-components upon destuction") 
 {}
-
