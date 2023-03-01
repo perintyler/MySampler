@@ -1,18 +1,13 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   main_test.cpp
-//   ~~~~~~~~~~~~~
-//
-// This file contains the entry point (i.e. main function) for
-// the `piano960-test` build.
-//
-// TODO: this file shouldn't be neccessary...
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/* main_test.cpp */
 
-#include <catch2/catch_session.hpp>
+#define CATCH_CONFIG_RUNNER
+#include "<catch2/catch.hpp>"
+#include "<juce_events/juce_events.h>"
 
-int main(int argc, char* argv[]) {
-    Catch::Session session;
-    return session.run();
+int main(int argc, char* argv[])
+{
+    juce::initialiseJuce_GUI();
+    int result = Catch::Session().run(argc, argv);
+    juce::shutdownJuce_GUI();
+    return result;
 }
