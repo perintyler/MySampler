@@ -30,24 +30,24 @@ TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
     REQUIRE(app.isResizable() == false);
 }
 
-TEST_CASE("app: keyboard is sub-component") 
+TEST_CASE_METHOD("app: keyboard is sub-component") 
 {}
 
-TEST_CASE("app: randomize button is sub-component") 
+TEST_CASE_METHOD("app: randomize button is sub-component") 
 {}
 
-TEST_CASE("app: paints keyboard") 
+TEST_CASE_METHOD("app: paints keyboard") 
 {}
 
-TEST_CASE("app: paints randomize button") 
+TEST_CASE_METHOD("app: paints randomize button") 
 {}
 
-TEST_CASE("app: lays out keyboard") 
+TEST_CASE_METHOD("app: lays out keyboard") 
 {}
 
-TEST_CASE("app: lays out randomize button") 
+TEST_CASE_METHOD("app: lays out randomize button") 
 {}
 
-TEST_CASE("app: cleans up sub-components upon destuction") 
+TEST_CASE_METHOD("app: cleans up sub-components upon destuction") 
 {}
 
