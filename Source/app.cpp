@@ -45,7 +45,9 @@ App::App(AudioProcessor& audioProcessor)
     addAndMakeVisible(keyboard, 0);
     addAndMakeLockButtonsVisible(keyboard, processor);
 
+    #ifndef TESTMODE
     processor.randomize_samples();
+    #endif
 }
 
 /** Render the UI
