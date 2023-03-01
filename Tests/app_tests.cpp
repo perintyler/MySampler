@@ -5,6 +5,14 @@
 #include "audio_processor.h"
 #include "app.h"
 
+AudioProcessor processor {};
+App app(processor);
+
+TEST("app: is visibile")
+{
+    REQUIRE(app.isVisible() == false);
+}
+
 TEST("app: keyboard is sub-component") 
 {}
 
