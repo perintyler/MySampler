@@ -42,8 +42,7 @@ TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
 
 TEST_CASE_METHOD(AppTestFixture, "app: has size")
 {
-    auto appRectangle = app.getBounds();
-    REQUIRE(appRectangle.getWidth()*appRectangle.getHeight() > 0);
+    REQUIRE(app.getBounds().getWidth() * app.getBounds().getHeight() > 0);
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: keyboard is sub-component") 
@@ -57,7 +56,9 @@ TEST_CASE_METHOD(AppTestFixture, "app: randomize button is sub-component")
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: paints keyboard") 
-{}
+{
+    REQUIRE(app.findChildWithID("keyboard").isShowing());
+}
 
 TEST_CASE_METHOD(AppTestFixture, "app: paints randomize button") 
 {}
