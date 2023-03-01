@@ -2,7 +2,7 @@
 
 #include <juce_graphics/juce_graphics.h>
 
-#include "plugin_editor.h"
+#include "app.h"
 #include "lock_buttons.h"
 
 const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
@@ -17,7 +17,7 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-Piano960Editor::Piano960Editor(Piano960Processor& audioProcessor)
+App::App(AudioProcessor& audioProcessor)
     : AudioProcessorEditor (&audioProcessor)
     , processor            (audioProcessor)
     , keyboard             (audioProcessor.getKeyboardState(), juce::MidiKeyboardComponent::horizontalKeyboard)
@@ -50,7 +50,7 @@ Piano960Editor::Piano960Editor(Piano960Processor& audioProcessor)
 
 /** Render the UI
  **/
-void Piano960Editor::paint(juce::Graphics& g)
+void App::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     g.setColour(BACKGROUND_COLOR);
@@ -58,7 +58,7 @@ void Piano960Editor::paint(juce::Graphics& g)
 
 /** Lay out subcomponents
  **/
-void Piano960Editor::resized()
+void App::resized()
 {
     int keyboardWidth = getWidth() - HORIZONTAL_MARGIN_SIZE*2;
     int keyboardHeight = 200;

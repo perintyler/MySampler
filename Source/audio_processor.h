@@ -2,7 +2,7 @@
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
-// This file declares the `Piano960Processor` class, which is
+// This file declares the `AudioProcessor` class, which is
 // responsible for processing MIDI input and producing audio
 // output.
 //
@@ -22,12 +22,12 @@ const int NUM_VOICES = 8;
 
 const juce::String PLUGIN_NAME { "Piano960" };
 
-class Piano960Processor: public juce::AudioProcessor {
+class AudioProcessor: public juce::AudioProcessor {
 public:
 
-    Piano960Processor();
+    AudioProcessor();
     
-    ~Piano960Processor() override = default;
+    ~AudioProcessor() override = default;
     
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     
@@ -89,5 +89,5 @@ private:
 
     std::unordered_map<int, juce::String> sampleNames {};
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Piano960Processor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };

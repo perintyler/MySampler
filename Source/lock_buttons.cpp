@@ -63,7 +63,7 @@ void layoutLockButton(
     lockButton->setCentrePosition(xCoord, yCoord);
 }
 
-void addAndMakeLockButtonsVisible(juce::MidiKeyboardComponent& keyboard, Piano960Processor& processor)
+void addAndMakeLockButtonsVisible(juce::MidiKeyboardComponent& keyboard, AudioProcessor& processor)
 {
     for (midi::MidiNumber midiNumber = keyboard.getRangeStart();
          midiNumber <= keyboard.getRangeEnd();

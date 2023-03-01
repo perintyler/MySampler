@@ -27,10 +27,10 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
 
 # TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
 set(Piano960Plugin_SOURCES 
-    plugin_editor.h
-    plugin_editor.cpp 
-    plugin_processor.h
-    plugin_processor.cpp
+    app.h
+    app.cpp 
+    audio_processor.h
+    audio_processor.cpp
     pitch_detection.h
     pitch_detection.cpp
     midi.h

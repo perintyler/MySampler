@@ -16,7 +16,7 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "plugin_processor.h"
+#include "audio_processor.h"
 #include "midi.h"
 
 const midi::MidiNumber FIRST_MIDI_NOTE = midi::C0;
@@ -25,12 +25,12 @@ const midi::MidiNumber LAST_MIDI_NOTE = midi::C3;
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
-class Piano960Editor: public juce::AudioProcessorEditor {
+class App: public juce::AudioProcessorEditor {
 public:
     
-    Piano960Editor(Piano960Processor&);
+    App(AudioProcessor&);
     
-    ~Piano960Editor() override = default;
+    ~App() override = default;
 
     void paint(juce::Graphics&) override;
 
@@ -38,7 +38,7 @@ public:
     
 private:
 
-    Piano960Processor& processor;
+    AudioProcessor& processor;
     
     juce::MidiKeyboardComponent keyboard;
     
@@ -48,5 +48,5 @@ private:
 
     std::vector<std::unique_ptr<juce::ImageButton>> lockButtons;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Piano960Editor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(App)
 };
