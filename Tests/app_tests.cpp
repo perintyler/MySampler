@@ -13,6 +13,11 @@ TEST("app: is visibile")
     REQUIRE(app.isVisible() == false);
 }
 
+TEST("app: is not resizable")
+{
+    REQUIRE(app.isResizable() == false);
+}
+
 TEST("app: keyboard is sub-component") 
 {}
 
