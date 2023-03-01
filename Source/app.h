@@ -46,7 +46,5 @@ private:
     
     juce::TextButton saveButton;
 
-    std::vector<std::unique_ptr<juce::ImageButton>> lockButtons;
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(App)
 };
