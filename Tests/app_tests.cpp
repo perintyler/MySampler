@@ -22,7 +22,13 @@ protected:
 
 TEST_CASE_METHOD(AppTestFixture, "app: is visibile")
 {
-    REQUIRE(app.isVisible() == false);
+    REQUIRE(app.isVisible() == true);
+}
+
+
+TEST_CASE_METHOD(AppTestFixture, "app: is showing")
+{
+    REQUIRE(app.isShowing() == true);
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
