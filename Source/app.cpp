@@ -32,6 +32,7 @@ App::App(AudioProcessor& audioProcessor)
     keyboard.setKeyWidth(WHITE_KEY_WIDTH);
     keyboard.setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
     keyboard.setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
+    keyboard.setBufferedToImage(true);
 
     // the editor's sub-components use plugin dimensions to set their
     // own bounds, so the plugin size must be set before adding sub-components
@@ -40,19 +41,19 @@ App::App(AudioProcessor& audioProcessor)
         250.0
     );
 
-    addAndMakeVisible(saveButton);
-    addAndMakeVisible(randomizeButton);
-    addAndMakeVisible(keyboard, 0);
-    addAndMakeLockButtonsVisible(keyboard, processor);
-
     #ifdef TESTMODE
     setComponentID("app");
     keyboard.setComponentID("keyboard");
-    randomizeButton.setComponentID("randomize-buttom");
+    randomizeButton.setComponentID("randomize-button");
     saveButton.setComponentID("save-button");
     #else
     processor.randomize_samples();
     #endif
+
+    addAndMakeVisible(saveButton);
+    addAndMakeVisible(randomizeButton);
+    addAndMakeVisible(keyboard, 0);
+    addAndMakeLockButtonsVisible(keyboard, processor);
 }
 
 /** Render the UI
