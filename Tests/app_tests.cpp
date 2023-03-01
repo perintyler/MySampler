@@ -68,11 +68,14 @@ TEST_CASE_METHOD(AppTestFixture, "app: paints randomize button")
 TEST_CASE_METHOD(AppTestFixture, "app: lays out keyboard") 
 {
     auto bounds = app.findChildWithID("keyboard").getBounds();
-    REQUIRE(bounds.getWidth() * bounds.getHeight() > 600);
+    REQUIRE(bounds.getWidth() * bounds.getHeight() > 600*250);
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: lays out randomize button") 
-{}
+{
+    auto bounds = app.findChildWithID("randomize-button").getBounds();
+    REQUIRE(bounds.getWidth() * bounds.getHeight() > 300*250);
+}
 
 TEST_CASE_METHOD(AppTestFixture, "app: cleans up sub-components upon destuction") 
 {}
