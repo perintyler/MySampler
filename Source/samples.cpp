@@ -18,13 +18,8 @@
 #include "random.h"
 
 #ifndef SAMPLES_DIRECTORY
-    #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
 #endif
-
-juce::File getRandomSample()
-{
-    return juce::File { getPathToRandomFile(SAMPLES_DIRECTORY) };
-}
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 {
@@ -53,8 +48,9 @@ juce::AudioSampleBuffer createAudioBuffer(std::unique_ptr<juce::AudioFormatReade
     return buffer;
 }
 
-/* TODO: this needs a docstring
- */
+/** Generates a random sample from the installed wav files. The sample will be transposed
+ ** to match the pitch of the desired MIDI key.
+ **/
 juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
 {
     juce::File randomSample;
@@ -62,12 +58,14 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
     std::unique_ptr<juce::AudioFormatReader> audioReader;
     juce::String pathToFile;
 
-    while ((audioReader == nullptr)) {
-        juce::File randomSample = getRandomSample();
-        pathToFile = randomSample.getFullPathName();
+    while (audioReader == nullptr) 
+    {
+        pathToFile = juce::String { getPathToRandomFile(SAMPLES_DIRECTORY) };
+        juce::File randomSample(pathToFile);
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);
         juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
+
         try {
             int frequencyOfSample = getFundementalFrequency(
                 buffer.getReadPointer(0),
