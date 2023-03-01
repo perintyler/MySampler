@@ -5,15 +5,27 @@
 #include "audio_processor.h"
 #include "app.h"
 
-AudioProcessor processor {};
-App app(processor);
+class AppTestFixture {
+public:
+     AppFixture()
+        : processor ()
+        , app (processor) 
+     {}
 
-TEST_CASE("app: is visibile")
+private:
+    AudioProcessor processor;
+
+protected:
+   App app;
+
+ };
+
+TEST_CASE_METHOD(AppTestFixture, "app: is visibile")
 {
     REQUIRE(app.isVisible() == false);
 }
 
-TEST_CASE("app: is not resizable")
+TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
 {
     REQUIRE(app.isResizable() == false);
 }
