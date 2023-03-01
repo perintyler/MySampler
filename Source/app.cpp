@@ -45,7 +45,12 @@ App::App(AudioProcessor& audioProcessor)
     addAndMakeVisible(keyboard, 0);
     addAndMakeLockButtonsVisible(keyboard, processor);
 
-    #ifndef TESTMODE
+    #ifdef TESTMODE
+    setComponentID("app");
+    keyboard.setComponentID("keyboard");
+    randomizeButton.setComponentID("randomize-buttom");
+    saveButton.setComponentID("save-button");
+    #else
     processor.randomize_samples();
     #endif
 }
