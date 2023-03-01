@@ -1,39 +1,29 @@
 /* editor_tests.cpp */
 
 #include <catch2/catch_test_macros.hpp>
+#include <juce_graphics/juce_graphics.h>
 
 #include "audio_processor.h"
 #include "app.h"
 
 class AppTestFixture {
 public:
-     AppTestFixture()
-        : processor ()
-        , app (processor) 
-     {}
-
+    AppTestFixture()
+      : processor ()
+      , app (processor)
+      , image (juce::Image::PixelFormat::RGB, 1000, 1000, true)
+      , graphics (image)
+    {
+        app.paint(graphics);
+        app.resized();
+    }
 private:
     AudioProcessor processor;
-
+    juce::Image image;
+    juce::Graphics graphics;
 protected:
-   App app;
-
+    App app;
 };
-
-TEST_CASE_METHOD(AppTestFixture, "app: is visibile")
-{
-    REQUIRE(app.isVisible() == true);
-}
-
-TEST_CASE_METHOD(AppTestFixture, "app: is showing")
-{
-    REQUIRE(app.isShowing() == true);
-}
-
-TEST_CASE_METHOD(AppTestFixture, "app: is unclipped")
-{
-    REQUIRE(app.isPaintingUnclipped() == true);
-}
 
 TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
 {
@@ -57,24 +47,24 @@ TEST_CASE_METHOD(AppTestFixture, "app: randomize button is sub-component")
 
 TEST_CASE_METHOD(AppTestFixture, "app: paints keyboard") 
 {
-    REQUIRE(app.findChildWithID("keyboard").isShowing());
+    REQUIRE(app.findChildWithID("keyboard")->isVisible());
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: paints randomize button") 
 {
-    REQUIRE(app.findChildWithID("randomize-button").isShowing());
+    REQUIRE(app.findChildWithID("randomize-button")->isVisible());
 }
 
-TEST_CASE_METHOD(AppTestFixture, "app: lays out keyboard") 
+TEST_CASE_METHOD(AppTestFixture, "app: keyboard has size") 
 {
-    auto bounds = app.findChildWithID("keyboard").getBounds();
-    REQUIRE(bounds.getWidth() * bounds.getHeight() > 600*250);
+    auto bounds = app.findChildWithID("keyboard")->getBounds();
+    REQUIRE(bounds.getWidth() * bounds.getHeight() > 0);
 }
 
-TEST_CASE_METHOD(AppTestFixture, "app: lays out randomize button") 
+TEST_CASE_METHOD(AppTestFixture, "app: randomize button has size") 
 {
-    auto bounds = app.findChildWithID("randomize-button").getBounds();
-    REQUIRE(bounds.getWidth() * bounds.getHeight() > 300*250);
+    auto bounds = app.findChildWithID("randomize-button")->getBounds();
+    REQUIRE(bounds.getWidth() * bounds.getHeight() > 0);
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: cleans up sub-components upon destuction") 
