@@ -6,7 +6,7 @@
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 #include "plugin_processor.h"
-#include "plugin_editor.h"
+#include "app.h"
 #include "logs.h"
 
 Piano960Processor::Piano960Processor()
@@ -95,7 +95,7 @@ void Piano960Processor::logSamples() const
 
 juce::AudioProcessorEditor* Piano960Processor::createEditor()
 {
-    return new Piano960Editor (*this);
+    return new App (*this);
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

@@ -25,12 +25,12 @@ const midi::MidiNumber LAST_MIDI_NOTE = midi::C3;
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
-class Piano960Editor: public juce::AudioProcessorEditor {
+class App: public juce::AudioProcessorEditor {
 public:
     
-    Piano960Editor(Piano960Processor&);
+    App(Piano960Processor&);
     
-    ~Piano960Editor() override = default;
+    ~App() override = default;
 
     void paint(juce::Graphics&) override;
 
@@ -48,5 +48,5 @@ private:
 
     std::vector<std::unique_ptr<juce::ImageButton>> lockButtons;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Piano960Editor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(App)
 };
