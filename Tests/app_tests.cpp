@@ -42,7 +42,9 @@ TEST_CASE_METHOD(AppTestFixture, "app: has size")
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: keyboard is sub-component") 
-{}
+{
+    REQUIRE(app.findChildWithID("keyboard") != nullptr);
+}
 
 TEST_CASE_METHOD(AppTestFixture, "app: randomize button is sub-component") 
 {}
