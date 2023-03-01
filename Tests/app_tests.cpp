@@ -61,7 +61,9 @@ TEST_CASE_METHOD(AppTestFixture, "app: paints keyboard")
 }
 
 TEST_CASE_METHOD(AppTestFixture, "app: paints randomize button") 
-{}
+{
+    REQUIRE(app.findChildWithID("randomize-button").isShowing());
+}
 
 TEST_CASE_METHOD(AppTestFixture, "app: lays out keyboard") 
 {}
