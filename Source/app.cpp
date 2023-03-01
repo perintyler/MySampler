@@ -17,7 +17,7 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-App::App(Piano960Processor& audioProcessor)
+App::App(AudioProcessor& audioProcessor)
     : AudioProcessorEditor (&audioProcessor)
     , processor            (audioProcessor)
     , keyboard             (audioProcessor.getKeyboardState(), juce::MidiKeyboardComponent::horizontalKeyboard)

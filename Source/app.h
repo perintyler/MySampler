@@ -16,7 +16,7 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "plugin_processor.h"
+#include "audio_processor.h"
 #include "midi.h"
 
 const midi::MidiNumber FIRST_MIDI_NOTE = midi::C0;
@@ -28,7 +28,7 @@ const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 class App: public juce::AudioProcessorEditor {
 public:
     
-    App(Piano960Processor&);
+    App(AudioProcessor&);
     
     ~App() override = default;
 
@@ -38,7 +38,7 @@ public:
     
 private:
 
-    Piano960Processor& processor;
+    AudioProcessor& processor;
     
     juce::MidiKeyboardComponent keyboard;
     
