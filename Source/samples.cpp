@@ -41,7 +41,6 @@ std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 juce::AudioSampleBuffer createAudioBuffer(std::unique_ptr<juce::AudioFormatReader>& audioReader, int bufferSize)
 {
     juce::AudioSampleBuffer buffer;
-    buffer.clear(); // Why again?
     bufferSize = std::min(bufferSize, (int) audioReader->lengthInSamples);
     buffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&buffer, 0, bufferSize, 0, true, true);
