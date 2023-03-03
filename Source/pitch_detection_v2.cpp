@@ -11,12 +11,15 @@
  *      and with only one channel (mono).
  **/
 
-#include <cassert>
+#include <assert.h>
+#include <math.h>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/tools/gen_op_registration.h"
+
+#include "pitch_detection_v2.h"
 
 const float MINIMUM_CONFIDENCE_THRESHOLD = 0.8;
 
@@ -67,23 +70,23 @@ void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 
     assert(sampleRate > MODEL_INPUT_SAMPLE_RATE);
 
-    void applyLowPassFilter = [&buffer] {
+    auto applyLowPassFilter = [&buffer] {
         // TODO
     };
 
-    void downSampleAudio = [&buffer, &sampleRate] {
+    auto downSampleAudio = [&buffer, &sampleRate] {
         int numSamplesAfterDownSampling = SPICE_MODEL_SAMPLE_RATE*buffer.getNumSamples()/sampleRate;
-
+        int channel = 0;
         if (sampleRate > SPICE_MODEL_SAMPLE_RATE) 
         {
-            for (int newSignalIndex = 0,
+            for (int newSignalIndex = 0
                ; newSignalIndex < numSamplesAfterDownSampling
-               ; newSignalIndex += 1;
+               ; newSignalIndex += 1
             ) {
                 int oldSignalIndex = static_cast<int>(
                     std::round(newSignalIndex*sampleRate/SPICE_MODEL_SAMPLE_RATE)
                 );
-                buffer.setSample(newSignalIndex, buffer.getSample(oldSignalIndex));
+                buffer.setSample(channel, newSignalIndex, buffer.getSample(channel, oldSignalIndex));
             }
         }
         buffer.setSize(1 /* num channels */, numSamplesAfterDownSampling);
@@ -93,34 +96,29 @@ void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
     downSampleAudio();
 }
 
-float* convertModelOutputToFrequencies(float* output, int bufferSize)
-{
-    float* frequencies[bufferSize];
-    for (int index = 0; index < bufferSize; index++)
-        frequencies[index] = FMIN * 2.0 ** (1.0 * (ouput[index] * PT_SLOPE + PT_OFFSET) / BINS_PER_OCTAVE);
-    return frequencies;
-}
 
 float* runModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
     float* spiceModelInput = interpreter->typed_input_tensor<float>(0);
     for (int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); sampleIndex++) {
-        spiceModelInput[sampleIndex] = buffer.getSample(sampleIndex);
+        spiceModelInput[sampleIndex] = buffer.getSample(0, sampleIndex);
     }
 
     interpreter->Invoke();
     return interpreter->typed_output_tensor<float>(0);
 }
 
-float getAverageFrequency(float* frequencies, int numFrequencies) 
+float getAverageFrequency(float* output, int bufferSize)
 {
     float sumOfFrequencies;
-    for (int index = 0; index < numFrequencies; index++)
-        sumOfFrequencies += frequencies[index];
-
-    return sumOfFrequencies / numFrequencies;
+    for (int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++) {
+        sumOfFrequencies += pow(
+          FMIN * 2.0, 
+          (1.0*(output[sampleIndex]*PT_SLOPE+PT_OFFSET) / BINS_PER_OCTAVE)
+        );
+    }
+    return sumOfFrequencies / bufferSize;
 }
-
 
 float pitch_detection_v2::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
@@ -130,8 +128,7 @@ float pitch_detection_v2::getFundementalFrequency(juce::AudioBuffer<float>& buff
         assert(false); // TODO: define custom error
 
     prepareAudioForModel(buffer, sampleRate);
-    float* output = runModel(buffer, bufferSize);
-    float* frequencies = convertModelOutputToFrequencies(output, buffer.getNumSamples());
+    float* output = runModel(buffer, buffer.getNumSamples());
 
-    return getAverageFrequency(frequencies);
+    return getAverageFrequency(output, buffer.getNumSamples());
 }
