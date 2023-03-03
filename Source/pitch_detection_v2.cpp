@@ -17,3 +17,19 @@
 #include "tensorflow/lite/kernels/register.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/tools/gen_op_registration.h"
+
+const float MINIMUM_CONFIDENCE_THRESHOLD = 0.8;
+
+const int SPICE_MODEL_SAMPLE_RATE = 16000;
+
+const int SPICE_MODEL_NUM_CHANNELS = 1;
+
+// the constants below were taken from https://tfhub.dev/google/spice/2
+
+const float PT_OFFSET = 25.58;
+
+const float PT_SLOPE = 63.07;
+
+const float FMIN = 10.0;
+
+const float BINS_PER_OCTAVE = 12.0;
