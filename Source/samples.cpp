@@ -64,16 +64,18 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);
         juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
-
+        const float* signal = buffer.getReadPointer(0);
+        
         try {
-            int frequencyOfSample = getFundementalFrequency(
-                buffer.getReadPointer(0),
-                bufferSize,
-                audioReader->sampleRate,
-                true
-            );
+            int frequencyOfSample = 
+              #ifdef PITCH_DETECTION_V2
+              pitch_detection_v2::getFundementalFrequency(signal, bufferSize, audioReader->sampleRate, true);
+              #else
+              getFundementalFrequency(signal, bufferSize, audioReader->sampleRate, true);
+              #endif
             rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
-        } catch (FrequencyNotDetectedException) {
+        } 
+        catch (FrequencyNotDetectedException) {
             logs::newBadSample(pathToFile);
         }
     }
