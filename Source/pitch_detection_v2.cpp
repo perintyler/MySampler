@@ -41,3 +41,12 @@ bool pitch_detection_v2::model_is_loaded()
 {
     return model.get() != nullptr;
 }
+
+void pitch_detection_v2::load_model()
+{
+    assert(!pitch_detection_v2::model_is_loaded());
+    model = tflite::FlatBufferModel::BuildFromFile("linear.tflite");
+    tflite::ops::builtin::BuiltinOpResolver resolver;  
+    tflite::InterpreterBuilder(*model.get(), resolver)(&interpreter);
+    interpreter->AllocateTensors(); // do i need this?
+}
