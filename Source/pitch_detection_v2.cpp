@@ -100,3 +100,14 @@ float* convertModelOutputToFrequencies(float* output, int bufferSize)
         frequencies[index] = FMIN * 2.0 ** (1.0 * (ouput[index] * PT_SLOPE + PT_OFFSET) / BINS_PER_OCTAVE);
     return frequencies;
 }
+
+float* runModel(juce::AudioBuffer<float>& buffer, int sampleRate)
+{
+    float* spiceModelInput = interpreter->typed_input_tensor<float>(0);
+    for (int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); sampleIndex++) {
+        spiceModelInput[sampleIndex] = buffer.getSample(sampleIndex);
+    }
+
+    interpreter->Invoke();
+    return interpreter->typed_output_tensor<float>(0);
+}
