@@ -36,3 +36,8 @@ const float BINS_PER_OCTAVE = 12.0;
 
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
+
+bool pitch_detection_v2::model_is_loaded()
+{
+    return model.get() != nullptr;
+}
