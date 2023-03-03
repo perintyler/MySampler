@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <juce_audio_formats/juce_audio_formats.h>
+
 namespace pitch_detection_v2 
 {
     bool model_is_loaded();
