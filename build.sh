@@ -20,6 +20,8 @@ SILENT=false; # cli option
 
 CLEAN_BUILD=false; # cli option
 
+USE_PITCH_DETECTION_V2=false;
+
 echo_help_message() 
 {
     echo "options:";
@@ -54,7 +56,11 @@ cmake_piano960()
     pushd_silently $PIANO960_BUILD_DIRECTORY;
 
     cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX";
-    
+
+    if [ "$USE_PITCH_DETECTION_V2" = true ]; then
+        cmake_command_arguments+=" -DPITCH_DETECTION_V=1"
+    fi
+
     if [ "$VERBOSE" = true ]; then 
         echo_stdin_message "cmake $PIANO960_REPO $cmake_command_arguments";
         cmake $PIANO960_REPO $cmake_command_arguments;
@@ -98,7 +104,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit" option; do
+while getopts "hvscit2" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -106,6 +112,7 @@ while getopts "hvscit" option; do
       c) CLEAN_BUILD=true;;                                 # -c : make clean build
       i) add_make_parameter "install";;                     # -i : install samples
       t) add_make_parameter "unit-tests"; RUN_TESTS=true;;  # -t : build and run unit tests
+      2) USE_PITCH_DETECTION_V2=true;                       # -e : use spice model for pitch detection
    esac
 done
 
