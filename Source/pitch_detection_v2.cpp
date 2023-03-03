@@ -92,3 +92,11 @@ void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
     applyLowPassFilter();
     downSampleAudio();
 }
+
+float* convertModelOutputToFrequencies(float* output, int bufferSize)
+{
+    float* frequencies[bufferSize];
+    for (int index = 0; index < bufferSize; index++)
+        frequencies[index] = FMIN * 2.0 ** (1.0 * (ouput[index] * PT_SLOPE + PT_OFFSET) / BINS_PER_OCTAVE);
+    return frequencies;
+}
