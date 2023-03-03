@@ -33,3 +33,6 @@ const float PT_SLOPE = 63.07;
 const float FMIN = 10.0;
 
 const float BINS_PER_OCTAVE = 12.0;
+
+std::unique_ptr<tflite::FlatBufferModel> model { };
+std::unique_ptr<tflite::Interpreter> interpreter { };
