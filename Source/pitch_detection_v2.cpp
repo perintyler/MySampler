@@ -50,3 +50,45 @@ void pitch_detection_v2::load_model()
     tflite::InterpreterBuilder(*model.get(), resolver)(&interpreter);
     interpreter->AllocateTensors(); // do i need this?
 }
+
+/**
+ * Step 1: apply low pass filter (https://cplusplus.com/forum/general/282026/)
+ * Step 2: reduce sample rate
+ *    - this reduces buffer size, allowing us to overwrite the signal in-place. 
+ *    - Iterate through the buffer while overwriting the initial indecies with the decimated signal. 
+ *    - The decimated signal will consists of every Nth sample of the original sample,
+ *      where N = Desired Sample Rate / Current Sample Rate
+ * Step 3: reduce the buffer to a single channel
+ * Step 3: use juce::AudioBuffer::setSize to reduce the buffer to a single channel
+ *         as well as safely update the size of the now smaller buffer
+ **/
+void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
+{
+
+    assert(sampleRate > MODEL_INPUT_SAMPLE_RATE);
+
+    void applyLowPassFilter = [&buffer] {
+        // TODO
+    };
+
+    void downSampleAudio = [&buffer, &sampleRate] {
+        int numSamplesAfterDownSampling = SPICE_MODEL_SAMPLE_RATE*buffer.getNumSamples()/sampleRate;
+
+        if (sampleRate > SPICE_MODEL_SAMPLE_RATE) 
+        {
+            for (int newSignalIndex = 0,
+               ; newSignalIndex < numSamplesAfterDownSampling
+               ; newSignalIndex += 1;
+            ) {
+                int oldSignalIndex = static_cast<int>(
+                    std::round(newSignalIndex*sampleRate/SPICE_MODEL_SAMPLE_RATE)
+                );
+                buffer.setSample(newSignalIndex, buffer.getSample(oldSignalIndex));
+            }
+        }
+        buffer.setSize(1 /* num channels */, numSamplesAfterDownSampling);
+    };
+
+    applyLowPassFilter();
+    downSampleAudio();
+}
