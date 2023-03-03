@@ -120,3 +120,18 @@ float getAverageFrequency(float* frequencies, int numFrequencies)
 
     return sumOfFrequencies / numFrequencies;
 }
+
+
+float pitch_detection_v2::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
+{
+    assert(is_model_loaded());
+
+    if (sampleRate < SPICE_MODEL_SAMPLE_RATE) // audio quality isn't high enough. throw an error.
+        assert(false); // TODO: define custom error
+
+    prepareAudioForModel(buffer, sampleRate);
+    float* output = runModel(buffer, bufferSize);
+    float* frequencies = convertModelOutputToFrequencies(output, buffer.getNumSamples());
+
+    return getAverageFrequency(frequencies);
+}
