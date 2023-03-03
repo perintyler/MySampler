@@ -10,3 +10,10 @@
  *  -- "The SPICE model needs as input an audio file at a sampling rate of 16kHz 
  *      and with only one channel (mono).
  **/
+
+#include <cassert>
+
+#include "tensorflow/lite/interpreter.h"
+#include "tensorflow/lite/kernels/register.h"
+#include "tensorflow/lite/model.h"
+#include "tensorflow/lite/tools/gen_op_registration.h"
