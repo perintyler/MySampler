@@ -3,6 +3,8 @@
 #pragma once
 
 namespace pitch_detection_v2 
-{ 
-    float getFundementalFrequency(const float* signal, int bufferSize, int sampleRate);
+{
+    bool model_is_loaded();
+    void load_model();
+    float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
 }
