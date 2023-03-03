@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 
 project(Piano960 VERSION 0.0.1)
 
-###
+
 # ============= Define Compiler Flags ===============
-###
+
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
@@ -31,44 +31,48 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 
-###
-# ================== Install Samples ====================
-###
+# ================== Installation ====================
+
 
 set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
+# install samples
 install(
-   DIRECTORY          ${CMAKE_CURRENT_SOURCE_DIR}/Resources/
-   DESTINATION        ${PIANO960_INSTALLATION_DIR}
+   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Resources/
+   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-###
+# install pitch detection model
+install(
+  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Model/
+  DESTINATION ${PIANO960_INSTALLATION_DIR}
+)
+
+
 # ================== Configuration Files ====================
-###
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
 
-###
+
 # =============== Build JUCE framework =================
-###
+
 
 # TODO: only build the individual/neccessary JUCE modules that are used by the plugin
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/JUCE EXCLUDE_FROM_ALL)
 juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 
-###
-# ====================== Build Plugin  ====================
-###
 
-# include source code
+# ====================== Build Plugin  ====================
+
+
 add_subdirectory(Source)
 
-###
+
 # =================== Build Unit Tests ===================
-###
+
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 enable_testing()
