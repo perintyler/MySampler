@@ -111,3 +111,12 @@ float* runModel(juce::AudioBuffer<float>& buffer, int sampleRate)
     interpreter->Invoke();
     return interpreter->typed_output_tensor<float>(0);
 }
+
+float getAverageFrequency(float* frequencies, int numFrequencies) 
+{
+    float sumOfFrequencies;
+    for (int index = 0; index < numFrequencies; index++)
+        sumOfFrequencies += frequencies[index];
+
+    return sumOfFrequencies / numFrequencies;
+}
