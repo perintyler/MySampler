@@ -9,39 +9,24 @@ import sys
 import os
 import pathlib
 import argparse
+import random
 
-if not 'pydub' in sys.modules:
-  sys.exit("To use 'normalize_samples.py', first install 'pydub' (with pip) and 'ffpeg' (with homebrew)")
-
-from pydub import AudioSegment
+try: from pydub import AudioSegment
+except ModuleNotFoundError: 
+  sys.exit("To use 'trim_samples.py', first install 'pydub' (with pip)")
 
 PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
 
-def generate_WAV_file_paths(sample_pack_directory, print_details=False) -> Set[pathlib.PosixPath]:
-  """
-  """ 
-  sample_paths = set()
+def generate_sample_paths(sample_packs_directory):
+  sample_paths = list(pathlib.Path(sample_packs_directory).glob(f"**/*.wav"))
+  assert len(sample_paths) > 0
 
-  def crawl(path_to_directory):
-    num_samples_found_in_directory = 0
-    for file_name in os.listdir(path_to_directory):
-      absolute_path = os.path.join(path_to_directory, file_name)
-      if os.path.isdir(absolute_path):
-        posix_path = pathlib.Path(absolute_path).resolve()
-        crawl(posix_path)
-      elif file_name.endswith('.wav'):
-        sample_paths.add(absolute_path)
-        num_samples_found_in_directory += 1
-
-    if print_details and num_samples_found_in_directory > 0: 
-      print(f'found {num_samples_found_in_directory} samples '
-          + f'in {path_to_directory.relative_to(sample_pack_directory)}')
-
-  crawl(sample_pack_directory)
-  return sample_paths
+  while sample_paths:
+    random_index = random.randint(0, len(sample_paths) - 1)
+    yield sample_paths.pop(random_index)
 
 def trim_wav_file(path_to_file: str, maximum_sample_length: int, print_details: bool = False):
-  assert path_to_file.endswith('.wav')
+  assert path_to_file.suffix == '.wav'
   audio = AudioSegment.from_file(path_to_file, 'wav')
   if len(audio) > maximum_sample_length:
     if print_details: print(f'trimming {len(audio) / 1000} second audio file: {path_to_file}')
@@ -56,7 +41,7 @@ def main():
     default=str(PATH_TO_PIANO960_REPO.joinpath('Resources', 'Piano960-Sample-Packs')))
 
   argument_parser.add_argument('--max-length', 
-    default=10000, # 10 seconds in milliseconds,
+    default=5000, # 5 seconds in milliseconds,
     help='the maximum allowed sample size (measured in milliseconds)')
 
   argument_parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -66,9 +51,7 @@ def main():
   assert os.path.exists(args.sample_packs)
   assert os.path.isdir(args.sample_packs)
 
-  for sample_file in generate_WAV_file_paths(args.sample_packs, print_details=args.verbose):
-    absolute_path_to_sample = os.path.join(args.sample_packs, sample_file)
-    assert absolute_path_to_sample.endswith('.wav')
-    trim_wav_file(absolute_path_to_sample, print_details=args.verbose)
+  for sample_file in generate_sample_paths(args.sample_packs):
+    trim_wav_file(sample_file, args.max_length, print_details=args.verbose)
 
 if __name__ == '__main__': main()
