@@ -13,18 +13,17 @@ static std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0); // 
 std::string getPathToRandomFile(const std::string& directory)
 {
     std::string path;
-    int numFilesTraversed = 0;
+    int numFilesTraversed = 1;
     std::filesystem::recursive_directory_iterator fileIterator(directory);
     
     for (const std::filesystem::directory_entry &entry: fileIterator) {
-        numFilesTraversed++;
         if (!std::filesystem::is_directory(entry)) {
-            if (uniformDistribution(numberGenerator) < 1.0 / numFilesTraversed) {
+            if (uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed)) {
                path = entry.path().string();
             }
+            numFilesTraversed++;
         }
     }
 
-    assert(!path.empty());
     return path;
 }

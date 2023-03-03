@@ -17,6 +17,7 @@
 
 #include "midi.h"
 #include "samples.h"
+#include "logs.h"
 
 const int NUM_VOICES = 8;
 

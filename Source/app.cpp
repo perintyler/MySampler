@@ -5,6 +5,8 @@
 #include "app.h"
 #include "lock_buttons.h"
 
+const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
+
 const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
 
 const int VERTICAL_MARGIN_SIZE = 5; // pixels

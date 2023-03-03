@@ -19,11 +19,9 @@
 #include "audio_processor.h"
 #include "midi.h"
 
-const midi::MidiNumber FIRST_MIDI_NOTE = midi::C0;
+const midi::MidiNumber FIRST_MIDI_NOTE = midi::C2;
 
-const midi::MidiNumber LAST_MIDI_NOTE = midi::C3;
-
-const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
+const midi::MidiNumber LAST_MIDI_NOTE = midi::C8;
 
 class App: public juce::AudioProcessorEditor {
 public:
