@@ -33,6 +33,8 @@ set(Piano960Plugin_SOURCES
     audio_processor.cpp
     pitch_detection.h
     pitch_detection.cpp
+    pitch_detection_v2.h
+    pitch_detection_v2.cpp
     midi.h
     midi.cpp
     samples.h
