@@ -17,6 +17,10 @@ AudioProcessor::AudioProcessor()
         
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
+
+    #ifdef PITCH_DETECTION_V2
+    if (!pitch_detection_v2::model_is_loaded()) { pitch_detection_v2::load_model(); }
+    #endif
 }
 
 void AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
