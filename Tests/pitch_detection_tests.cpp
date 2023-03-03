@@ -18,6 +18,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 
 #include "pitch_detection.h"
+#include "pitch_detection_v2.h"
 #include "midi.h"
 #include "paths.h"
 
@@ -41,7 +42,11 @@ float get_frequency(std::filesystem::path fileName)
     audioBuffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
 
-    return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
+    #ifdef PITCH_DETECTION_V2
+        return pitch_detection_v2::getFundementalFrequency(buffer, audioReader->sampleRate);
+    #else
+        return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
+    #endif
 }
 
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
