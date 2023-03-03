@@ -18,7 +18,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
     if(COMPILER_SUPPORTS_MARCH_NATIVE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endif()
 
     if(MSVC)
@@ -63,6 +63,16 @@ include_directories(${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/JUCE EXCLUDE_FROM_ALL)
 juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
+
+
+# =============== Build Tensorflow =================
+
+
+add_subdirectory(
+  "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
+  "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
+  EXCLUDE_FROM_ALL
+)
 
 
 # ====================== Build Plugin  ====================
