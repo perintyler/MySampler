@@ -22,6 +22,8 @@ CLEAN_BUILD=false; # cli option
 
 USE_PITCH_DETECTION_V2=false;
 
+DEBUG_BUILD=true;
+
 echo_help_message() 
 {
     echo "options:";
@@ -58,7 +60,13 @@ cmake_piano960()
     cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX";
 
     if [ "$USE_PITCH_DETECTION_V2" = true ]; then
-        cmake_command_arguments+=" -DPITCH_DETECTION_V=1"
+        cmake_command_arguments="${cmake_command_arguments} -DTENSORFLOW=1";
+    fi
+
+    if [ "$DEBUG_BUILD" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_BUILD_TYPE=Debug";
+    else
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_BUILD_TYPE=Release";
     fi
 
     if [ "$VERBOSE" = true ]; then 
@@ -104,7 +112,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit2" option; do
+while getopts "hvscit2r" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -112,7 +120,8 @@ while getopts "hvscit2" option; do
       c) CLEAN_BUILD=true;;                                 # -c : make clean build
       i) add_make_parameter "install";;                     # -i : install samples
       t) add_make_parameter "unit-tests"; RUN_TESTS=true;;  # -t : build and run unit tests
-      2) USE_PITCH_DETECTION_V2=true;                       # -e : use spice model for pitch detection
+      2) USE_PITCH_DETECTION_V2=true;;                      # -e : use spice model for pitch detection
+      r) DEBUG_BUILD=false;;
    esac
 done
 
@@ -120,10 +129,10 @@ done
 
 if [ -d "$PIANO960_BUILD_DIRECTORY" ] && [ "$CLEAN_BUILD" = true ]; then
     if [ "$VERBOSE" = true ]; then 
-        echo_stdin_message "rm -r " $PIANO960_BUILD_DIRECTORY; 
+        echo_stdin_message "rm -rf" $PIANO960_BUILD_DIRECTORY; 
     fi
 
-    rm -r $PIANO960_BUILD_DIRECTORY;
+    rm -rf $PIANO960_BUILD_DIRECTORY;
 fi
 
 if [ ! -d "$PIANO960_BUILD_DIRECTORY" ]; then 

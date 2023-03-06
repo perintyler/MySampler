@@ -38,19 +38,22 @@ set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
 # install samples
 install(
-   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Resources/
+   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Resources
    DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
 # install pitch detection model
 install(
-  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Model/
+  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Model
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
 
 # ================== Configuration Files ====================
 
+if(TENSORFLOW)
+  add_compile_definitions(PITCH_DETECTION_V2 "ON")
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
@@ -73,6 +76,12 @@ add_subdirectory(
   "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
   EXCLUDE_FROM_ALL
 )
+
+# ====================== Print CMake Variables ====================
+
+
+include(CMakePrintHelpers)
+cmake_print_variables(${CMAKE_CURRENT_SOURCE_DIR})
 
 
 # ====================== Build Plugin  ====================
