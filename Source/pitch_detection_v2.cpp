@@ -20,6 +20,7 @@
 #include "tensorflow/lite/tools/gen_op_registration.h"
 
 #include "pitch_detection_v2.h"
+#include "paths.h"
 
 const float MINIMUM_CONFIDENCE_THRESHOLD = 0.8;
 
@@ -48,7 +49,7 @@ bool pitch_detection_v2::model_is_loaded()
 void pitch_detection_v2::load_model()
 {
     assert(!pitch_detection_v2::model_is_loaded());
-    model = tflite::FlatBufferModel::BuildFromFile("linear.tflite");
+    model = tflite::FlatBufferModel::BuildFromFile(PATH_TO_SPICE_MODEL);
     tflite::ops::builtin::BuiltinOpResolver resolver;  
     tflite::InterpreterBuilder(*model.get(), resolver)(&interpreter);
     interpreter->AllocateTensors(); // do i need this?
@@ -68,7 +69,7 @@ void pitch_detection_v2::load_model()
 void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
 
-    assert(sampleRate > MODEL_INPUT_SAMPLE_RATE);
+    assert(sampleRate > SPICE_MODEL_SAMPLE_RATE);
 
     auto applyLowPassFilter = [&buffer] {
         // TODO
@@ -122,7 +123,7 @@ float getAverageFrequency(float* output, int bufferSize)
 
 float pitch_detection_v2::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-    assert(is_model_loaded());
+    assert(model_is_loaded());
 
     if (sampleRate < SPICE_MODEL_SAMPLE_RATE) // audio quality isn't high enough. throw an error.
         assert(false); // TODO: define custom error

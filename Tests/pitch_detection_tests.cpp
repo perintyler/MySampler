@@ -43,7 +43,7 @@ float get_frequency(std::filesystem::path fileName)
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
 
     #ifdef PITCH_DETECTION_V2
-        return pitch_detection_v2::getFundementalFrequency(buffer, audioReader->sampleRate);
+        return pitch_detection_v2::getFundementalFrequency(audioBuffer, audioReader->sampleRate);
     #else
         return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
     #endif

@@ -16,6 +16,7 @@
 #include "samples.h"
 #include "logs.h"
 #include "random.h"
+#include "pitch_detection_v2.h"
 
 #ifndef SAMPLES_DIRECTORY
 #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/Resources/"
@@ -69,7 +70,7 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
         try {
             int frequencyOfSample = 
               #ifdef PITCH_DETECTION_V2
-              pitch_detection_v2::getFundementalFrequency(signal, bufferSize, audioReader->sampleRate, true);
+              pitch_detection_v2::getFundementalFrequency(buffer, audioReader->sampleRate);
               #else
               getFundementalFrequency(signal, bufferSize, audioReader->sampleRate, true);
               #endif
