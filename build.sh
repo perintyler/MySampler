@@ -26,6 +26,8 @@ DEBUG_BUILD=true;
 
 ENABLE_GPU=false;
 
+USE_GCC=false; # defaults to Clang
+
 echo_help_message() 
 {
     echo "options:";
@@ -63,6 +65,10 @@ cmake_piano960()
 
     if [ "$ENABLE_GPU" = true ]; then
         cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
+    fi
+
+    if [ "$USE_GCC" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++";
     fi
 
     if [ "$DEBUG_BUILD" = true ]; then
@@ -114,7 +120,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit23rg" option; do
+while getopts "hvscit23re" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -125,7 +131,8 @@ while getopts "hvscit23rg" option; do
       2) PITCH_DETECTION_ALGO="SPICE";;                     # -2 : use spice model for pitch detection
       3) PITCH_DETECTION_ALGO="CREPE";;                     # -3 : use crepe model for pitch detection
       r) DEBUG_BUILD=false;;
-      g) ENABLE_GPU=true;;
+      e) ENABLE_GPU=true;;
+      g) USE_GCC=true;
    esac
 done
 
