@@ -111,5 +111,7 @@ juce::AudioProcessorEditor* AudioProcessor::createEditor()
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
+    std::cout << PLUGIN_NAME << " (C) 2023" << std::endl;
+    std::cout << "Using " << PITCH_DETECTION_ALGO << "pitch detection algorithm" << std::endl;
     return new AudioProcessor();
 }
