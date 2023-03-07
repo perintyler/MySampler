@@ -60,7 +60,7 @@ cmake_piano960()
     cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX";
 
     if [ "$USE_PITCH_DETECTION_V2" = true ]; then
-        cmake_command_arguments="${cmake_command_arguments} -DTENSORFLOW=1";
+        cmake_command_arguments="${cmake_command_arguments} -DTENSORFLOW=1 -DTFLITE_ENABLE_GPU=ON";
     fi
 
     if [ "$DEBUG_BUILD" = true ]; then
