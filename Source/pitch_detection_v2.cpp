@@ -66,7 +66,15 @@ void pitch_detection_v2::load_model()
     // options = std::make_unique<tflite::InterpreterOptions>();
     // options->allow_dynamic_dimensions = true;
 
-    model = tflite::FlatBufferModel::BuildFromFile(PATH_TO_SPICE_MODEL, &error_reporter);
+    model = tflite::FlatBufferModel::BuildFromFile(
+    #if PITCH_DETECTION_ALGO == SPICE
+        PATH_TO_SPICE_MODEL, 
+    #else
+        PATH_TO_CREPE_MODEL
+    #endif
+        &error_reporter
+    );
+
     tflite::ops::builtin::BuiltinOpResolver resolver;  
 
     options = std::make_unique<tflite::InterpreterOptions>();
@@ -79,7 +87,6 @@ void pitch_detection_v2::load_model()
     };
 
     interpreter->AllocateTensors();
-    // interpreter->SetNumThreads(4);
 
     tflite::PrintInterpreterState(interpreter.get());
 }
