@@ -20,9 +20,11 @@ SILENT=false; # cli option
 
 CLEAN_BUILD=false; # cli option
 
-USE_PITCH_DETECTION_V2=false;
+PITCH_DETECTION_ALGO="YIN";
 
 DEBUG_BUILD=true;
+
+ENABLE_GPU=false;
 
 echo_help_message() 
 {
@@ -57,10 +59,10 @@ cmake_piano960()
 {
     pushd_silently $PIANO960_BUILD_DIRECTORY;
 
-    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX";
+    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX -DPITCH_DETECTION_ALGO=${PITCH_DETECTION_ALGO}";
 
-    if [ "$USE_PITCH_DETECTION_V2" = true ]; then
-        cmake_command_arguments="${cmake_command_arguments} -DTENSORFLOW=1 -DTFLITE_ENABLE_GPU=ON";
+    if [ "$ENABLE_GPU" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
     fi
 
     if [ "$DEBUG_BUILD" = true ]; then
@@ -112,7 +114,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit2r" option; do
+while getopts "hvscit23rg" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -120,8 +122,10 @@ while getopts "hvscit2r" option; do
       c) CLEAN_BUILD=true;;                                 # -c : make clean build
       i) add_make_parameter "install";;                     # -i : install samples
       t) add_make_parameter "unit-tests"; RUN_TESTS=true;;  # -t : build and run unit tests
-      2) USE_PITCH_DETECTION_V2=true;;                      # -e : use spice model for pitch detection
+      2) PITCH_DETECTION_ALGO="SPICE";;                     # -2 : use spice model for pitch detection
+      3) PITCH_DETECTION_ALGO="CREPE";;                     # -3 : use crepe model for pitch detection
       r) DEBUG_BUILD=false;;
+      g) ENABLE_GPU=true;;
    esac
 done
 
