@@ -1,33 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Piano960 VERSION 0.0.1)
+project(Piano960 C CXX)
 
 
 # ============= Define Compiler Flags ===============
 
 
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-    set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_CXX_STANDARD_REQUIRED YES)
-    set(CMAKE_CXX_EXTENSIONS NO)
-    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
-    if(COMPILER_SUPPORTS_MARCH_NATIVE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endif()
-
-    if(MSVC)
-        CHECK_CXX_COMPILER_FLAG("/arch:AVX2" COMPILER_OPT_ARCH_AVX2_SUPPORTED)
-        if(COMPILER_OPT_ARCH_AVX2_SUPPORTED)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:AVX2")
-        endif()
-    endif()
-
 endif()
 
 
@@ -49,11 +33,16 @@ install(
 )
 
 
-# ================== Configuration Files ====================
+# ============= Define Pre-Compiler Variables ===============
+
 
 if(TENSORFLOW)
   add_compile_definitions(PITCH_DETECTION_V2 "ON")
 endif()
+
+
+# ================== Configuration Files ====================
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
@@ -71,11 +60,14 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 # =============== Build Tensorflow =================
 
 
-add_subdirectory(
-  "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
-  "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
-  EXCLUDE_FROM_ALL
-)
+if(TENSORFLOW)
+    add_subdirectory(
+      "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
+      "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
+      EXCLUDE_FROM_ALL
+    )
+endif()
+
 
 # ====================== Print CMake Variables ====================
 
