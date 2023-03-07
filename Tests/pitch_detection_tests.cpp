@@ -37,8 +37,13 @@ float get_frequency(std::filesystem::path fileName)
     );
 
     juce::AudioSampleBuffer audioBuffer;
-    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (0.10*audioReader->sampleRate)); // (audioReader->sampleRate));
-    audioBuffer.clear(); // Why again?
+
+    #ifdef PITCH_DETECTION_V2
+    int bufferSize = audioReader->lengthInSamples;
+    #else
+    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (0.10*audioReader->sampleRate));
+    #endif
+
     audioBuffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
 
