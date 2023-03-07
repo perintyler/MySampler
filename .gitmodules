@@ -13,3 +13,6 @@
 [submodule "Libraries/tensorflow"]
 	path = Libraries/tensorflow
 	url = https://github.com/tensorflow/tensorflow
+[submodule "Model/crepe"]
+	path = Model/crepe
+	url = git@github.com:marl/crepe.git
