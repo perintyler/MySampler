@@ -47,7 +47,6 @@ const float BINS_PER_OCTAVE = 12.0;
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
 std::unique_ptr<tflite::InterpreterOptions> options { };
-tflite::StderrReporter error_reporter;
 
 const char * pitch_detection_v2::SpiceModelError::what() const throw ()
 {
@@ -66,11 +65,13 @@ void pitch_detection_v2::load_model()
     // options = std::make_unique<tflite::InterpreterOptions>();
     // options->allow_dynamic_dimensions = true;
 
+    tflite::StderrReporter error_reporter;
+
     model = tflite::FlatBufferModel::BuildFromFile(
     #if PITCH_DETECTION_ALGO == SPICE
         PATH_TO_SPICE_MODEL, 
     #else
-        PATH_TO_CREPE_MODEL
+        PATH_TO_CREPE_MODEL,
     #endif
         &error_reporter
     );
