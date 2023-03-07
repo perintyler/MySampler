@@ -26,9 +26,15 @@ install(
    DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-# install pitch detection model
+# install crepe pitch detection models
 install(
-  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Model
+  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
+  DESTINATION ${PIANO960_INSTALLATION_DIR}
+)
+
+# install spice pitch detection model
+install(
+  DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
@@ -36,8 +42,12 @@ install(
 # ============= Define Pre-Compiler Variables ===============
 
 
-if(TENSORFLOW)
-  add_compile_definitions(PITCH_DETECTION_V2 "ON")
+if(PITCH_DETECTION STREQUAL "CREPE")
+  add_compile_definitions(PITCH_DETECTION_ALGO "CREPE")
+elseif(PITCH_DETECTION STREQUAL "SPICE")
+  add_compile_definitions(PITCH_DETECTION_ALGO "SPICE")
+else()
+  add_compile_definitions(PITCH_DETECTION_ALGO "YIN")
 endif()
 
 
@@ -60,7 +70,7 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 # =============== Build Tensorflow =================
 
 
-if(TENSORFLOW)
+if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     add_subdirectory(
       "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
       "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
