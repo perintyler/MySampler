@@ -16,7 +16,10 @@
 #include "samples.h"
 #include "logs.h"
 #include "random.h"
+
+#if PITCH_DETECTION_ALGO == SPICE || PITCH_DETECTION_ALGO == CREPE
 #include "pitch_detection_v2.h"
+#endif
 
 #ifndef SAMPLES_DIRECTORY
 #define SAMPLES_DIRECTORY "/usr/local/include/Piano960/Resources/"

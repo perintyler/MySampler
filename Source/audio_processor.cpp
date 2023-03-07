@@ -5,10 +5,15 @@
 //
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
+#include <assert.h>
+
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
+
+#if PITCH_DETECTION_ALGO == SPICE || PITCH_DETECTION_ALGO == CREPE
 #include "pitch_detection_v2.h"
+#endif
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
@@ -19,8 +24,9 @@ AudioProcessor::AudioProcessor()
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
 
-    #ifdef PITCH_DETECTION_V2
-    if (!pitch_detection_v2::model_is_loaded()) { pitch_detection_v2::load_model(); }
+    #if PITCH_DETECTION_ALGO == SPICE || PITCH_DETECTION_ALGO == CREPE
+        assert(!pitch_detection_v2::model_is_loaded());
+        pitch_detection_v2::load_model();
     #endif
 }
 
