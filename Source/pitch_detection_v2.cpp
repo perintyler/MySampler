@@ -13,14 +13,20 @@
 
 #include <assert.h>
 #include <math.h>
+#include <unordered_map>
+#include <iostream>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/tools/gen_op_registration.h"
+#include "tensorflow/lite/delegates/nnapi/nnapi_delegate.h"
+#include "tensorflow/lite/delegates/gpu/delegate.h"
+#include "tensorflow/lite/optional_debug_tools.h"
 
 #include "pitch_detection_v2.h"
 #include "paths.h"
+#include "logs.h"
 
 const float MINIMUM_CONFIDENCE_THRESHOLD = 0.8;
 
@@ -40,6 +46,13 @@ const float BINS_PER_OCTAVE = 12.0;
 
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
+std::unique_ptr<tflite::InterpreterOptions> options { };
+tflite::StderrReporter error_reporter;
+
+const char * pitch_detection_v2::SpiceModelError::what() const throw ()
+{
+    return "Spice Model Error";
+}
 
 bool pitch_detection_v2::model_is_loaded()
 {
@@ -49,10 +62,26 @@ bool pitch_detection_v2::model_is_loaded()
 void pitch_detection_v2::load_model()
 {
     assert(!pitch_detection_v2::model_is_loaded());
-    model = tflite::FlatBufferModel::BuildFromFile(PATH_TO_SPICE_MODEL);
+
+    // options = std::make_unique<tflite::InterpreterOptions>();
+    // options->allow_dynamic_dimensions = true;
+
+    model = tflite::FlatBufferModel::BuildFromFile(PATH_TO_SPICE_MODEL, &error_reporter);
     tflite::ops::builtin::BuiltinOpResolver resolver;  
-    tflite::InterpreterBuilder(*model.get(), resolver)(&interpreter);
-    interpreter->AllocateTensors(); // do i need this?
+
+    options = std::make_unique<tflite::InterpreterOptions>();
+    options->SetEnsureDynamicTensorsAreReleased();
+
+    tflite::InterpreterBuilder builder(*model.get(), resolver, options.get());
+    if (builder(&interpreter) != kTfLiteOk)
+    { 
+        throw SpiceModelError();
+    };
+
+    interpreter->AllocateTensors();
+    // interpreter->SetNumThreads(4);
+
+    tflite::PrintInterpreterState(interpreter.get());
 }
 
 /**
@@ -68,7 +97,6 @@ void pitch_detection_v2::load_model()
  **/
 void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-
     assert(sampleRate > SPICE_MODEL_SAMPLE_RATE);
 
     auto applyLowPassFilter = [&buffer] {
@@ -100,36 +128,42 @@ void prepareAudioForModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 
 float* runModel(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-    float* spiceModelInput = interpreter->typed_input_tensor<float>(0);
+    assert(model);
+    assert(interpreter);
+
+    float* input = interpreter->typed_input_tensor<float>(0);
     for (int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); sampleIndex++) {
-        spiceModelInput[sampleIndex] = buffer.getSample(0, sampleIndex);
+        float normalizedSample = buffer.getSample(0, sampleIndex) / 32768.0;
+        input[sampleIndex] = normalizedSample;
     }
 
     interpreter->Invoke();
-    return interpreter->typed_output_tensor<float>(0);
-}
 
-float getAverageFrequency(float* output, int bufferSize)
-{
-    float sumOfFrequencies;
-    for (int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++) {
-        sumOfFrequencies += pow(
-          FMIN * 2.0, 
-          (1.0*(output[sampleIndex]*PT_SLOPE+PT_OFFSET) / BINS_PER_OCTAVE)
-        );
-    }
-    return sumOfFrequencies / bufferSize;
+
+    // "A list of values in the interval [0, 1], each of which corresponds to the
+    // pitch of the input audio. The size of the array is Ceil(input_size / 512)"
+    return interpreter->typed_output_tensor<float>(0);
 }
 
 float pitch_detection_v2::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-    assert(model_is_loaded());
-
-    if (sampleRate < SPICE_MODEL_SAMPLE_RATE) // audio quality isn't high enough. throw an error.
-        assert(false); // TODO: define custom error
+    if (sampleRate < SPICE_MODEL_SAMPLE_RATE) { // audio quality isn't high enough.
+        throw SpiceModelError();
+    } else if (!model_is_loaded()) {
+        load_model();
+    }
 
     prepareAudioForModel(buffer, sampleRate);
     float* output = runModel(buffer, buffer.getNumSamples());
 
-    return getAverageFrequency(output, buffer.getNumSamples());
+    float sumOfFrequencies = 0.0;
+    for (int sampleIndex = 0; sampleIndex < (buffer.getNumSamples() / 512); sampleIndex++) {
+        float cqt_bin = output[sampleIndex] * PT_SLOPE + PT_OFFSET;
+        float frequency = FMIN*pow(
+            2.0, (1.0 * cqt_bin / BINS_PER_OCTAVE)
+        );
+        sumOfFrequencies += frequency;
+    }
+
+    return sumOfFrequencies / buffer.getNumSamples();
 }
