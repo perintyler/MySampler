@@ -36,7 +36,6 @@ float get_frequency(std::filesystem::path fileName)
     juce::File wavFile { filePath.string() };
 
     assert(wavFile.existsAsFile());
-
     juce::WavAudioFormat wavFormat;
     std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
         wavFormat.createReaderFor(wavFile.createInputStream().release(), true)
@@ -63,8 +62,7 @@ float get_frequency(std::filesystem::path fileName)
     #endif
 }
 
-
-TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
+void print_pitch_detection_algorithm()
 {
     if (config::useSPICE()) {
         std::cout << "Using SPICE pitch detection algorithm" << std::endl;
@@ -73,7 +71,12 @@ TEST_CASE("Female Vocal: G5", "[pitch_detection]")
     } else {
         std::cout << "Using YIN pitch detection algorithm" << std::endl;
     }
+}
 
+TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
+{
+    print_pitch_detection_algorithm();
+    
     float frequency = get_frequency("G5-female-vocal-chop.wav");
 
     if (!ONLY_TEST_SEMITONES) {

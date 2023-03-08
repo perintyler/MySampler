@@ -7,7 +7,7 @@ namespace config {
 
 bool useYIN()   
 { 
-    #ifdef YIN
+    #ifdef YIN_ALGO
       return true;
     #else
       return false;
@@ -16,7 +16,7 @@ bool useYIN()
 
 bool useSPICE()   
 { 
-    #ifdef SPICE
+    #ifdef SPICE_MODEL
       return true;
     #else
       return false;
@@ -25,7 +25,7 @@ bool useSPICE()
 
 bool useCREPE()  
 { 
-    #ifdef CREPE
+    #ifdef CREPE_MODEL
       return true;
     #else
       return false;
