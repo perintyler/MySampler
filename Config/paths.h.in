@@ -10,8 +10,8 @@
 
 #define DATA_DIRECTORY "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}"
 
-#define PATH_TO_SPICE_MODEL "${PIANO960_INSTALLATION_DIR}/Model/spice-models/spice.tflite"
+#define PATH_TO_SPICE_MODEL "${PIANO960_INSTALLATION_DIR}/spice-models/spice.tflite"
 
-#define PATH_TO_CREPE_MODEL "${PIANO960_INSTALLATION_DIR}/Model/crepe-models/model-full.tflite"
+#define PATH_TO_CREPE_MODEL "${PIANO960_INSTALLATION_DIR}/crepe-models/model-full.tflite"
 
 #endif

@@ -16,14 +16,7 @@
 #include "samples.h"
 #include "logs.h"
 #include "random.h"
-
-#if PITCH_DETECTION_ALGO == SPICE || PITCH_DETECTION_ALGO == CREPE
-#include "pitch_detection_v2.h"
-#endif
-
-#ifndef SAMPLES_DIRECTORY
-#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/Resources/"
-#endif
+#include "config.h"
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 {
@@ -60,10 +53,11 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
     int rootNoteOfSample;
     std::unique_ptr<juce::AudioFormatReader> audioReader;
     juce::String pathToFile;
+    // const std::string samplesDirectory = config::getSamplesDirectory();
 
     while (audioReader == nullptr) 
     {
-        pathToFile = juce::String { getPathToRandomFile(SAMPLES_DIRECTORY) };
+        pathToFile = juce::String { getPathToRandomFile(config::getSamplesDirectory()) };
         juce::File randomSample(pathToFile);
         audioReader = createWAVReader(randomSample);
         int bufferSize = (int) (0.10*audioReader->sampleRate);

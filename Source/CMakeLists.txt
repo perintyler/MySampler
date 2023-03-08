@@ -28,7 +28,7 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
 # TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
 set(Piano960Plugin_SOURCES 
     app.h
-    app.cpp 
+    app.cpp
     audio_processor.h
     audio_processor.cpp
     pitch_detection.h
@@ -45,6 +45,8 @@ set(Piano960Plugin_SOURCES
     logs.h
     random.cpp
     random.h
+    config.h
+    config.cpp
 )
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})

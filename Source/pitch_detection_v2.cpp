@@ -25,8 +25,10 @@
 #include "tensorflow/lite/optional_debug_tools.h"
 
 #include "pitch_detection_v2.h"
-#include "paths.h"
+#include "config.h"
 #include "logs.h"
+
+const bool VERBOSE = false;
 
 const float MINIMUM_CONFIDENCE_THRESHOLD = 0.8;
 
@@ -62,34 +64,36 @@ void pitch_detection_v2::load_model()
 {
     assert(!pitch_detection_v2::model_is_loaded());
 
-    // options = std::make_unique<tflite::InterpreterOptions>();
-    // options->allow_dynamic_dimensions = true;
+
+    if (VERBOSE) {
+        std::string pitchDetectionAlgoName = std::string { "UNKNOWN" };
+        if      (config::useYIN())   { pitchDetectionAlgoName = std::string { "YIN" }; }
+        else if (config::useSPICE()) { pitchDetectionAlgoName = std::string { "SPICE" }; }
+        else if (config::useCREPE()) { pitchDetectionAlgoName = std::string { "CREPE" }; }
+        std::cout << "Loading " << pitchDetectionAlgoName << " model." << std::endl;
+    }
+
+    std::string pathToModel = config::useSPICE() 
+                            ? config::getPathToSPICEModel()
+                            : config::getPathToCREPEModel();
 
     tflite::StderrReporter error_reporter;
-
-    model = tflite::FlatBufferModel::BuildFromFile(
-    #if PITCH_DETECTION_ALGO == SPICE
-        PATH_TO_SPICE_MODEL, 
-    #else
-        PATH_TO_CREPE_MODEL,
-    #endif
-        &error_reporter
-    );
+    model = tflite::FlatBufferModel::BuildFromFile(pathToModel.c_str(), &error_reporter);
 
     tflite::ops::builtin::BuiltinOpResolver resolver;  
-
     options = std::make_unique<tflite::InterpreterOptions>();
     options->SetEnsureDynamicTensorsAreReleased();
 
     tflite::InterpreterBuilder builder(*model.get(), resolver, options.get());
-    if (builder(&interpreter) != kTfLiteOk)
-    { 
-        throw SpiceModelError();
-    };
+    auto interpreterBuildResults = builder(&interpreter);
+    if (interpreterBuildResults != kTfLiteOk) { throw SpiceModelError(); };
 
-    interpreter->AllocateTensors();
+    auto allocationResults = interpreter->AllocateTensors();
+    if (allocationResults != kTfLiteOk) { throw SpiceModelError(); };
 
-    tflite::PrintInterpreterState(interpreter.get());
+    if (VERBOSE) {
+        tflite::PrintInterpreterState(interpreter.get());
+    }
 }
 
 /**

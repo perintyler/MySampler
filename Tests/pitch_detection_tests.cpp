@@ -13,20 +13,26 @@
 #include <filesystem>
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
 
-#include "pitch_detection.h"
-#include "pitch_detection_v2.h"
 #include "midi.h"
-#include "paths.h"
+#include "config.h"
+
+#if PITCH_DETECTION_ALGO == YIN
+  #include "pitch_detection.h"
+#else
+  #include "pitch_detection_v2.h"
+#endif
 
 bool ONLY_TEST_SEMITONES = true;
 
 float get_frequency(std::filesystem::path fileName)
 {
-    std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } / std::filesystem::path { fileName };
+    std::filesystem::path filePath = std::filesystem::path { config::getTestDataDirectory() } 
+                                   / std::filesystem::path { fileName };
     juce::File wavFile { filePath.string() };
 
     assert(wavFile.existsAsFile());
@@ -38,24 +44,36 @@ float get_frequency(std::filesystem::path fileName)
 
     juce::AudioSampleBuffer audioBuffer;
 
-    #ifdef PITCH_DETECTION_V2
-    int bufferSize = audioReader->lengthInSamples;
-    #else
-    int bufferSize = std::min((int) audioReader->lengthInSamples, (int) (0.10*audioReader->sampleRate));
-    #endif
+    int bufferSize;
+    if (config::useSPICE()) {
+        bufferSize = audioReader->lengthInSamples;
+    } else if (config::useCREPE()) {
+        bufferSize = audioReader->lengthInSamples;
+    } else {
+        bufferSize = std::min((int) audioReader->lengthInSamples, (int) (0.10*audioReader->sampleRate));
+    }
 
     audioBuffer.setSize(audioReader->numChannels, bufferSize);
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
 
-    #ifdef PITCH_DETECTION_V2
-        return pitch_detection_v2::getFundementalFrequency(audioBuffer, audioReader->sampleRate);
-    #else
+    #if PITCH_DETECTION_ALGO == YIN
         return getFundementalFrequency(audioBuffer.getReadPointer(0), bufferSize, audioReader->sampleRate);
+    #else
+        return pitch_detection_v2::getFundementalFrequency(audioBuffer, audioReader->sampleRate);
     #endif
 }
 
+
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
 {
+    if (config::useSPICE()) {
+        std::cout << "Using SPICE pitch detection algorithm" << std::endl;
+    } else if (config::useCREPE()) {
+        std::cout << "Using CREPE pitch detection algorithm" << std::endl;
+    } else {
+        std::cout << "Using YIN pitch detection algorithm" << std::endl;
+    }
+
     float frequency = get_frequency("G5-female-vocal-chop.wav");
 
     if (!ONLY_TEST_SEMITONES) {

@@ -61,7 +61,7 @@ cmake_piano960()
 {
     pushd_silently $PIANO960_BUILD_DIRECTORY;
 
-    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX -DPITCH_DETECTION_ALGO=${PITCH_DETECTION_ALGO}";
+    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
 
     if [ "$ENABLE_GPU" = true ]; then
         cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
