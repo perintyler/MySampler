@@ -1,9 +1,10 @@
 /* plugin_editor.cpp */
 
 #include <juce_graphics/juce_graphics.h>
+#include <functional>
 
 #include "app.h"
-#include "lock_buttons.h"
+// #include "lock_buttons.h"
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
@@ -11,31 +12,27 @@ const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
 
 const int VERTICAL_MARGIN_SIZE = 5; // pixels
 
-const float WHITE_KEY_WIDTH = 40.0;
-
-const float BLACK_KEY_WIDTH_RATIO = 1.0;
-
 const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-App::App(AudioProcessor& audioProcessor)
-    : AudioProcessorEditor (&audioProcessor)
-    , processor            (audioProcessor)
-    , keyboard             (audioProcessor.getKeyboardState(), juce::MidiKeyboardComponent::horizontalKeyboard)
-    , randomizeButton      (RANDOMIZE_BUTTON_LABEL)
-    , saveButton           (SAVE_BUTTON_LABEL)
+App::App(AudioProcessor& audioProcessor) : AudioProcessorEditor(&audioProcessor)
+    , processor       (audioProcessor)
+    , randomizeButton (RANDOMIZE_BUTTON_LABEL)
+    , saveButton      (SAVE_BUTTON_LABEL)
+    , keyboard        (processor.getKeyboardState(), [this](midi::MidiNumber midiNumber)
+    {
+        if (this->processor.isKeyLocked(midiNumber))
+            this->processor.unlockKey(midiNumber);
+        else
+            this->processor.lockKey(midiNumber);
+    })
 {
-    saveButton.onClick = [&]() { processor.logSamples(); };
+    setResizable(false, false);
+
+    saveButton.onClick      = [&]() { processor.logSamples(); };
     randomizeButton.onClick = [&]() { processor.randomize_samples(); };
-
-    // configure MIDI keyboard
-    keyboard.setScrollButtonsVisible(false);
-    keyboard.setKeyWidth(WHITE_KEY_WIDTH);
-    keyboard.setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
-    keyboard.setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
-    keyboard.setBufferedToImage(true);
-
+    
     // the editor's sub-components use plugin dimensions to set their
     // own bounds, so the plugin size must be set before adding sub-components
     setSize(
@@ -43,19 +40,18 @@ App::App(AudioProcessor& audioProcessor)
         250.0
     );
 
-    #ifdef TESTMODE
-    setComponentID("app");
-    keyboard.setComponentID("keyboard");
-    randomizeButton.setComponentID("randomize-button");
-    saveButton.setComponentID("save-button");
-    #else
-    processor.randomize_samples();
-    #endif
-
     addAndMakeVisible(saveButton);
     addAndMakeVisible(randomizeButton);
     addAndMakeVisible(keyboard, 0);
-    addAndMakeLockButtonsVisible(keyboard, processor);
+
+    #ifdef TESTMODE
+      setComponentID("app");
+      keyboard.setComponentID("keyboard");
+      randomizeButton.setComponentID("randomize-button");
+      saveButton.setComponentID("save-button");
+    #else
+      processor.randomize_samples();
+    #endif
 }
 
 /** Render the UI

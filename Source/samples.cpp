@@ -18,7 +18,7 @@
 #include "random.h"
 
 #ifndef SAMPLES_DIRECTORY
-#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/samples/"
+#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/Resources/"
 #endif
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)

@@ -37,8 +37,8 @@ set(Piano960Plugin_SOURCES
     midi.cpp
     samples.h
     samples.cpp
-    lock_buttons.cpp
-    lock_buttons.h
+    lockable_keys.cpp
+    lockable_keys.h
     logs.cpp
     logs.h
     random.cpp

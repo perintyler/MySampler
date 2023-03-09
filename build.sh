@@ -132,7 +132,7 @@ make_piano960 $make_parameters;
 
 if [ "$RUN_TESTS" = true ]; then
     # if -t option was set, run the newly built unit tests 
-    $PIANO960_BUILD_DIRECTORY/Tests/unit-tests --abort
+    $PIANO960_BUILD_DIRECTORY/Tests/unit-tests --abort -v
 fi
 
 echo_build_message "Successfully built Piano960 to" $PIANO960_BUILD_DIRECTORY;
