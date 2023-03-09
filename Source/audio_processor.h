@@ -86,9 +86,9 @@ private:
 
     juce::Synthesiser synthesiser;
     
-    std::unordered_map<int, bool> lockedKeys {};
+    std::map<midi::MidiNumber, bool> lockedKeys {};
 
-    std::unordered_map<int, juce::String> sampleNames {};
+    std::map<midi::MidiNumber, juce::String> sampleNames {};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };
