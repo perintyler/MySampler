@@ -3,36 +3,7 @@
 #include "config.h"
 #include "paths.h"
 
-namespace config {
-
-bool useYIN()   
-{ 
-    #ifdef YIN_ALGO
-      return true;
-    #else
-      return false;
-    #endif
-}
-
-bool useSPICE()   
-{ 
-    #ifdef SPICE_MODEL
-      return true;
-    #else
-      return false;
-    #endif
-}
-
-bool useCREPE()  
-{ 
-    #ifdef CREPE_MODEL
-      return true;
-    #else
-      return false;
-    #endif
-}
-
-std::string getSamplesDirectory()
+std::string config::getSamplesDirectory()
 {
     #ifdef SAMPLES_DIRECTORY
       return std::string { SAMPLES_DIRECTORY };
@@ -41,7 +12,7 @@ std::string getSamplesDirectory()
     #endif
 }
 
-std::string getTestDataDirectory()
+std::string config::getTestDataDirectory()
 {
     #ifdef TEST_DATA_DIRECTORY
       return std::string { TEST_DATA_DIRECTORY };
@@ -50,7 +21,7 @@ std::string getTestDataDirectory()
     #endif
 }
 
-std::string getPathToCREPEModel()
+std::string config::getPathToCREPEModel()
 {
     #ifdef PATH_TO_YIN_MODEL
       return std::string { PATH_TO_CREPE_MODEL };
@@ -59,7 +30,7 @@ std::string getPathToCREPEModel()
     #endif
 }
 
-std::string getPathToSPICEModel()
+std::string config::getPathToSPICEModel()
 {
     #ifdef PATH_TO_YIN_MODEL
       return std::string { PATH_TO_SPICE_MODEL };
@@ -67,6 +38,4 @@ std::string getPathToSPICEModel()
       return std::string { "/usr/local/include/Piano960/spice-models/spice.tflite" };
     #endif
 }
-
-} // config namespace
 
