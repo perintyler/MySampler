@@ -78,6 +78,7 @@ cmake_piano960()
     fi
 
     if [ "$VERBOSE" = true ]; then 
+        cmake_command_arguments="${cmake_command_arguments} --trace-expand";
         echo_stdin_message "cmake $PIANO960_REPO $cmake_command_arguments";
         cmake $PIANO960_REPO $cmake_command_arguments;
     elif [ "$SILENT" = true ]; then
