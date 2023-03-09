@@ -7,6 +7,8 @@
               pluginCode="Tyle" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="gfHjMe" name="Piano960D">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="../Source">
+      <FILE id="v8ZOHy" name="config.h" compile="0" resource="0" file="../Source/config.h"/>
+      <FILE id="gjl4TH" name="config.cpp" compile="1" resource="0" file="../Source/config.cpp"/>
       <FILE id="ZwCUAZ" name="lockable_keys.h" compile="0" resource="0" file="../Source/lockable_keys.h"/>
       <FILE id="bRiTQ4" name="lockable_keys.cpp" compile="1" resource="0"
             file="../Source/lockable_keys.cpp"/>
