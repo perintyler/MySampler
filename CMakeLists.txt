@@ -42,12 +42,12 @@ install(
 # ============= Define Pre-Compiler Variables ===============
 
 
-if(${PITCH_DETECTION} STREQUAL "CREPE")
-  add_compile_definitions(CREPE_MODEL)
-elseif(${PITCH_DETECTION} STREQUAL "SPICE")
-  add_compile_definitions(SPICE_MODEL)
+if(PITCH_DETECTION STREQUAL "CREPE")
+  add_compile_definitions(CREPE_MODEL 1)
+elseif(PITCH_DETECTION STREQUAL "SPICE")
+  add_compile_definitions(SPICE_MODEL 1)
 else()
-  add_compile_definitions(YIN_ALGO)
+  add_compile_definitions(YIN_ALGO 1)
 endif()
 
 
@@ -70,7 +70,7 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 # =============== Build Tensorflow =================
 
 
-if(NOT ${PITCH_DETECTION} STREQUAL "YIN")
+if(NOT PITCH_DETECTION STREQUAL "YIN")
     add_subdirectory(
       "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
       "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
