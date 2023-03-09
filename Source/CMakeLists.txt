@@ -43,15 +43,22 @@ set(Piano960Plugin_SOURCES
     random.h
     config.h
     config.cpp
-    pitch_detection/yin.h
-    pitch_detection/yin.cpp
-    pitch_detection/spice.h
-    pitch_detection/spice.cpp
-    pitch_detection/crepe.h
-    pitch_detection/crepe.cpp
     pitch_detection/exceptions.h
     pitch_detection/pitch_detection.h
 )
+
+if(PITCH_DETECTION STREQUAL "YIN")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.cpp")
+elseif(PITCH_DETECTION STREQUAL "SPICE")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.cpp")
+else()
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
+endif()
+
+message("Source Files: ${my_list}")
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Piano960Plugin_SOURCES})
