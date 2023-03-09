@@ -28,7 +28,7 @@ public:
 
     AudioProcessor();
     
-    ~AudioProcessor() override = default;
+    ~AudioProcessor() override;
     
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     

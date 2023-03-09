@@ -23,6 +23,12 @@ AudioProcessor::AudioProcessor()
         lockedKeys[midiNumber] = false;
 }
 
+AudioProcessor::~AudioProcessor()
+{
+    synthesiser.clearSounds();
+}
+
+
 void AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     midiCollector.reset (sampleRate);
@@ -62,7 +68,7 @@ void AudioProcessor::randomize_samples()
         if (!isKeyLocked(midiNumber)) {
             juce::SamplerSound* sound = getRandomSamplerSound(midiNumber);
             sampleNames[midiNumber] = sound->getName();
-            synthesiser.addSound(sound);
+            synthesiser.addSound(juce::SynthesiserSound::Ptr(sound));
         }
     }
 }
