@@ -48,6 +48,12 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
     }
 }
 
+LockableKeys::~LockableKeys()
+{
+    for (auto &[midiNumber, lockButton]: lockButtons)
+        lockButton.deleteAndZero();
+}
+
 void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, midi::MidiNumber midiNumber)
 {
    juce::Image unlockedImage = juce::ImageFileFormat::loadFrom(

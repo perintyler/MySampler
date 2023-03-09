@@ -24,7 +24,7 @@ class LockableKeys: public juce::MidiKeyboardComponent
 public:
     LockableKeys(juce::MidiKeyboardState&, OnKeyLockStateChange);
 
-    ~LockableKeys() override {}
+    ~LockableKeys() override;
 
     void resized() override;
 
