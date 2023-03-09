@@ -17,6 +17,7 @@
 #include "logs.h"
 #include "random.h"
 #include "config.h"
+#include "pitch_detection/pitch_detection.h"
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 {
@@ -53,27 +54,19 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
     int rootNoteOfSample;
     std::unique_ptr<juce::AudioFormatReader> audioReader;
     juce::String pathToFile;
-    // const std::string samplesDirectory = config::getSamplesDirectory();
 
     while (audioReader == nullptr) 
     {
         pathToFile = juce::String { getPathToRandomFile(config::getSamplesDirectory()) };
         juce::File randomSample(pathToFile);
         audioReader = createWAVReader(randomSample);
-        int bufferSize = (int) (0.10*audioReader->sampleRate);
-        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
-        const float* signal = buffer.getReadPointer(0);
+        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, audioReader->lengthInSamples);
         
         try {
-            int frequencyOfSample = 
-              #ifdef PITCH_DETECTION_V2
-              pitch_detection_v2::getFundementalFrequency(buffer, audioReader->sampleRate);
-              #else
-              getFundementalFrequency(signal, bufferSize, audioReader->sampleRate, true);
-              #endif
+            int frequencyOfSample = pitch_detection::getFundementalFrequency(buffer, audioReader->sampleRate);
             rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
         } 
-        catch (FrequencyNotDetectedException) {
+        catch (pitch_detection::FrequencyNotDetectedException) {
             logs::newBadSample(pathToFile);
         }
     }

@@ -9,7 +9,6 @@
 
 #include <juce_audio_formats/juce_audio_formats.h>
 
-#include "pitch_detection.h"
 #include "midi.h"
 
 const double ATTACK = 0.1; // seconds
