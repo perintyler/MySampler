@@ -70,7 +70,7 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 # =============== Build Tensorflow =================
 
 
-if(NOT PITCH_DETECTION STREQUAL "YIN")
+if((PITCH_DETECTION STREQUAL "YIN") OR (PITCH_DETECTION STREQUAL "SPICE"))
     add_subdirectory(
       "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
       "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 

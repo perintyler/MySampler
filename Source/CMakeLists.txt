@@ -58,7 +58,7 @@ else()
     list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
 endif()
 
-message("Source Files: ${my_list}")
+message("Source Files: ${Piano960Plugin_SOURCES}")
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Piano960Plugin_SOURCES})
@@ -74,10 +74,18 @@ target_compile_definitions(Piano960Plugin
     JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-target_link_libraries(Piano960Plugin PRIVATE
+set(Piano960Plugin_LIBRARIES
     Piano960PluginBinaryData
-    tensorflow-lite
     juce::juce_audio_utils
     juce::juce_dsp
     ff_meters
 )
+
+if((PITCH_DETECTION STREQUAL "YIN") OR (PITCH_DETECTION STREQUAL "SPICE"))
+    list(APPEND Piano960Plugin_SOURCES "tensorflow-lite")
+endif()
+
+message("Libraries: ${Piano960Plugin_LIBRARIES}")
+
+target_link_libraries(Piano960Plugin PRIVATE ${Piano960Plugin_LIBRARIES})
+
