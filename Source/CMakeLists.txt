@@ -31,10 +31,6 @@ set(Piano960Plugin_SOURCES
     app.cpp
     audio_processor.h
     audio_processor.cpp
-    pitch_detection.h
-    pitch_detection.cpp
-    pitch_detection_v2.h
-    pitch_detection_v2.cpp
     midi.h
     midi.cpp
     samples.h
@@ -47,6 +43,14 @@ set(Piano960Plugin_SOURCES
     random.h
     config.h
     config.cpp
+    pitch_detection/yin.h
+    pitch_detection/yin.cpp
+    pitch_detection/spice.h
+    pitch_detection/spice.cpp
+    pitch_detection/crepe.h
+    pitch_detection/crepe.cpp
+    pitch_detection/exceptions.h
+    pitch_detection/pitch_detection.h
 )
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
