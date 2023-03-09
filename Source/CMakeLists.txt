@@ -81,8 +81,8 @@ set(Piano960Plugin_LIBRARIES
     ff_meters
 )
 
-if((PITCH_DETECTION STREQUAL "YIN") OR (PITCH_DETECTION STREQUAL "SPICE"))
-    list(APPEND Piano960Plugin_SOURCES "tensorflow-lite")
+if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
+    list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
 endif()
 
 message("Libraries: ${Piano960Plugin_LIBRARIES}")
