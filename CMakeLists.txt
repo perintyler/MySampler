@@ -43,11 +43,11 @@ install(
 
 
 if(PITCH_DETECTION STREQUAL "CREPE")
-  add_compile_definitions(CREPE_MODEL 1)
+  add_compile_definitions(CREPE_MODEL)
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-  add_compile_definitions(SPICE_MODEL 1)
+  add_compile_definitions(SPICE_MODEL)
 else()
-  add_compile_definitions(YIN_ALGO 1)
+  add_compile_definitions(YIN_ALGO)
 endif()
 
 
