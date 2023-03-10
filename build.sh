@@ -20,6 +20,14 @@ SILENT=false; # cli option
 
 CLEAN_BUILD=false; # cli option
 
+PITCH_DETECTION_ALGO="YIN";
+
+DEBUG_BUILD=true;
+
+ENABLE_GPU=false;
+
+USE_GCC=false; # defaults to Clang
+
 echo_help_message() 
 {
     echo "options:";
@@ -53,9 +61,24 @@ cmake_piano960()
 {
     pushd_silently $PIANO960_BUILD_DIRECTORY;
 
-    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX";
-    
+    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
+
+    if [ "$ENABLE_GPU" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
+    fi
+
+    if [ "$USE_GCC" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++";
+    fi
+
+    if [ "$DEBUG_BUILD" = true ]; then
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_BUILD_TYPE=Debug";
+    else
+        cmake_command_arguments="${cmake_command_arguments} -DCMAKE_BUILD_TYPE=Release";
+    fi
+
     if [ "$VERBOSE" = true ]; then 
+        cmake_command_arguments="${cmake_command_arguments} --trace-expand";
         echo_stdin_message "cmake $PIANO960_REPO $cmake_command_arguments";
         cmake $PIANO960_REPO $cmake_command_arguments;
     elif [ "$SILENT" = true ]; then
@@ -98,7 +121,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit" option; do
+while getopts "hvscit23re" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -106,6 +129,11 @@ while getopts "hvscit" option; do
       c) CLEAN_BUILD=true;;                                 # -c : make clean build
       i) add_make_parameter "install";;                     # -i : install samples
       t) add_make_parameter "unit-tests"; RUN_TESTS=true;;  # -t : build and run unit tests
+      2) PITCH_DETECTION_ALGO="SPICE";;                     # -2 : use spice model for pitch detection
+      3) PITCH_DETECTION_ALGO="CREPE";;                     # -3 : use crepe model for pitch detection
+      r) DEBUG_BUILD=false;;
+      e) ENABLE_GPU=true;;
+      g) USE_GCC=true;
    esac
 done
 
@@ -113,10 +141,10 @@ done
 
 if [ -d "$PIANO960_BUILD_DIRECTORY" ] && [ "$CLEAN_BUILD" = true ]; then
     if [ "$VERBOSE" = true ]; then 
-        echo_stdin_message "rm -r " $PIANO960_BUILD_DIRECTORY; 
+        echo_stdin_message "rm -rf" $PIANO960_BUILD_DIRECTORY; 
     fi
 
-    rm -r $PIANO960_BUILD_DIRECTORY;
+    rm -rf $PIANO960_BUILD_DIRECTORY;
 fi
 
 if [ ! -d "$PIANO960_BUILD_DIRECTORY" ]; then 

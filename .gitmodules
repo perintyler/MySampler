@@ -10,3 +10,9 @@
 [submodule "Libraries/ff_meters"]
 	path = Libraries/ff_meters
 	url = git@github.com:ffAudio/ff_meters.git
+[submodule "Libraries/tensorflow"]
+	path = Libraries/tensorflow
+	url = https://github.com/tensorflow/tensorflow
+[submodule "Model/crepe"]
+	path = Models/crepe
+	url = git@github.com:marl/crepe.git

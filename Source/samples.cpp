@@ -16,10 +16,8 @@
 #include "samples.h"
 #include "logs.h"
 #include "random.h"
-
-#ifndef SAMPLES_DIRECTORY
-#define SAMPLES_DIRECTORY "/usr/local/include/Piano960/Resources/"
-#endif
+#include "config.h"
+#include "pitch_detection/pitch_detection.h"
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 {
@@ -59,21 +57,16 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
 
     while (audioReader == nullptr) 
     {
-        pathToFile = juce::String { getPathToRandomFile(SAMPLES_DIRECTORY) };
+        pathToFile = juce::String { getPathToRandomFile(config::getSamplesDirectory()) };
         juce::File randomSample(pathToFile);
         audioReader = createWAVReader(randomSample);
-        int bufferSize = (int) (0.10*audioReader->sampleRate);
-        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
-
+        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, audioReader->lengthInSamples);
+        
         try {
-            int frequencyOfSample = getFundementalFrequency(
-                buffer.getReadPointer(0),
-                bufferSize,
-                audioReader->sampleRate,
-                true
-            );
+            int frequencyOfSample = pitch_detection::getFundementalFrequency(buffer, audioReader->sampleRate);
             rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
-        } catch (FrequencyNotDetectedException) {
+        } 
+        catch (pitch_detection::FrequencyNotDetectedException) {
             logs::newBadSample(pathToFile);
         }
     }

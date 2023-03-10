@@ -6,4 +6,6 @@ logs/
 
 .DS_Store
 
+env/
+
 notes.*

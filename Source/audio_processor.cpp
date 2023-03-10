@@ -5,9 +5,13 @@
 //
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
+#include <assert.h>
+#include <string>
+
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
+#include "config.h"
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
@@ -18,6 +22,12 @@ AudioProcessor::AudioProcessor()
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
 }
+
+AudioProcessor::~AudioProcessor()
+{
+    synthesiser.clearSounds();
+}
+
 
 void AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -58,7 +68,7 @@ void AudioProcessor::randomize_samples()
         if (!isKeyLocked(midiNumber)) {
             juce::SamplerSound* sound = getRandomSamplerSound(midiNumber);
             sampleNames[midiNumber] = sound->getName();
-            synthesiser.addSound(sound);
+            synthesiser.addSound(juce::SynthesiserSound::Ptr(sound));
         }
     }
 }

@@ -28,11 +28,9 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
 # TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
 set(Piano960Plugin_SOURCES 
     app.h
-    app.cpp 
+    app.cpp
     audio_processor.h
     audio_processor.cpp
-    pitch_detection.h
-    pitch_detection.cpp
     midi.h
     midi.cpp
     samples.h
@@ -43,7 +41,24 @@ set(Piano960Plugin_SOURCES
     logs.h
     random.cpp
     random.h
+    config.h
+    config.cpp
+    pitch_detection/exceptions.h
+    pitch_detection/pitch_detection.h
 )
+
+if(PITCH_DETECTION STREQUAL "YIN")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.cpp")
+elseif(PITCH_DETECTION STREQUAL "SPICE")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.cpp")
+else()
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
+endif()
+
+message("Source Files: ${Piano960Plugin_SOURCES}")
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Piano960Plugin_SOURCES})
@@ -59,9 +74,18 @@ target_compile_definitions(Piano960Plugin
     JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-target_link_libraries(Piano960Plugin PRIVATE
+set(Piano960Plugin_LIBRARIES
     Piano960PluginBinaryData
     juce::juce_audio_utils
     juce::juce_dsp
     ff_meters
 )
+
+if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
+    list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
+endif()
+
+message("Libraries: ${Piano960Plugin_LIBRARIES}")
+
+target_link_libraries(Piano960Plugin PRIVATE ${Piano960Plugin_LIBRARIES})
+

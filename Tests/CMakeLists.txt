@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project("unit-tests")
 
-file(GLOB test_sources "${CMAKE_SOURCE_DIR}/Tests/*.cpp" "${CMAKE_SOURCE_DIR}/Tests/test_utils.h")
+file(GLOB test_sources "${CMAKE_SOURCE_DIR}/Tests/*.cpp")
 
 target_compile_definitions(Piano960Plugin PRIVATE TESTMODE=1)
 
