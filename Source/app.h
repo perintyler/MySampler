@@ -16,7 +16,6 @@
 
 #include "lockable_keys.h"
 #include "audio_processor.h"
-#include "midi.h"
 
 class App: public juce::AudioProcessorEditor {
 public:

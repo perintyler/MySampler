@@ -16,8 +16,13 @@
 #include "samples.h"
 #include "logs.h"
 #include "random.h"
-#include "config.h"
-#include "pitch_detection/pitch_detection.h"
+#include "pitch/pitch.h"
+
+#ifdef SAMPLES_DIRECTORY
+  const std::string PATH_TO_SAMPLES_DIRECTORY { SAMPLES_DIRECTORY };
+#else
+  const std::string PATH_TO_SAMPLES_DIRECTORY { "/usr/local/include/Piano960/Resources" };
+#endif
 
 std::unique_ptr<juce::AudioFormatReader> createWAVReader(juce::File& wavFile)
 {
@@ -48,7 +53,7 @@ juce::AudioSampleBuffer createAudioBuffer(std::unique_ptr<juce::AudioFormatReade
 /** Generates a random sample from the installed wav files. The sample will be transposed
  ** to match the pitch of the desired MIDI key.
  **/
-juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
+juce::SamplerSound* getRandomSamplerSound(NoteID note)
 {
     juce::File randomSample;
     int rootNoteOfSample;
@@ -57,22 +62,22 @@ juce::SamplerSound* getRandomSamplerSound(midi::MidiNumber midiNumber)
 
     while (audioReader == nullptr) 
     {
-        pathToFile = juce::String { getPathToRandomFile(config::getSamplesDirectory()) };
+        pathToFile = juce::String { getPathToRandomFile(PATH_TO_SAMPLES_DIRECTORY) };
         juce::File randomSample(pathToFile);
         audioReader = createWAVReader(randomSample);
-        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, audioReader->lengthInSamples);
+        int bufferSize = static_cast<int>(audioReader->lengthInSamples);
+        juce::AudioSampleBuffer buffer = createAudioBuffer(audioReader, bufferSize);
         
         try {
-            int frequencyOfSample = pitch_detection::getFundementalFrequency(buffer, audioReader->sampleRate);
-            rootNoteOfSample = midi::getMidiNumber(frequencyOfSample);
+            rootNoteOfSample = detectNote(buffer, audioReader->sampleRate);
         } 
-        catch (pitch_detection::FrequencyNotDetectedException) {
+        catch (FrequencyNotDetectedException) {
             logs::newBadSample(pathToFile);
         }
     }
 
     juce::BigInteger keyRange;
-    keyRange.setRange(midiNumber, midiNumber+1, true);
+    keyRange.setRange(note, note+1, true);
     
     return new juce::SamplerSound(
         pathToFile, *audioReader,

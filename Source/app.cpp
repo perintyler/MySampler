@@ -4,7 +4,6 @@
 #include <functional>
 
 #include "app.h"
-// #include "lock_buttons.h"
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
@@ -20,12 +19,12 @@ App::App(AudioProcessor& audioProcessor) : AudioProcessorEditor(&audioProcessor)
     , processor       (audioProcessor)
     , randomizeButton (RANDOMIZE_BUTTON_LABEL)
     , saveButton      (SAVE_BUTTON_LABEL)
-    , keyboard        (processor.getKeyboardState(), [this](midi::MidiNumber midiNumber)
+    , keyboard        (processor.getKeyboardState(), [this](NoteID note)
     {
-        if (this->processor.isKeyLocked(midiNumber))
-            this->processor.unlockKey(midiNumber);
+        if (this->processor.isKeyLocked(note))
+            this->processor.unlockKey(note);
         else
-            this->processor.lockKey(midiNumber);
+            this->processor.lockKey(note);
     })
 {
     setResizable(false, false);

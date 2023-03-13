@@ -31,8 +31,6 @@ set(Piano960Plugin_SOURCES
     app.cpp
     audio_processor.h
     audio_processor.cpp
-    midi.h
-    midi.cpp
     samples.h
     samples.cpp
     lockable_keys.cpp
@@ -41,21 +39,22 @@ set(Piano960Plugin_SOURCES
     logs.h
     random.cpp
     random.h
-    config.h
-    config.cpp
-    pitch_detection/exceptions.h
-    pitch_detection/pitch_detection.h
+    pitch/exceptions.h
+    pitch/pitch.h
+    pitch/pitch.cpp
+    pitch/notes.h
+    pitch/notes.cpp
 )
 
 if(PITCH_DETECTION STREQUAL "YIN")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/yin.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/yin.cpp")
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/spice.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/spice.cpp")
 else()
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.cpp")
 endif()
 
 message("Source Files: ${Piano960Plugin_SOURCES}")

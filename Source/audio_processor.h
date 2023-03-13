@@ -15,7 +15,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "midi.h"
+#include "pitch/pitch.h"
 #include "samples.h"
 #include "logs.h"
 
@@ -70,11 +70,11 @@ public:
     
     void randomize_samples();
 
-    bool isKeyLocked(midi::MidiNumber) const;
+    bool isKeyLocked(NoteID) const;
     
-    void lockKey(midi::MidiNumber);
+    void lockKey(NoteID);
     
-    void unlockKey(midi::MidiNumber);
+    void unlockKey(NoteID);
     
     void logSamples() const;
     
@@ -86,9 +86,9 @@ private:
 
     juce::Synthesiser synthesiser;
     
-    std::map<midi::MidiNumber, bool> lockedKeys {};
+    std::map<NoteID, bool> lockedKeys {};
 
-    std::map<midi::MidiNumber, juce::String> sampleNames {};
+    std::map<NoteID, juce::String> sampleNames {};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };

@@ -11,7 +11,6 @@
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
-#include "config.h"
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
@@ -64,38 +63,38 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 void AudioProcessor::randomize_samples()
 {
     synthesiser.clearSounds();
-    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
-        if (!isKeyLocked(midiNumber)) {
-            juce::SamplerSound* sound = getRandomSamplerSound(midiNumber);
-            sampleNames[midiNumber] = sound->getName();
+    for (NoteID note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+        if (!isKeyLocked(note)) {
+            juce::SamplerSound* sound = getRandomSamplerSound(note);
+            sampleNames[note] = sound->getName();
             synthesiser.addSound(juce::SynthesiserSound::Ptr(sound));
         }
     }
 }
 
-bool AudioProcessor::isKeyLocked(midi::MidiNumber midiNumber) const
+bool AudioProcessor::isKeyLocked(NoteID note) const
 {
-    jassert(lockedKeys.count(midiNumber));
-    return lockedKeys.at(midiNumber) == true;
+    jassert(lockedKeys.count(note));
+    return lockedKeys.at(note) == true;
 }
 
-void AudioProcessor::lockKey(midi::MidiNumber midiNumber)
+void AudioProcessor::lockKey(NoteID note)
 {
-    jassert(lockedKeys.count(midiNumber));
-    lockedKeys[midiNumber] = true;
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = true;
 }
 
-void AudioProcessor::unlockKey(midi::MidiNumber midiNumber)
+void AudioProcessor::unlockKey(NoteID note)
 {
-    jassert(lockedKeys.count(midiNumber));
-    lockedKeys[midiNumber] = false;
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = false;
 }
 
 void AudioProcessor::logSamples() const
 {
-    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
-        juce::String sampleName = sampleNames.at(midiNumber);
-        if (isKeyLocked(midiNumber)) {
+    for (NoteID note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+        juce::String sampleName = sampleNames.at(note);
+        if (isKeyLocked(note)) {
             logs::newGoodSample(sampleName);
         } else {
             logs::newBadSample(sampleName);

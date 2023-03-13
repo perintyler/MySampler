@@ -9,15 +9,15 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "midi.h"
+#include "pitch/notes.h"
 
-const midi::MidiNumber FIRST_MIDI_NOTE = midi::C2;
+const NoteID FIRST_MIDI_NOTE = C2;
 
-const midi::MidiNumber LAST_MIDI_NOTE = midi::C8;
+const NoteID LAST_MIDI_NOTE = C8;
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 
-using OnKeyLockStateChange = std::function<void(midi::MidiNumber)>;
+using OnKeyLockStateChange = std::function<void(NoteID)>;
 
 class LockableKeys: public juce::MidiKeyboardComponent
 {
@@ -29,11 +29,11 @@ public:
     void resized() override;
 
 private:
-    void setLockButtonImage(ImageButtonPointer&, midi::MidiNumber);
+    void setLockButtonImage(ImageButtonPointer&, NoteID);
 
-    void layoutLockButton(ImageButtonPointer&, midi::MidiNumber);
+    void layoutLockButton(ImageButtonPointer&, NoteID);
 
-    std::map<midi::MidiNumber, ImageButtonPointer> lockButtons;
+    std::map<NoteID, ImageButtonPointer> lockButtons;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LockableKeys);
 };

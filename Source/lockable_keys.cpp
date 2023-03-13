@@ -2,6 +2,7 @@
 
 #include "lockable_keys.h"
 #include "BinaryData.h"
+#include "pitch/notes.h"
 #include "logs.h"
 
 static const juce::MidiKeyboardComponent::Orientation DEFAULT_ORIENTATION 
@@ -30,31 +31,31 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
     setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
 //    setBufferedToImage(true);
 
-    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
-        juce::String lockButtonName = juce::String("lock-button") + juce::String(midiNumber);
+    for (NoteID note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+        juce::String lockButtonName = juce::String("lock-button") + juce::String(note);
         
         auto lockButton = juce::Component::SafePointer<juce::ImageButton>(
             new juce::ImageButton(lockButtonName)
         );
 
-        lockButton->setComponentID(juce::String { midiNumber });
+        lockButton->setComponentID(juce::String { note });
         lockButton->setToggleable(true);
         lockButton->setClickingTogglesState(true);
-        lockButton->onClick = [midiNumber, toggleLock]() { toggleLock(midiNumber); };
+        lockButton->onClick = [note, toggleLock]() { toggleLock(note); };
         
-        lockButtons.insert(std::pair<midi::MidiNumber, ImageButtonPointer>(midiNumber, lockButton));
-        setLockButtonImage(lockButton, midiNumber);
+        lockButtons.insert(std::pair<NoteID, ImageButtonPointer>(note, lockButton));
+        setLockButtonImage(lockButton, note);
         addAndMakeVisible(lockButton);
     }
 }
 
 LockableKeys::~LockableKeys()
 {
-    for (auto &[midiNumber, lockButton]: lockButtons)
+    for (auto &[note, lockButton]: lockButtons)
         lockButton.deleteAndZero();
 }
 
-void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, midi::MidiNumber midiNumber)
+void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, NoteID note)
 {
    juce::Image unlockedImage = juce::ImageFileFormat::loadFrom(
         BinaryData::unlockedwhite_png,
@@ -85,10 +86,10 @@ void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, midi::Midi
     );
 }
 
-void LockableKeys::layoutLockButton(ImageButtonPointer& lockButton, midi::MidiNumber midiNumber)
+void LockableKeys::layoutLockButton(ImageButtonPointer& lockButton, NoteID note)
 {
-    const juce::Rectangle keyBounds = getRectangleForKey(midiNumber);
-    const bool isBlackKey = midi::isBlackNote(midiNumber);
+    const juce::Rectangle keyBounds = getRectangleForKey(note);
+    const bool isBlackKey = isBlackNote(note);
 
     const float keyXCoord = keyBounds.getX();
     const float keyYCoord = keyBounds.getY();
@@ -109,7 +110,7 @@ void LockableKeys::layoutLockButton(ImageButtonPointer& lockButton, midi::MidiNu
 void LockableKeys::resized()
 {
     juce::MidiKeyboardComponent::resized();
-    for (auto &[midiNumber, lockButton]: lockButtons) {
-        layoutLockButton(lockButton, midiNumber);
+    for (auto &[note, lockButton]: lockButtons) {
+        layoutLockButton(lockButton, note);
     }
 }

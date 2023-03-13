@@ -1,14 +1,22 @@
-/* pitch_detection/spice.h */
+/* pitch_detection/crepe.h */
 
 #pragma once
+
+#ifdef CREPE_MODEL
+
+#include <string>
 
 #include <juce_audio_formats/juce_audio_formats.h>
 
 namespace pitch_detection
 {
+    const std::string ALGORITHM_NAME = "CREPE";
+
     bool model_is_loaded();
 
     void load_model();
-
+    
     float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
 }
+
+#endif
