@@ -8,19 +8,19 @@
               defines="YIN_ALGO=1">
   <MAINGROUP id="gfHjMe" name="Piano960D">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="./Source">
-      <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch_detection">
-        <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch_detection/crepe.cpp"/>
-        <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch_detection/crepe.h"/>
-        <FILE id="hQCut2" name="exceptions.h" compile="0" resource="0" file="./Source/pitch_detection/exceptions.h"/>
-        <FILE id="yqotOS" name="pitch_detection.h" compile="0" resource="0"
-              file="./Source/pitch_detection/pitch_detection.h"/>
-        <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch_detection/spice.cpp"/>
-        <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch_detection/spice.h"/>
-        <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch_detection/yin.cpp"/>
-        <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch_detection/yin.h"/>
+      <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch">
+        <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch/crepe.cpp"/>
+        <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch/crepe.h"/>
+        <FILE id="hQCut2" name="exceptions.h" compile="0" resource="0" file="./Source/pitch/exceptions.h"/>
+        <FILE id="IoCkXB" name="notes.cpp" compile="1" resource="0" file="Source/pitch/notes.cpp"/>
+        <FILE id="bqbWDF" name="notes.h" compile="0" resource="0" file="Source/pitch/notes.h"/>
+        <FILE id="hDwQbf" name="pitch.cpp" compile="1" resource="0" file="Source/pitch/pitch.cpp"/>
+        <FILE id="yqotOS" name="pitch.h" compile="0" resource="0" file="./Source/pitch/pitch.h"/>
+        <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch/spice.cpp"/>
+        <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch/spice.h"/>
+        <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch/yin.cpp"/>
+        <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch/yin.h"/>
       </GROUP>
-      <FILE id="v8ZOHy" name="config.h" compile="0" resource="0" file="./Source/config.h"/>
-      <FILE id="gjl4TH" name="config.cpp" compile="1" resource="0" file="./Source/config.cpp"/>
       <FILE id="ZwCUAZ" name="lockable_keys.h" compile="0" resource="0" file="./Source/lockable_keys.h"/>
       <FILE id="bRiTQ4" name="lockable_keys.cpp" compile="1" resource="0"
             file="./Source/lockable_keys.cpp"/>
@@ -28,11 +28,6 @@
       <FILE id="Buusbf" name="app.cpp" compile="1" resource="0" file="./Source/app.cpp"/>
       <FILE id="j0Sc1t" name="logs.cpp" compile="1" resource="0" file="./Source/logs.cpp"/>
       <FILE id="ri8sRM" name="logs.h" compile="0" resource="0" file="./Source/logs.h"/>
-      <FILE id="Bu3a1I" name="random.cpp" compile="1" resource="0" file="./Source/random.cpp"/>
-      <FILE id="F3MrFx" name="random.h" compile="0" resource="0" file="./Source/random.h"/>
-      <FILE id="FOmJth" name="midi.cpp" compile="1" resource="0" file="./Source/midi.cpp"
-            xcodeResource="0"/>
-      <FILE id="Y1Ncbs" name="midi.h" compile="0" resource="0" file="./Source/midi.h"/>
       <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="./Libraries/AudioFFT/AudioFFT.cpp"/>
       <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="./Libraries/AudioFFT/AudioFFT.h"/>
       <FILE id="iiM5iF" name="samples.cpp" compile="1" resource="0" file="./Source/samples.cpp"/>
