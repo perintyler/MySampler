@@ -1,4 +1,4 @@
-/* pitch/pitch.h */
+/*** pitch/pitch.h ***/
 
 #pragma once
 
@@ -7,9 +7,12 @@
 
 #include "exceptions.h"
 #include "notes.h"
+#include "semitones.h"
+
+void loadPitchDetectionModel();
+
+void printPitchDetectionInfo();
 
 float detectFrequency(juce::AudioBuffer<float>&, int sampleRate);
 
 NoteID detectNote(juce::AudioBuffer<float>&, int sampleRate);
-
-std::string getPitchDetectionAlgorithmName();

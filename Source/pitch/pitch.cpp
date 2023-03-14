@@ -1,23 +1,24 @@
-/* pitch/pitch.cpp */
+/*** pitch/pitch.cpp ***/
 
 #include "pitch.h"
 
 #if defined(CREPE_MODEL)
-
-    const std::string PITCH_DETECTION_ALGORITHM_NAME = "CREPE";
     #include "crepe.h"
-
+    const std::string PITCH_DETECTION_ALGO = "CREPE";
 #elif defined(SPICE_MODEL)
-
-    const std::string PITCH_DETECTION_ALGORITHM_NAME = "SPICE";
     #include "spice.h"
-
+    const std::string PITCH_DETECTION_ALGO = "SPICE";
 #else
-
-    const std::string PITCH_DETECTION_ALGORITHM_NAME = "YIN";
     #include "yin.h"
-
+    const std::string PITCH_DETECTION_ALGO = "YIN";
 #endif
+
+void loadPitchDetectionModel()
+{
+    #if defined(CREPE_MODEL) || defined(SPICE_MODEL)
+    pitch_detection::load_model();
+    #endif
+}
 
 float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
@@ -29,7 +30,7 @@ NoteID detectNote(juce::AudioBuffer<float>& buffer, int sampleRate)
     return matchNoteToFrequency(detectFrequency(buffer, sampleRate));
 }
 
-std::string getPitchDetectionAlgorithmName()
+void printPitchDetectionInfo()
 {
-    return PITCH_DETECTION_ALGORITHM_NAME;
+    std::cout << "Using " << PITCH_DETECTION_ALGO << " pitch detection algorithm." << std::endl;
 }
