@@ -11,16 +11,10 @@ public:
     AppTestFixture()
       : processor ()
       , app (processor)
-      , image (juce::Image::PixelFormat::RGB, 1000, 1000, true)
-      , graphics (image)
-    {
-        app.paint(graphics);
-        app.resized();
-    }
+    {}
+
 private:
     AudioProcessor processor;
-    juce::Image image;
-    juce::Graphics graphics;
 protected:
     App app;
 };
