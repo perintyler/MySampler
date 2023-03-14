@@ -37,13 +37,13 @@ set(Piano960Plugin_SOURCES
     lockable_keys.h
     logs.cpp
     logs.h
-    random.cpp
-    random.h
     pitch/exceptions.h
     pitch/pitch.h
     pitch/pitch.cpp
     pitch/notes.h
     pitch/notes.cpp
+    pitch/semitones.h
+    pitch/semitones.cpp
 )
 
 if(PITCH_DETECTION STREQUAL "YIN")
