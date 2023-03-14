@@ -1,5 +1,7 @@
 /*** pitch/pitch.cpp ***/
 
+#include <iostream>
+
 #include "pitch.h"
 
 #if defined(CREPE_MODEL)
