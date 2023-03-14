@@ -1,8 +1,8 @@
-/* pitch_detection/crepe.cpp */
-
-#include <memory>
+/*** Piano960 | pitch/crepe.cpp ***/
 
 #ifdef CREPE_MODEL
+
+#include <memory>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
