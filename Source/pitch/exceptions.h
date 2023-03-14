@@ -1,4 +1,4 @@
-/* pitch/pitch_detection_exceptions.h */
+/*** pitch/exceptions.h ***/
 
 #pragma once
 
@@ -20,10 +20,10 @@ struct PitchDetectionModelLoadingError : public std::exception
     }
 };
 
-struct InvalidFrequencyException : public std::exception
+struct NoteDoesNotExistException : public std::exception
 {
     const char * what () const throw () 
     {
-        return "The detected frequency does not match to a valid MIDI note";
+        return "Frequency falls outside the range of valid MIDI notes";
     }
 };

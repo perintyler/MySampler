@@ -56,7 +56,7 @@ float get_frequency(std::filesystem::path fileName)
 
 TEST_CASE("lower frequency than lowest note", "[matchNoteToFrequency]")
 {
-    REQUIRE_THROWS_AS(matchNoteToFrequency(10.0), InvalidFrequencyException);
+    REQUIRE_THROWS_AS(matchNoteToFrequency(10.0), NoteDoesNotExistException);
 }
 
 TEST_CASE("inbetween B3 and C4", "[matchNoteToFrequency]") 
