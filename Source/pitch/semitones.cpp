@@ -3,7 +3,6 @@
 #include <assert.h>
 
 #include "semitones.h"
-#include "notes.h"
 
 const std::string SEMITONE_STRINGS[] = {
     "C", "D#", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
@@ -17,7 +16,7 @@ Semitone getSemitone(float frequency)
     return Semitone(semitoneNumber);
 }
 
-Semitone getSemitone(NoteID note)
+Semitone getSemitone(Note note)
 {
     return Semitone(note % OCTAVE_SIZE);
 }
