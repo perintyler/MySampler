@@ -9,12 +9,10 @@ static const juce::MidiKeyboardComponent::Orientation DEFAULT_ORIENTATION
     = juce::MidiKeyboardComponent::horizontalKeyboard;
 
 static const juce::Colour BLACK = juce::Colour::fromRGB(
-    juce::uint8(256), juce::uint8(256), juce::uint8(256)
-);
+    juce::uint8(256), juce::uint8(256), juce::uint8(256));
 
 static const juce::Colour WHITE = juce::Colour::fromRGB(
-    juce::uint8(0), juce::uint8(0), juce::uint8(0)
-);
+    juce::uint8(0), juce::uint8(0), juce::uint8(0));
 
 static const int LOCK_BUTTON_OFFSET = 0; // 2; // pixels
 
