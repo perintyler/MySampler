@@ -142,6 +142,18 @@ TEST_CASE("Keyboard: C6", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == C);
 }
 
+TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
+{
+    float frequency = get_frequency("C2-uprite-bass-oneshot.wav");
+
+    if (!ONLY_TEST_SEMITONES) {
+        REQUIRE(61.74 < frequency);
+        REQUIRE(frequency < 69.30);
+    }
+
+    REQUIRE(getSemitone(frequency) == C);
+}
+
 /************************************************************
  * FAILING PITCH DETECTION TESTS
 
@@ -152,19 +164,6 @@ TEST_CASE("Guitar: C3", "[pitch_detection]")
     if (!ONLY_TEST_SEMITONES) {
         REQUIRE(123.47 < frequency);
         REQUIRE(frequency < 138.59);
-    }
-
-    Semitone semitone = getSemitone(frequency);
-    REQUIRE(semitone == midi::C);
-}
-
-TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
-{
-    float frequency = get_frequency("C2-uprite-bass-oneshot.wav");
-
-    if (!ONLY_TEST_SEMITONES) {
-        REQUIRE(61.74 < frequency);
-        REQUIRE(frequency < 69.30);
     }
 
     Semitone semitone = getSemitone(frequency);
