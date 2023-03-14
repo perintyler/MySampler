@@ -24,18 +24,13 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 
 #include "pitch/pitch.h"
-
-#ifdef TEST_DATA_DIRECTORY
-  const std::string PATH_TO_TEST_FILES { TEST_DATA_DIRECTORY };
-#else
-  const std::string PATH_TO_TEST_FILES { "Tests/test-data" };
-#endif
+#include "paths.h"
 
 bool ONLY_TEST_SEMITONES = true;
 
 float get_frequency(std::filesystem::path fileName)
 {
-    std::filesystem::path filePath = std::filesystem::path { PATH_TO_TEST_FILES } 
+    std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } 
                                    / std::filesystem::path { fileName };
     juce::File wavFile { filePath.string() };
 
