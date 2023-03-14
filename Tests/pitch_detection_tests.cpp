@@ -6,6 +6,11 @@
 // This file contains unit tests for the `PitchDetection`
 // translation unit.
 //
+// MIDI Note Numbers Reference: 
+//   | https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
+// Note Frequencies Reference
+//   | https://pages.mtu.edu/~suits/notefreqs.html
+//
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 #include <vector>
@@ -49,13 +54,29 @@ float get_frequency(std::filesystem::path fileName)
     return detectFrequency(audioBuffer, audioReader->sampleRate);
 }
 
+TEST_CASE("lower frequency than lowest note", "[matchNoteToFrequency]")
+{
+    REQUIRE_THROWS_AS(matchNoteToFrequency(10.0), InvalidFrequencyException);
+}
+
+TEST_CASE("inbetween B3 and C4", "[matchNoteToFrequency]") 
+{
+    REQUIRE(matchNoteToFrequency(250.7) == 59);
+}
+
+TEST_CASE("G4", "[matchNoteToFrequency]") 
+{
+    REQUIRE(matchNoteToFrequency(392.0) == 67);
+}
+
+TEST_CASE("close to Csharp6", "[matchNoteToFrequency]") 
+{
+    REQUIRE(matchNoteToFrequency(1100.8) == 85);
+}
+
 TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
 {
-    std::cout << "Using " 
-              << getPitchDetectionAlgorithmName() 
-              << " pitch detection algorithm." 
-              << std::endl;
-    
+    printPitchDetectionInfo();
     float frequency = get_frequency("G5-female-vocal-chop.wav");
 
     if (!ONLY_TEST_SEMITONES) {
