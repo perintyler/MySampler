@@ -9,8 +9,6 @@
 
 namespace pitch_detection
 {
-    const std::string ALGORITHM_NAME = "SPICE";
-
     bool model_is_loaded();
 
     void load_model();

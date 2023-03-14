@@ -7,8 +7,6 @@
 
 namespace pitch_detection 
 {
-    const std::string ALGORITHM_NAME = "YIN";
-
     static const float TOLERANCE = 0.10f;
 
     float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);

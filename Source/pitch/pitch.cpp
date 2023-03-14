@@ -1,13 +1,22 @@
-/* pitch/pitch_detection.cpp */
+/* pitch/pitch.cpp */
 
 #include "pitch.h"
 
 #if defined(CREPE_MODEL)
-  #include "crepe.h"
+
+    const std::string PITCH_DETECTION_ALGORITHM_NAME = "CREPE";
+    #include "crepe.h"
+
 #elif defined(SPICE_MODEL)
-  #include "spice.h"
+
+    const std::string PITCH_DETECTION_ALGORITHM_NAME = "SPICE";
+    #include "spice.h"
+
 #else
-  #include "yin.h"
+
+    const std::string PITCH_DETECTION_ALGORITHM_NAME = "YIN";
+    #include "yin.h"
+
 #endif
 
 float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
@@ -22,5 +31,5 @@ NoteID detectNote(juce::AudioBuffer<float>& buffer, int sampleRate)
 
 std::string getPitchDetectionAlgorithmName()
 {
-    return pitch_detection::ALGORITHM_NAME;
+    return PITCH_DETECTION_ALGORITHM_NAME;
 }

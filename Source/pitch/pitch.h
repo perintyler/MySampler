@@ -1,4 +1,4 @@
-/* pitch/pitch_detection.h */
+/* pitch/pitch.h */
 
 #pragma once
 

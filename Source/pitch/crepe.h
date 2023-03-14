@@ -10,8 +10,6 @@
 
 namespace pitch_detection
 {
-    const std::string ALGORITHM_NAME = "CREPE";
-
     bool model_is_loaded();
 
     void load_model();
