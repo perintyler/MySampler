@@ -16,6 +16,8 @@
         <FILE id="bqbWDF" name="notes.h" compile="0" resource="0" file="Source/pitch/notes.h"/>
         <FILE id="hDwQbf" name="pitch.cpp" compile="1" resource="0" file="Source/pitch/pitch.cpp"/>
         <FILE id="yqotOS" name="pitch.h" compile="0" resource="0" file="./Source/pitch/pitch.h"/>
+        <FILE id="H0ELnb" name="semitones.cpp" compile="1" resource="0" file="Source/pitch/semitones.cpp"/>
+        <FILE id="ayuPio" name="semitones.h" compile="0" resource="0" file="Source/pitch/semitones.h"/>
         <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch/spice.cpp"/>
         <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch/spice.h"/>
         <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch/yin.cpp"/>
