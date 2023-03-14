@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="iT4mh4" name="Piano960D" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Sound Voyage"
+              companyWebsite="soundvoyager.xyz" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginVST3Category="Instrument" cppLanguageStandard="17" displaySplashScreen="1"
+              pluginCode="Tyle" pluginFormats="buildAU,buildStandalone,buildVST3"
+              defines="YIN_ALGO=1">
+  <MAINGROUP id="gfHjMe" name="Piano960D">
+    <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="./Source">
+      <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch_detection">
+        <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch_detection/crepe.cpp"/>
+        <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch_detection/crepe.h"/>
+        <FILE id="hQCut2" name="exceptions.h" compile="0" resource="0" file="./Source/pitch_detection/exceptions.h"/>
+        <FILE id="yqotOS" name="pitch_detection.h" compile="0" resource="0"
+              file="./Source/pitch_detection/pitch_detection.h"/>
+        <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch_detection/spice.cpp"/>
+        <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch_detection/spice.h"/>
+        <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch_detection/yin.cpp"/>
+        <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch_detection/yin.h"/>
+      </GROUP>
+      <FILE id="v8ZOHy" name="config.h" compile="0" resource="0" file="./Source/config.h"/>
+      <FILE id="gjl4TH" name="config.cpp" compile="1" resource="0" file="./Source/config.cpp"/>
+      <FILE id="ZwCUAZ" name="lockable_keys.h" compile="0" resource="0" file="./Source/lockable_keys.h"/>
+      <FILE id="bRiTQ4" name="lockable_keys.cpp" compile="1" resource="0"
+            file="./Source/lockable_keys.cpp"/>
+      <FILE id="O45mgK" name="app.h" compile="0" resource="0" file="./Source/app.h"/>
+      <FILE id="Buusbf" name="app.cpp" compile="1" resource="0" file="./Source/app.cpp"/>
+      <FILE id="j0Sc1t" name="logs.cpp" compile="1" resource="0" file="./Source/logs.cpp"/>
+      <FILE id="ri8sRM" name="logs.h" compile="0" resource="0" file="./Source/logs.h"/>
+      <FILE id="Bu3a1I" name="random.cpp" compile="1" resource="0" file="./Source/random.cpp"/>
+      <FILE id="F3MrFx" name="random.h" compile="0" resource="0" file="./Source/random.h"/>
+      <FILE id="FOmJth" name="midi.cpp" compile="1" resource="0" file="./Source/midi.cpp"
+            xcodeResource="0"/>
+      <FILE id="Y1Ncbs" name="midi.h" compile="0" resource="0" file="./Source/midi.h"/>
+      <FILE id="J2r9YR" name="AudioFFT.cpp" compile="1" resource="0" file="./Libraries/AudioFFT/AudioFFT.cpp"/>
+      <FILE id="lLukfX" name="AudioFFT.h" compile="0" resource="0" file="./Libraries/AudioFFT/AudioFFT.h"/>
+      <FILE id="iiM5iF" name="samples.cpp" compile="1" resource="0" file="./Source/samples.cpp"/>
+      <FILE id="YybXYt" name="samples.h" compile="0" resource="0" file="./Source/samples.h"/>
+      <FILE id="gCYTnU" name="audio_processor.cpp" compile="1" resource="0"
+            file="./Source/audio_processor.cpp"/>
+      <FILE id="Y40Ti4" name="audio_processor.h" compile="0" resource="0"
+            file="./Source/audio_processor.h"/>
+    </GROUP>
+    <FILE id="En5OBp" name="locked-white.png" compile="0" resource="1"
+          file="./Assets/locked-white.png"/>
+    <FILE id="Mwe4fj" name="locked-black.png" compile="0" resource="1"
+          file="./Assets/locked-black.png"/>
+    <FILE id="Z2dmo4" name="unlocked-white.png" compile="0" resource="1"
+          file="./Assets/unlocked-white.png"/>
+    <FILE id="HFRWBo" name="unlocked-black.png" compile="0" resource="1"
+          file="./Assets/unlocked-black.png"/>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" macOSDeploymentTarget="12.0" osxCompatibility="12.0 SDK"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Piano960"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="./Libraries/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="./Libraries/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+</JUCERPROJECT>
