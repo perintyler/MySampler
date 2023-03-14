@@ -7,6 +7,7 @@
 
 #include "samples.h"
 #include "logs.h"
+#include "paths.h"
 #include "pitch/pitch.h"
 
 #ifdef SAMPLES_DIRECTORY
@@ -19,6 +20,9 @@ static std::random_device randomDevice;
 static std::mt19937 numberGenerator(randomDevice()); // Mersenne Twister
 static std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0); // unit interval uniform distribution
 
+/** Randomly selects a file from a nested directory of sample-packs
+ **  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
+ */
 juce::String getPathToRandomSample()
 {
     std::string path;
