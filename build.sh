@@ -78,7 +78,6 @@ cmake_piano960()
     fi
 
     if [ "$VERBOSE" = true ]; then 
-        cmake_command_arguments="${cmake_command_arguments} --trace-expand";
         echo_stdin_message "cmake $PIANO960_REPO $cmake_command_arguments";
         cmake $PIANO960_REPO $cmake_command_arguments;
     elif [ "$SILENT" = true ]; then
@@ -121,7 +120,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit23re" option; do
+while getopts "hvscit23reg" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
