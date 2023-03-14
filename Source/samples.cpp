@@ -51,7 +51,7 @@ void validateSample(juce::File& sample, juce::String pathToFile)
 /** Generates a random sample from the installed wav files. The sample will be transposed
  ** to match the pitch of the desired MIDI key.
  **/
-juce::SamplerSound* getRandomSamplerSound(NoteID note)
+juce::SamplerSound* getRandomSamplerSound(Note note)
 {
     juce::File randomSample;
     int rootNoteOfSample;

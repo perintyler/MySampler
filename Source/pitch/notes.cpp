@@ -28,7 +28,7 @@ bool isValidNote(float frequency)
 /** returns the Midi note with a frequency closest to the parameterized
  ** fundemental frequency
  **/
-NoteID matchNoteToFrequency(float frequency)
+Note matchNoteToFrequency(float frequency)
 {
     if (!isValidNote(frequency)) {
         throw NoteDoesNotExistException();
@@ -55,7 +55,7 @@ NoteID matchNoteToFrequency(float frequency)
     return C0 + noteID;
 }
 
-bool isBlackNote(NoteID note)
+bool isBlackNote(Note note)
 {
     return std::find(
         std::begin(BLACK_KEY_SEMITONES), 

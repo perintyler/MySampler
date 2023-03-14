@@ -70,11 +70,11 @@ public:
     
     void randomize_samples();
 
-    bool isKeyLocked(NoteID) const;
+    bool isKeyLocked(Note) const;
     
-    void lockKey(NoteID);
+    void lockKey(Note);
     
-    void unlockKey(NoteID);
+    void unlockKey(Note);
     
     void logSamples() const;
     
@@ -86,9 +86,9 @@ private:
 
     juce::Synthesiser synthesiser;
     
-    std::map<NoteID, bool> lockedKeys {};
+    std::map<Note, bool> lockedKeys {};
 
-    std::map<NoteID, juce::String> sampleNames {};
+    std::map<Note, juce::String> sampleNames {};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };

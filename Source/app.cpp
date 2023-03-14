@@ -19,7 +19,7 @@ App::App(AudioProcessor& audioProcessor) : AudioProcessorEditor(&audioProcessor)
     , processor       (audioProcessor)
     , randomizeButton (RANDOMIZE_BUTTON_LABEL)
     , saveButton      (SAVE_BUTTON_LABEL)
-    , keyboard        (processor.getKeyboardState(), [this](NoteID note)
+    , keyboard        (processor.getKeyboardState(), [this](Note note)
     {
         if (this->processor.isKeyLocked(note))
             this->processor.unlockKey(note);

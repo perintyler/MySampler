@@ -11,13 +11,13 @@
 
 #include "pitch/notes.h"
 
-const NoteID FIRST_MIDI_NOTE = C2;
+const Note FIRST_MIDI_NOTE = C2;
 
-const NoteID LAST_MIDI_NOTE = C8;
+const Note LAST_MIDI_NOTE = C8;
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 
-using OnKeyLockStateChange = std::function<void(NoteID)>;
+using OnKeyLockStateChange = std::function<void(Note)>;
 
 class LockableKeys: public juce::MidiKeyboardComponent
 {
@@ -29,11 +29,11 @@ public:
     void resized() override;
 
 private:
-    void setLockButtonImage(ImageButtonPointer&, NoteID);
+    void setLockButtonImage(ImageButtonPointer&, Note);
 
-    void layoutLockButton(ImageButtonPointer&, NoteID);
+    void layoutLockButton(ImageButtonPointer&, Note);
 
-    std::map<NoteID, ImageButtonPointer> lockButtons;
+    std::map<Note, ImageButtonPointer> lockButtons;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LockableKeys);
 };

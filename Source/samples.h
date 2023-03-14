@@ -19,4 +19,4 @@ const double MAX_SAMPLE_LENGTH = 10.0; // seconds
 
 const bool DEBUG_MODE = true; // TODO: make this a Precompiled Variable
 
-juce::SamplerSound* getRandomSamplerSound(NoteID);
+juce::SamplerSound* getRandomSamplerSound(Note);

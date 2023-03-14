@@ -25,7 +25,7 @@ float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
     return pitch_detection::getFundementalFrequency(buffer, sampleRate);
 }
 
-NoteID detectNote(juce::AudioBuffer<float>& buffer, int sampleRate)
+Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
     return matchNoteToFrequency(detectFrequency(buffer, sampleRate));
 }

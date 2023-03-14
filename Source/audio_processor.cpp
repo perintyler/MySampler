@@ -65,7 +65,7 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 void AudioProcessor::randomize_samples()
 {
     synthesiser.clearSounds();
-    for (NoteID note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+    for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
         if (!isKeyLocked(note)) {
             juce::SamplerSound* sound = getRandomSamplerSound(note);
             sampleNames[note] = sound->getName();
@@ -74,19 +74,19 @@ void AudioProcessor::randomize_samples()
     }
 }
 
-bool AudioProcessor::isKeyLocked(NoteID note) const
+bool AudioProcessor::isKeyLocked(Note note) const
 {
     jassert(lockedKeys.count(note));
     return lockedKeys.at(note) == true;
 }
 
-void AudioProcessor::lockKey(NoteID note)
+void AudioProcessor::lockKey(Note note)
 {
     jassert(lockedKeys.count(note));
     lockedKeys[note] = true;
 }
 
-void AudioProcessor::unlockKey(NoteID note)
+void AudioProcessor::unlockKey(Note note)
 {
     jassert(lockedKeys.count(note));
     lockedKeys[note] = false;
@@ -94,7 +94,7 @@ void AudioProcessor::unlockKey(NoteID note)
 
 void AudioProcessor::logSamples() const
 {
-    for (NoteID note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+    for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
         juce::String sampleName = sampleNames.at(note);
         if (isKeyLocked(note)) {
             logs::newGoodSample(sampleName);
