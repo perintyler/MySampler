@@ -11,6 +11,7 @@
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
+#include "pitch/pitch.h"
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
@@ -20,13 +21,14 @@ AudioProcessor::AudioProcessor()
         
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
+
+    loadPitchDetectionModel();
 }
 
 AudioProcessor::~AudioProcessor()
 {
     synthesiser.clearSounds();
 }
-
 
 void AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
