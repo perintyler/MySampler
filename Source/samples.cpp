@@ -1,13 +1,4 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Piano960 | VST3, AU - - - - - - - - - - - - - - - - - - - -
-// - - Created by Tyler Perin  - - - - - - - - - - - - - - - - - -
-// - - Copyright © 2022 Sound Voyager. All rights reserved.- - - -
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   samples.cpp
-//   ~~~~~~~~~~~
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/*** Piano960: samples.cpp ***/
 
 #include <cmath>
 #include <string>
@@ -16,7 +7,6 @@
 
 #include "samples.h"
 #include "logs.h"
-#include "random.h"
 #include "pitch/pitch.h"
 
 #ifdef SAMPLES_DIRECTORY
@@ -44,7 +34,7 @@ juce::String getPathToRandomSample()
         }
     }
 
-    return juce::String { juce::String };
+    return juce::String { path };
 }
 
 void validateSample(juce::File& sample, juce::String pathToFile)
