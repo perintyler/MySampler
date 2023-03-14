@@ -6,60 +6,31 @@
 #include "audio_processor.h"
 #include "app.h"
 
-class AppTestFixture {
-public:
-    AppTestFixture()
-      : processor ()
-      , app (processor)
-    {}
-
-private:
-    AudioProcessor processor;
-protected:
-    App app;
-};
-
-TEST_CASE_METHOD(AppTestFixture, "app: is not resizable")
+TEST_CASE("app tests") 
 {
+    // block messages from other threads for the duration of the test 
+    // we're not testing processing here 
+    juce::MessageManager::getInstance()->runDispatchLoop();
+
+    AudioProcessor processor {};
+    App app { processor };
+
     REQUIRE(app.isResizable() == false);
-}
 
-TEST_CASE_METHOD(AppTestFixture, "app: has size")
-{
     REQUIRE(app.getBounds().getWidth() * app.getBounds().getHeight() > 0);
-}
 
-TEST_CASE_METHOD(AppTestFixture, "app: keyboard is sub-component") 
-{
-    REQUIRE(app.findChildWithID("keyboard") != nullptr);
-}
-
-TEST_CASE_METHOD(AppTestFixture, "app: randomize button is sub-component") 
-{
-    REQUIRE(app.findChildWithID("randomize-button") != nullptr);
-}
-
-TEST_CASE_METHOD(AppTestFixture, "app: paints keyboard") 
-{
-    REQUIRE(app.findChildWithID("keyboard")->isVisible());
-}
-
-TEST_CASE_METHOD(AppTestFixture, "app: paints randomize button") 
-{
     REQUIRE(app.findChildWithID("randomize-button")->isVisible());
-}
 
-TEST_CASE_METHOD(AppTestFixture, "app: keyboard has size") 
-{
-    auto bounds = app.findChildWithID("keyboard")->getBounds();
-    REQUIRE(bounds.getWidth() * bounds.getHeight() > 0);
-}
+    REQUIRE(app.findChildWithID("keyboard")->isVisible());
 
-TEST_CASE_METHOD(AppTestFixture, "app: randomize button has size") 
-{
-    auto bounds = app.findChildWithID("randomize-button")->getBounds();
-    REQUIRE(bounds.getWidth() * bounds.getHeight() > 0);
-}
+    REQUIRE(app.findChildWithID("randomize-button")->isVisible());
 
-TEST_CASE_METHOD(AppTestFixture, "app: cleans up sub-components upon destuction") 
-{}
+    auto keyboardBounds = app.findChildWithID("keyboard")->getBounds();
+    REQUIRE(keyboardBounds.getWidth() * keyboardBounds.getHeight() > 0);
+
+    auto randomizeButtonBounds = app.findChildWithID("randomize-button")->getBounds();
+    REQUIRE(randomizeButtonBounds.getWidth() * randomizeButtonBounds.getHeight() > 0);
+
+    juce::MessageManager::getInstance()->stopDispatchLoop();
+    juce::MessageManager::deleteInstance();
+}
