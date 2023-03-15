@@ -78,6 +78,10 @@ public:
     
     void logSamples() const;
 
+    #ifdef TESTMODE
+    const std::map<Note, juce::String>& getSampleNames() const { return sampleNames; }
+    #endif
+
 private:
 
     juce::MidiKeyboardState keyboardState;
