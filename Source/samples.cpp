@@ -69,13 +69,14 @@ juce::SamplerSound* getRandomSamplerSound(Note note)
         juce::File randomSample(pathToFile);
         validateSample(randomSample, pathToFile);
 
+        audioReader = std::unique_ptr<juce::AudioFormatReader>(
+            wavFormat.createReaderFor(randomSample.createInputStream().release(), true)
+        );
+        
         juce::AudioSampleBuffer buffer;
         int bufferSize = static_cast<int>(audioReader->lengthInSamples);
         buffer.setSize(audioReader->numChannels, bufferSize);
 
-        audioReader = std::unique_ptr<juce::AudioFormatReader>(
-            wavFormat.createReaderFor(randomSample.createInputStream().release(), true)
-        );
         audioReader->read(&buffer, 0, bufferSize, 0, true, true);
 
         try {
