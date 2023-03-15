@@ -83,7 +83,7 @@ endif()
 
 
 include(CMakePrintHelpers)
-cmake_print_variables(${CMAKE_CURRENT_SOURCE_DIR})
+cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
 
 
 # ====================== Build Plugin  ====================
