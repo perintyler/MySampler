@@ -25,28 +25,7 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
     ../Assets/icons/unlocked-white.png
 )
 
-# TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
-set(Piano960Plugin_SOURCES 
-    app.h
-    app.cpp
-    audio_processor.h
-    audio_processor.cpp
-    main_view.h
-    main_view.cpp
-    samples.h
-    samples.cpp
-    lockable_keys.cpp
-    lockable_keys.h
-    logs.cpp
-    logs.h
-    pitch/exceptions.h
-    pitch/pitch.h
-    pitch/pitch.cpp
-    pitch/notes.h
-    pitch/notes.cpp
-    pitch/semitones.h
-    pitch/semitones.cpp
-)
+file(GLOB Piano960Plugin_SOURCES "*.h" "*.cpp" "pitch/*.h" "pitch/*.cpp")
 
 if(PITCH_DETECTION STREQUAL "YIN")
     list(APPEND Piano960Plugin_SOURCES "pitch/yin.h")

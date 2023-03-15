@@ -10,10 +10,7 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 
 #include "pitch/pitch.h"
-
-const Note FIRST_MIDI_NOTE = C2;
-
-const Note LAST_MIDI_NOTE = C8;
+#include "config.h"
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 

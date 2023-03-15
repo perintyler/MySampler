@@ -18,7 +18,9 @@
 void loadPitchDetectionModel()
 {
     #if defined(CREPE_MODEL) || defined(SPICE_MODEL)
-    pitch_detection::load_model();
+    if (!pitch_detection::model_is_loaded()) {
+        pitch_detection::load_model();
+    }
     #endif
 }
 

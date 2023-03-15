@@ -2,7 +2,7 @@
 
 ![Build & Test](https://github.com/perintyler/Piano960/actions/workflows/tests.yml/badge.svg)
 
-Piano960 is a cross platform audio plugin: a virtual keyboard instrument where every key plays a different, random sample. Each of these samples is transposed to match the pitch of the key it's assigned to.
+Piano960 is a cross platform audio plugin: a virtual keyboard instrument where every key plays a different, random sound. Each of these samples is transposed to match the pitch of the key it's assigned to.
 
 ![plugin demo GIF](Assets/readme/demo.gif "Piano960 Plugin Demo")
 
@@ -101,6 +101,8 @@ This codebase currently supports 3 different pitch detection algorithm. The desi
 1. `-DPITCH_DETECTION_ALGORITHM=YIN`
 2. `-DPITCH_DETECTION_ALGORITHM=SPICE`
 3. `-DPITCH_DETECTION_ALGORITHM=CREPE`
+
+NOTE: Each algorithm currently exists as different builds because Tensorflow is a giant build dependency. The branching builds will be consolidated when pitch detection is ironed out.
 
 ### [YIN Algorithm](http://audition.ens.fr/adc/pdf/2002_JASA_YIN.pdf) 
 

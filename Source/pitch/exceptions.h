@@ -4,7 +4,10 @@
 
 #include <exception>
 
-struct FrequencyNotDetectedException : public std::exception 
+struct PitchDetectionException : public std::exception
+{};
+
+struct FrequencyNotDetectedException : PitchDetectionException 
 {
     const char * what () const throw () 
     {
@@ -12,7 +15,7 @@ struct FrequencyNotDetectedException : public std::exception
     }
 };
 
-struct PitchDetectionModelLoadingError : public std::exception 
+struct PitchDetectionModelLoadingError : PitchDetectionException 
 {
     const char * what () const throw ()
     {
@@ -20,10 +23,18 @@ struct PitchDetectionModelLoadingError : public std::exception
     }
 };
 
-struct NoteDoesNotExistException : public std::exception
+struct NoteDoesNotExistException : PitchDetectionException
 {
     const char * what () const throw () 
     {
         return "Frequency falls outside the range of valid MIDI notes";
+    }
+};
+
+struct BadAudioException : PitchDetectionException
+{
+    const char * what () const throw () 
+    {
+        return "Audio quality is too bad to work with";
     }
 };

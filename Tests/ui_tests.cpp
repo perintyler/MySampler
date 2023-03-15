@@ -1,10 +1,27 @@
-/*** Piano960 | main_view_tests.cpp ***/
+/*** Piano960 | ui_tests.cpp ***/
 
 #include <catch2/catch_test_macros.hpp>
+#include <juce_graphics/juce_graphics.h>
 
+#include "lockable_keys.h"
 #include "main_view.h"
+#include "audio_processor.h"
+#include "app.h"
 
-TEST_CASE("main view sub-components", "[main_view]") 
+TEST_CASE("app", "[ui]") 
+{
+    juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+    const juce::MessageManagerLock mml;
+
+    auto processor = AudioProcessor {};
+    processor.suspendProcessing(true);
+    auto app = App { processor };
+
+    REQUIRE(app.isResizable() == false);
+    REQUIRE(app.getBounds().getWidth() * app.getBounds().getHeight() > 0);
+}
+
+TEST_CASE("main view", "[ui]") 
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
@@ -15,9 +32,7 @@ TEST_CASE("main view sub-components", "[main_view]")
     SECTION("sub-components are created and visible") 
     {
         REQUIRE(view.findChildWithID("randomize-button")->isVisible());
-
         REQUIRE(view.findChildWithID("keyboard")->isVisible());
-
         REQUIRE(view.findChildWithID("save-button")->isVisible());
     }
 
@@ -39,3 +54,13 @@ TEST_CASE("main view sub-components", "[main_view]")
     }
 }
 
+TEST_CASE("lockable keys", "[ui]") 
+{
+    juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+    const juce::MessageManagerLock mml;
+    juce::MidiKeyboardState state;
+    LockableKeys keyboard { state, [](Note){} };
+    int numKeys = LAST_MIDI_NOTE - FIRST_MIDI_NOTE;
+    REQUIRE(keyboard.getNumChildComponents() > numKeys);
+    // TODO: require that each lock button is on the key with the same index 
+}
