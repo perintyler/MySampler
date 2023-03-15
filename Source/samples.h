@@ -12,4 +12,4 @@
 
 #include "pitch/notes.h"
 
-std::unique_ptr<juce::SamplerSound> getRandomSamplerSound(Note);
+juce::SynthesiserSound::Ptr getRandomSamplerSound(Note);

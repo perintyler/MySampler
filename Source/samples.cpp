@@ -8,6 +8,7 @@
 #include "samples.h"
 #include "logs.h"
 #include "paths.h"
+#include "config.h"
 #include "pitch/pitch.h"
 
 #ifdef SAMPLES_DIRECTORY
@@ -55,7 +56,7 @@ void validateSample(juce::File& sample, juce::String pathToFile)
 /** Generates a random sample from the installed wav files. The sample will be transposed
  ** to match the pitch of the desired MIDI key.
  **/
-juce::SamplerSound* getRandomSamplerSound(Note note)
+juce::SynthesiserSound::Ptr getRandomSamplerSound(Note note)
 {
     juce::File randomSample;
     int rootNoteOfSample;
@@ -67,31 +68,27 @@ juce::SamplerSound* getRandomSamplerSound(Note note)
     while (!foundValidSample) {
         pathToFile = getPathToRandomSample();
         juce::File randomSample(pathToFile);
-        validateSample(randomSample, pathToFile);
-
+        validateSample(randomSample, pathToFile);        
         audioReader = std::unique_ptr<juce::AudioFormatReader>(
-            wavFormat.createReaderFor(randomSample.createInputStream().release(), true)
-        );
+            wavFormat.createReaderFor(randomSample.createInputStream().release(), true));
         
         juce::AudioSampleBuffer buffer;
         int bufferSize = static_cast<int>(audioReader->lengthInSamples);
         buffer.setSize(audioReader->numChannels, bufferSize);
-
         audioReader->read(&buffer, 0, bufferSize, 0, true, true);
-
+        
         try {
             rootNoteOfSample = detectNote(buffer, audioReader->sampleRate);
             foundValidSample = true;
-        } catch (FrequencyNotDetectedException) {
+        } catch (PitchDetectionException) {
             logs::newBadSample(pathToFile);
         }
     }
 
     juce::BigInteger keyRange;
     keyRange.setRange(note, note+1, true);
-    
-    return new juce::SamplerSound(
-        pathToFile, *audioReader, keyRange, rootNoteOfSample,
-        ATTACK, RELEASE, MAX_SAMPLE_LENGTH
-    );
+
+    return juce::SynthesiserSound::Ptr(new juce::SamplerSound(
+        pathToFile, *audioReader, keyRange, rootNoteOfSample, ATTACK, RELEASE, SUSTAIN
+    ));
 }

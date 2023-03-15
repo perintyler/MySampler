@@ -77,9 +77,9 @@ void AudioProcessor::randomizeSamples()
     synthesiser.clearSounds();
     for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
         if (!isKeyLocked(note)) {
-            juce::SamplerSound* sound = getRandomSamplerSound(note);
-            sampleNames[note] = sound->getName();
-            synthesiser.addSound(juce::SynthesiserSound::Ptr(sound));
+            juce::SynthesiserSound::Ptr sound = getRandomSamplerSound(note);
+            sampleNames[note] = static_cast<juce::SamplerSound*>(sound.get())->getName();
+            synthesiser.addSound(sound);
         }
     }
 }
