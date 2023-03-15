@@ -160,17 +160,16 @@ float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer,
 
     prepareAudioForModel(buffer, sampleRate);
     float* output = runModel(buffer, buffer.getNumSamples());
+    int model_output_size = static_cast<int>(buffer.getNumSamples() / 512);
 
     float sumOfFrequencies = 0.0;
-    for (int sampleIndex = 0; sampleIndex < (buffer.getNumSamples() / 512); sampleIndex++) {
+    for (int sampleIndex = 0; sampleIndex < model_output_size; sampleIndex++) {
         float cqt_bin = output[sampleIndex] * PT_SLOPE + PT_OFFSET;
-        float frequency = FMIN*pow(
-            2.0, (1.0 * cqt_bin / BINS_PER_OCTAVE)
-        );
+        float frequency = FMIN*pow(2.0, (1.0 * cqt_bin / BINS_PER_OCTAVE));
         sumOfFrequencies += frequency;
     }
 
-    return sumOfFrequencies / buffer.getNumSamples();
+    return sumOfFrequencies / model_output_size;
 }
 
 #endif

@@ -1,4 +1,4 @@
-/* pitch_detection/spice.h */
+/*** Piano960 | pitch/spice.h ***/
 
 #pragma once
 
