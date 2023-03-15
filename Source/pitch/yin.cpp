@@ -1,4 +1,4 @@
-/* pitch_detection.cpp */
+/*** Piano960: pitch/yin.cpp ***/
 
 #include <cassert>
 

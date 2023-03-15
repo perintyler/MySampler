@@ -1,4 +1,4 @@
-/* pitch_detection.h */
+/*** Piano960 | yin.h ***/
 
 #pragma once
 
