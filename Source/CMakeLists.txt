@@ -19,10 +19,10 @@ juce_add_plugin(Piano960Plugin
 )
 
 juce_add_binary_data(Piano960PluginBinaryData SOURCES
-    ../Assets/locked-black.png
-    ../Assets/locked-white.png
-    ../Assets/unlocked-black.png 
-    ../Assets/unlocked-white.png
+    ../Assets/icons/locked-black.png
+    ../Assets/icons/locked-white.png
+    ../Assets/icons/unlocked-black.png 
+    ../Assets/icons/unlocked-white.png
 )
 
 # TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
