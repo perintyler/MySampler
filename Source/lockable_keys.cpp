@@ -1,3 +1,5 @@
+/*** Piano960 | lockable_keys.cpp */
+
 #include <assert.h>
 
 #include "lockable_keys.h"
@@ -27,15 +29,12 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
     setScrollButtonsVisible(false);
     setKeyWidth(WHITE_KEY_WIDTH);
     setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
-//    setBufferedToImage(true);
+    setBufferedToImage(true);
 
     for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
         juce::String lockButtonName = juce::String("lock-button") + juce::String(note);
         
-        auto lockButton = juce::Component::SafePointer<juce::ImageButton>(
-            new juce::ImageButton(lockButtonName)
-        );
-
+        auto lockButton = ImageButtonPointer(new juce::ImageButton(lockButtonName));
         lockButton->setComponentID(juce::String { note });
         lockButton->setToggleable(true);
         lockButton->setClickingTogglesState(true);
@@ -49,8 +48,12 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
 
 LockableKeys::~LockableKeys()
 {
-    for (auto &[note, lockButton]: lockButtons)
+    // removeAllChangeListeners();
+    for (auto &[note, lockButton]: lockButtons) {
         lockButton.deleteAndZero();
+    }
+    lockButtons.clear();
+    clearKeyMappings();
 }
 
 void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, Note note)

@@ -1,4 +1,4 @@
-/* LockableKeyboard.h */
+/*** Piano960 | lockable_keys.h */
 
 #pragma once
 
@@ -9,7 +9,7 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "pitch/notes.h"
+#include "pitch/pitch.h"
 
 const Note FIRST_MIDI_NOTE = C2;
 
