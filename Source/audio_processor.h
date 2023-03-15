@@ -1,4 +1,4 @@
-/* plugin_processor.h */
+/* Piano960 | plugin_processor.h */
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
@@ -28,11 +28,11 @@ public:
 
     AudioProcessor();
     
-    ~AudioProcessor() override;
+    ~AudioProcessor() override = default;
     
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     
-    void releaseResources() override {}
+    void releaseResources() override;
 
     bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
 
@@ -68,7 +68,7 @@ public:
 
     juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
     
-    void randomize_samples();
+    void randomizeSamples();
 
     bool isKeyLocked(Note) const;
     
@@ -77,9 +77,9 @@ public:
     void unlockKey(Note);
     
     void logSamples() const;
-    
+
 private:
-    
+
     juce::MidiKeyboardState keyboardState;
 
     juce::MidiMessageCollector midiCollector;
