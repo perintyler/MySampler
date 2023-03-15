@@ -28,6 +28,8 @@ ENABLE_GPU=false;
 
 USE_GCC=false; # defaults to Clang
 
+ABORT_AFTER_FIRST_TEST_FAILURE=false;
+
 echo_help_message() 
 {
     echo "options:";
@@ -120,7 +122,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit23reg" option; do
+while getopts "hvscit23rega" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -132,7 +134,8 @@ while getopts "hvscit23reg" option; do
       3) PITCH_DETECTION_ALGO="CREPE";;                     # -3 : use crepe model for pitch detection
       r) DEBUG_BUILD=false;;
       e) ENABLE_GPU=true;;
-      g) USE_GCC=true;
+      g) USE_GCC=true;;
+      a) ABORT_AFTER_FIRST_TEST_FAILURE=true;;
    esac
 done
 
@@ -159,7 +162,11 @@ make_piano960 $make_parameters;
 
 if [ "$RUN_TESTS" = true ]; then
     # if -t option was set, run the newly built unit tests 
-    $PIANO960_BUILD_DIRECTORY/Tests/unit-tests --abort -v
+    testArgs="-v";
+    if [ "$ABORT_AFTER_FIRST_TEST_FAILURE" = true ]; then
+        testArgs="$testArgs --abort";
+    fi
+    $PIANO960_BUILD_DIRECTORY/Tests/unit-tests $testArgs;
 fi
 
 echo_build_message "Successfully built Piano960 to" $PIANO960_BUILD_DIRECTORY;
