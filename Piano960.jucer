@@ -40,13 +40,13 @@
             file="./Source/audio_processor.h"/>
     </GROUP>
     <FILE id="En5OBp" name="locked-white.png" compile="0" resource="1"
-          file="./Assets/locked-white.png"/>
+          file="./Assets/icons/locked-white.png"/>
     <FILE id="Mwe4fj" name="locked-black.png" compile="0" resource="1"
-          file="./Assets/locked-black.png"/>
+          file="./Assets/icons/locked-black.png"/>
     <FILE id="Z2dmo4" name="unlocked-white.png" compile="0" resource="1"
-          file="./Assets/unlocked-white.png"/>
+          file="./Assets/icons/unlocked-white.png"/>
     <FILE id="HFRWBo" name="unlocked-black.png" compile="0" resource="1"
-          file="./Assets/unlocked-black.png"/>
+          file="./Assets/icons/unlocked-black.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
