@@ -11,33 +11,34 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "audio_processor.h"
+#include "config.h"
+#include "pitch/pitch.h"
 
-TEST_CASE("processor: Name", "[demo][processor]")
+TEST_CASE("processor: Name", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.getName() == juce::String {"Piano960"});
 }
 
-TEST_CASE("processor: HasEditor", "[demo][processor]")
+TEST_CASE("processor: HasEditor", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.hasEditor() == true);
 }
 
-TEST_CASE("processor: CurrentProgram", "[demo][processor]")
+TEST_CASE("processor: CurrentProgram", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.getCurrentProgram() == 0);
-    // REQUIRE(processor.getProgramName(1) == juce::String {});
 }
 
-TEST_CASE("processor: NumPrograms", "[demo][processor]")
+TEST_CASE("processor: NumPrograms", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.getNumPrograms() == 1);
 }
 
-TEST_CASE("processor: AcceptsMidi", "[demo][processor]")
+TEST_CASE("processor: AcceptsMidi", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.acceptsMidi() == true);
@@ -49,19 +50,19 @@ TEST_CASE("processor: ProducesMidi", "[demo][processor]")
     REQUIRE(processor.producesMidi() == false);
 }
 
-TEST_CASE("processor: IsMidiEffect", "[demo][processor]")
+TEST_CASE("processor: IsMidiEffect", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.isMidiEffect() == false);
 }
 
-TEST_CASE("processor: TailLength", "[demo][processor]")
+TEST_CASE("processor: TailLength", "[processor]")
 {
     auto processor = AudioProcessor {};
     REQUIRE(processor.getTailLengthSeconds() == 0.0);
 }
 
-TEST_CASE("processor: BusesLayoutSupportMono", "[demo][processor]")
+TEST_CASE("processor: BusesLayoutSupportMono", "[processor]")
 {
     auto processor     = AudioProcessor {};
     auto layout        = juce::AudioProcessor::BusesLayout {};
@@ -71,7 +72,7 @@ TEST_CASE("processor: BusesLayoutSupportMono", "[demo][processor]")
     REQUIRE(processor.isBusesLayoutSupported(layout) == true);
 }
 
-TEST_CASE("processor: BusesLayoutSupportStereo", "[demo][processor]")
+TEST_CASE("processor: BusesLayoutSupportStereo", "[processor]")
 {
     auto processor     = AudioProcessor {};
     auto layout        = juce::AudioProcessor::BusesLayout {};
@@ -81,7 +82,7 @@ TEST_CASE("processor: BusesLayoutSupportStereo", "[demo][processor]")
     REQUIRE(processor.isBusesLayoutSupported(layout) == true);
 }
 
-TEST_CASE("processor: BusesLayoutSupportInvalid", "[demo][processor]")
+TEST_CASE("processor: BusesLayoutSupportInvalid", "[processor]")
 {
     auto processor     = AudioProcessor {};
     auto layout        = juce::AudioProcessor::BusesLayout {};
@@ -90,3 +91,11 @@ TEST_CASE("processor: BusesLayoutSupportInvalid", "[demo][processor]")
 
     REQUIRE(processor.isBusesLayoutSupported(layout) == false);
 }
+
+TEST_CASE("processor: randomize samples", "[processor]")
+{
+    auto processor = AudioProcessor {};
+    processor.randomizeSamples();
+    REQUIRE(processor.getSampleNames().size() == NUM_KEYS);
+}
+
