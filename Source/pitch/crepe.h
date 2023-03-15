@@ -10,6 +10,8 @@
 
 namespace pitch_detection
 {
+    bool DEBUG = true;
+    
     bool model_is_loaded();
 
     void load_model();

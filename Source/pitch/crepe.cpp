@@ -21,8 +21,6 @@
   const std::string CREPE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/model-full.tflite" };
 #endif
 
-static const bool VERBOSE = false;
-
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
 std::unique_ptr<tflite::InterpreterOptions> options { };
@@ -50,7 +48,7 @@ void pitch_detection::load_model()
     auto allocationResults = interpreter->AllocateTensors();
     if (allocationResults != kTfLiteOk) { throw pitch_detection::ModelLoadingError(); };
 
-    if (VERBOSE) {
+    if (DEBUG) {
         tflite::PrintInterpreterState(interpreter.get());
     }
 }
