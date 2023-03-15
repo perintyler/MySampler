@@ -8,7 +8,7 @@ const Note FIRST_MIDI_NOTE = C2;
 
 const Note LAST_MIDI_NOTE = C8;
 
-const int NUM_KEYS = LAST_MIDI_NOTE - FIRST_MIDI_NOTE;
+const int NUM_KEYS = LAST_MIDI_NOTE - FIRST_MIDI_NOTE + 1;
 
 const double ATTACK = 0.1; // seconds
 
