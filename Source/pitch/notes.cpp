@@ -1,6 +1,7 @@
-/*** pitch/notes.cpp ***/
+/*** Piano960 | pitch/notes.cpp ***/
 
 #include <vector>
+#include <algorithm>
 
 #include "notes.h"
 #include "semitones.h"
@@ -17,7 +18,7 @@ const std::vector<float> NOTE_FREQUENCIES { // hz. the first frequency is for C0
     6644.88, 7040.00, 7458.62, 7902.13
 };
 
-const Semitone BLACK_KEY_SEMITONES[5] { Db, Eb, Gb, Ab, Bb };
+const Semitone BLACK_KEYS[5] { Db, Eb, Gb, Ab, Bb };
 
 bool isValidNote(float frequency)
 {
@@ -57,10 +58,7 @@ Note matchNoteToFrequency(float frequency)
 
 bool isBlackNote(Note note)
 {
-    return std::find(
-        std::begin(BLACK_KEY_SEMITONES), 
-        std::end(BLACK_KEY_SEMITONES), 
-        getSemitone(note)
-    ) != std::end(BLACK_KEY_SEMITONES);
+    return std::find(std::begin(BLACK_KEYS), std::end(BLACK_KEYS), getSemitone(note))
+        != std::end(BLACK_KEYS);
 }
 
