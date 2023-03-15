@@ -3,7 +3,7 @@
 
 const bool AUTO_FOCUS = false;
 
-const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
+// TODO: put margin constants in App and put the margins around MainView
 
 const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
 

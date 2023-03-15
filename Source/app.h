@@ -24,7 +24,7 @@ public:
     
     App(AudioProcessor&);
     
-    virtual ~App() override;
+    virtual ~App() override = default;
 
     void paint(juce::Graphics&) override;
 

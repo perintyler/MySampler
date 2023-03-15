@@ -23,6 +23,8 @@
         <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch/yin.cpp"/>
         <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch/yin.h"/>
       </GROUP>
+      <FILE id="TYBrN5" name="main_view.h" compile="0" resource="0" file="Source/main_view.h"/>
+      <FILE id="nzsH7v" name="main_view.cpp" compile="1" resource="0" file="Source/main_view.cpp"/>
       <FILE id="ZwCUAZ" name="lockable_keys.h" compile="0" resource="0" file="./Source/lockable_keys.h"/>
       <FILE id="bRiTQ4" name="lockable_keys.cpp" compile="1" resource="0"
             file="./Source/lockable_keys.cpp"/>
