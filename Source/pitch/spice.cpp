@@ -11,6 +11,8 @@
  *      and with only one channel (mono).
  **/
 
+#ifdef SPICE_MODEL
+
 #include <assert.h>
 #include <math.h>
 #include <unordered_map>
@@ -24,10 +26,14 @@
 #include "tensorflow/lite/delegates/gpu/delegate.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
-#include "pitch_detection/spice.h"
-#include "pitch_detection/exceptions.h"
-#include "config.h"
-#include "logs.h"
+#include "spice.h"
+#include "exceptions.h"
+
+#ifdef PATH_TO_CREPE_MODEL
+  const std::string SPICE_TFLITE_FILE { PATH_TO_SPICE_MODEL };
+#else
+  const std::string SPICE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/spice.tflite" };
+#endif
 
 const bool VERBOSE = false;
 
@@ -61,7 +67,7 @@ void pitch_detection::load_model()
     assert(!pitch_detection::model_is_loaded());
 
     tflite::StderrReporter error_reporter;
-    model = tflite::FlatBufferModel::BuildFromFile(config::getPathToSPICEModel().c_str(), &error_reporter);
+    model = tflite::FlatBufferModel::BuildFromFile(SPICE_TFLITE_FILE.c_str(), &error_reporter);
 
     tflite::ops::builtin::BuiltinOpResolver resolver;  
     options = std::make_unique<tflite::InterpreterOptions>();
@@ -69,10 +75,10 @@ void pitch_detection::load_model()
 
     tflite::InterpreterBuilder builder(*model.get(), resolver, options.get());
     auto interpreterBuildResults = builder(&interpreter);
-    if (interpreterBuildResults != kTfLiteOk) { throw pitch_detection::ModelLoadingError(); };
+    if (interpreterBuildResults != kTfLiteOk) { throw PitchDetectionModelLoadingError(); };
 
     auto allocationResults = interpreter->AllocateTensors();
-    if (allocationResults != kTfLiteOk) { throw pitch_detection::ModelLoadingError(); };
+    if (allocationResults != kTfLiteOk) { throw PitchDetectionModelLoadingError(); };
 
     if (VERBOSE) {
         tflite::PrintInterpreterState(interpreter.get());
@@ -154,15 +160,16 @@ float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer,
 
     prepareAudioForModel(buffer, sampleRate);
     float* output = runModel(buffer, buffer.getNumSamples());
+    int model_output_size = static_cast<int>(buffer.getNumSamples() / 512);
 
     float sumOfFrequencies = 0.0;
-    for (int sampleIndex = 0; sampleIndex < (buffer.getNumSamples() / 512); sampleIndex++) {
+    for (int sampleIndex = 0; sampleIndex < model_output_size; sampleIndex++) {
         float cqt_bin = output[sampleIndex] * PT_SLOPE + PT_OFFSET;
-        float frequency = FMIN*pow(
-            2.0, (1.0 * cqt_bin / BINS_PER_OCTAVE)
-        );
+        float frequency = FMIN*pow(2.0, (1.0 * cqt_bin / BINS_PER_OCTAVE));
         sumOfFrequencies += frequency;
     }
 
-    return sumOfFrequencies / buffer.getNumSamples();
+    return sumOfFrequencies / model_output_size;
 }
+
+#endif

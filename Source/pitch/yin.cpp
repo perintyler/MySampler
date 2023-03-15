@@ -1,10 +1,11 @@
-/* pitch_detection.cpp */
+/*** Piano960: pitch/yin.cpp ***/
 
 #include <cassert>
 
-#include "pitch_detection/yin.h"
-#include "pitch_detection/exceptions.h"
-#include "midi.h"
+#include "yin.h"
+#include "exceptions.h"
+#include "notes.h"
+#include "semitones.h"
 
 float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, int bufferSize)
 {
@@ -104,16 +105,15 @@ float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer,
     int bufferSize = (int) std::min(0.10*sampleRate, 0.50*buffer.getNumSamples());
     const float* signal = buffer.getReadPointer(0);
 
-    float frequencyOfFirstHalf = detectPitchWithYIN(buffer.getReadPointer(0), bufferSize, 0, sampleRate);
-    float frequencyOfSecondHalf = detectPitchWithYIN(buffer.getReadPointer(0), bufferSize, bufferSize, sampleRate);
+    float frequencyOfFirstHalf = detectPitchWithYIN(signal, bufferSize, 0, sampleRate);
+    float frequencyOfSecondHalf = detectPitchWithYIN(signal, bufferSize, bufferSize, sampleRate);
     
-    if (    !midi::isValidNote(frequencyOfFirstHalf)
-         || !midi::isValidNote(frequencyOfSecondHalf)
-         ||  midi::getSemitone(frequencyOfFirstHalf) != midi::getSemitone(frequencyOfSecondHalf)
+    if (    !isValidNote(frequencyOfFirstHalf)
+         || !isValidNote(frequencyOfSecondHalf)
+         ||  getSemitone(frequencyOfFirstHalf) != getSemitone(frequencyOfSecondHalf)
     ) {
         throw FrequencyNotDetectedException();
     }
 
     return (frequencyOfFirstHalf + frequencyOfSecondHalf) / 2.0;
-
 }

@@ -6,9 +6,9 @@ project(Piano960 C CXX)
 # ============= Define Compiler Flags ===============
 
 
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(ABSL_PROPAGATE_CXX_STD 1)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -22,7 +22,7 @@ set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
 # install samples
 install(
-   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
    DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
@@ -54,7 +54,7 @@ endif()
 # ================== Configuration Files ====================
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Config/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
 
 
@@ -70,7 +70,7 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 # =============== Build Tensorflow =================
 
 
-if(PITCH_DETECTION STREQUAL "YIN" OR PITCH_DETECTION STREQUAL "SPICE")
+if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     add_subdirectory(
       "${CMAKE_SOURCE_DIR}/Libraries/tensorflow/tensorflow/lite"
       "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
@@ -83,7 +83,7 @@ endif()
 
 
 include(CMakePrintHelpers)
-cmake_print_variables(${CMAKE_CURRENT_SOURCE_DIR})
+cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
 
 
 # ====================== Build Plugin  ====================

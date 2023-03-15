@@ -131,7 +131,7 @@ def main():
 
   argument_parser.add_argument('--compile-to',
     help = 'the directory where all Piano960 samples will be compile to',
-    default = os.path.join(PATH_TO_PIANO960_REPO, 'Resources')
+    default = os.path.join(PATH_TO_PIANO960_REPO, 'Assets', 'samples')
   )
 
   argument_parser.add_argument('-v', '--verbose', 

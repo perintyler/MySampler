@@ -1,4 +1,4 @@
-/* plugin_processor.h */
+/* Piano960 | plugin_processor.h */
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
@@ -15,7 +15,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "midi.h"
+#include "pitch/pitch.h"
 #include "samples.h"
 #include "logs.h"
 
@@ -28,11 +28,11 @@ public:
 
     AudioProcessor();
     
-    ~AudioProcessor() override;
+    ~AudioProcessor() override = default;
     
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     
-    void releaseResources() override {}
+    void releaseResources() override;
 
     bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
 
@@ -68,27 +68,27 @@ public:
 
     juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
     
-    void randomize_samples();
+    void randomizeSamples();
 
-    bool isKeyLocked(midi::MidiNumber) const;
+    bool isKeyLocked(Note) const;
     
-    void lockKey(midi::MidiNumber);
+    void lockKey(Note);
     
-    void unlockKey(midi::MidiNumber);
+    void unlockKey(Note);
     
     void logSamples() const;
-    
+
 private:
-    
+
     juce::MidiKeyboardState keyboardState;
 
     juce::MidiMessageCollector midiCollector;
 
     juce::Synthesiser synthesiser;
     
-    std::map<midi::MidiNumber, bool> lockedKeys {};
+    std::map<Note, bool> lockedKeys {};
 
-    std::map<midi::MidiNumber, juce::String> sampleNames {};
+    std::map<Note, juce::String> sampleNames {};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };

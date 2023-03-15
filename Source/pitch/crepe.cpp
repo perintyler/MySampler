@@ -1,4 +1,6 @@
-/* pitch_detection/crepe.cpp */
+/*** Piano960 | pitch/crepe.cpp ***/
+
+#ifdef CREPE_MODEL
 
 #include <memory>
 
@@ -10,15 +12,18 @@
 #include "tensorflow/lite/delegates/gpu/delegate.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
-#include "pitch_detection/crepe.h"
-#include "pitch_detection/exceptions.h"
-#include "config.h"
+#include "crepe.h"
+#include "exceptions.h"
+
+#ifdef PATH_TO_CREPE_MODEL
+  const std::string CREPE_TFLITE_FILE { PATH_TO_CREPE_MODEL };
+#else
+  const std::string CREPE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/model-full.tflite" };
+#endif
 
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
 std::unique_ptr<tflite::InterpreterOptions> options { };
-
-static const bool VERBOSE = false;
 
 bool pitch_detection::model_is_loaded()
 {
@@ -30,7 +35,7 @@ void pitch_detection::load_model()
     assert(!pitch_detection::model_is_loaded());
 
     tflite::StderrReporter error_reporter;
-    model = tflite::FlatBufferModel::BuildFromFile(config::getPathToCREPEModel().c_str(), &error_reporter);
+    model = tflite::FlatBufferModel::BuildFromFile(CREPE_TFLITE_FILE.c_str(), &error_reporter);
 
     tflite::ops::builtin::BuiltinOpResolver resolver;  
     options = std::make_unique<tflite::InterpreterOptions>();
@@ -43,7 +48,7 @@ void pitch_detection::load_model()
     auto allocationResults = interpreter->AllocateTensors();
     if (allocationResults != kTfLiteOk) { throw pitch_detection::ModelLoadingError(); };
 
-    if (VERBOSE) {
+    if (DEBUG) {
         tflite::PrintInterpreterState(interpreter.get());
     }
 }
@@ -52,3 +57,5 @@ float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer,
 {
     return 0.0;
 }
+
+#endif

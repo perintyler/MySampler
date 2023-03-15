@@ -1,7 +1,8 @@
-/* pitch_detection.h */
+/*** Piano960 | yin.h ***/
 
 #pragma once
 
+#include <string>
 #include <juce_audio_formats/juce_audio_formats.h>
 
 namespace pitch_detection 

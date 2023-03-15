@@ -1,9 +1,4 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   plugin_processor.cpp
-//   ~~~~~~~~~~~~~~~~~~~~
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/*** Piano960 | plugin_processor.cpp ***/
 
 #include <assert.h>
 #include <string>
@@ -11,23 +6,39 @@
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
-#include "config.h"
+#include "pitch/pitch.h"
 
 AudioProcessor::AudioProcessor()
-    : juce::AudioProcessor ( BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true) )
+    : juce::AudioProcessor (BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    , keyboardState ()
+    , midiCollector ()
+    , synthesiser ()
 {
     for (auto i = 0; i < NUM_VOICES; ++i)
         synthesiser.addVoice (new juce::SamplerVoice());
         
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
+
+    loadPitchDetectionModel();
+
+    #ifndef TESTMODE
+    randomizeSamples();
+    #endif
 }
 
-AudioProcessor::~AudioProcessor()
+void AudioProcessor::releaseResources()
 {
-    synthesiser.clearSounds();
-}
+    keyboardState.allNotesOff(0);
 
+    synthesiser.clearSounds();
+    sampleNames.clear();
+    lockedKeys.clear();
+
+    for (auto i = 0; i < NUM_VOICES; ++i) {
+        synthesiser.removeVoice(i);
+    }
+}
 
 void AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -48,7 +59,7 @@ bool AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 
 void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals; // What is this?
+    // juce::ScopedNoDenormals noDenormals; // What is this?
     
     // TODO: investigate if i actually need this (the plugin only recieves midi date)
     // clear output channels that didn't contain input data since
@@ -61,41 +72,41 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     synthesiser.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
-void AudioProcessor::randomize_samples()
+void AudioProcessor::randomizeSamples()
 {
     synthesiser.clearSounds();
-    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
-        if (!isKeyLocked(midiNumber)) {
-            juce::SamplerSound* sound = getRandomSamplerSound(midiNumber);
-            sampleNames[midiNumber] = sound->getName();
+    for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+        if (!isKeyLocked(note)) {
+            juce::SamplerSound* sound = getRandomSamplerSound(note);
+            sampleNames[note] = sound->getName();
             synthesiser.addSound(juce::SynthesiserSound::Ptr(sound));
         }
     }
 }
 
-bool AudioProcessor::isKeyLocked(midi::MidiNumber midiNumber) const
+bool AudioProcessor::isKeyLocked(Note note) const
 {
-    jassert(lockedKeys.count(midiNumber));
-    return lockedKeys.at(midiNumber) == true;
+    jassert(lockedKeys.count(note));
+    return lockedKeys.at(note) == true;
 }
 
-void AudioProcessor::lockKey(midi::MidiNumber midiNumber)
+void AudioProcessor::lockKey(Note note)
 {
-    jassert(lockedKeys.count(midiNumber));
-    lockedKeys[midiNumber] = true;
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = true;
 }
 
-void AudioProcessor::unlockKey(midi::MidiNumber midiNumber)
+void AudioProcessor::unlockKey(Note note)
 {
-    jassert(lockedKeys.count(midiNumber));
-    lockedKeys[midiNumber] = false;
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = false;
 }
 
 void AudioProcessor::logSamples() const
 {
-    for (midi::MidiNumber midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++) {
-        juce::String sampleName = sampleNames.at(midiNumber);
-        if (isKeyLocked(midiNumber)) {
+    for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
+        juce::String sampleName = sampleNames.at(note);
+        if (isKeyLocked(note)) {
             logs::newGoodSample(sampleName);
         } else {
             logs::newBadSample(sampleName);
@@ -105,7 +116,7 @@ void AudioProcessor::logSamples() const
 
 juce::AudioProcessorEditor* AudioProcessor::createEditor()
 {
-    return new App (*this);
+    return new App(*this);
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

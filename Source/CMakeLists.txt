@@ -19,10 +19,10 @@ juce_add_plugin(Piano960Plugin
 )
 
 juce_add_binary_data(Piano960PluginBinaryData SOURCES
-    ../Assets/locked-black.png
-    ../Assets/locked-white.png
-    ../Assets/unlocked-black.png 
-    ../Assets/unlocked-white.png
+    ../Assets/icons/locked-black.png
+    ../Assets/icons/locked-white.png
+    ../Assets/icons/unlocked-black.png 
+    ../Assets/icons/unlocked-white.png
 )
 
 # TODO: automatically set Piano960Plugin_SOURCES to be all .h/.cpp files inside the Source directory
@@ -31,34 +31,36 @@ set(Piano960Plugin_SOURCES
     app.cpp
     audio_processor.h
     audio_processor.cpp
-    midi.h
-    midi.cpp
+    main_view.h
+    main_view.cpp
     samples.h
     samples.cpp
     lockable_keys.cpp
     lockable_keys.h
     logs.cpp
     logs.h
-    random.cpp
-    random.h
-    config.h
-    config.cpp
-    pitch_detection/exceptions.h
-    pitch_detection/pitch_detection.h
+    pitch/exceptions.h
+    pitch/pitch.h
+    pitch/pitch.cpp
+    pitch/notes.h
+    pitch/notes.cpp
+    pitch/semitones.h
+    pitch/semitones.cpp
 )
 
 if(PITCH_DETECTION STREQUAL "YIN")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/yin.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/yin.cpp")
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/spice.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/spice.cpp")
 else()
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.cpp")
 endif()
 
-message("Source Files: ${Piano960Plugin_SOURCES}")
+include(CMakePrintHelpers)
+cmake_print_variables(Piano960Plugin_SOURCES)
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Piano960Plugin_SOURCES})
@@ -85,7 +87,7 @@ if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
 endif()
 
-message("Libraries: ${Piano960Plugin_LIBRARIES}")
+cmake_print_variables(Piano960Plugin_LIBRARIES)
 
 target_link_libraries(Piano960Plugin PRIVATE ${Piano960Plugin_LIBRARIES})
 

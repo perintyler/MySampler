@@ -1,4 +1,4 @@
-/* LockableKeyboard.h */
+/*** Piano960 | lockable_keys.h */
 
 #pragma once
 
@@ -9,15 +9,15 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "midi.h"
+#include "pitch/pitch.h"
 
-const midi::MidiNumber FIRST_MIDI_NOTE = midi::C2;
+const Note FIRST_MIDI_NOTE = C2;
 
-const midi::MidiNumber LAST_MIDI_NOTE = midi::C8;
+const Note LAST_MIDI_NOTE = C8;
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 
-using OnKeyLockStateChange = std::function<void(midi::MidiNumber)>;
+using OnKeyLockStateChange = std::function<void(Note)>;
 
 class LockableKeys: public juce::MidiKeyboardComponent
 {
@@ -29,11 +29,11 @@ public:
     void resized() override;
 
 private:
-    void setLockButtonImage(ImageButtonPointer&, midi::MidiNumber);
+    void setLockButtonImage(ImageButtonPointer&, Note);
 
-    void layoutLockButton(ImageButtonPointer&, midi::MidiNumber);
+    void layoutLockButton(ImageButtonPointer&, Note);
 
-    std::map<midi::MidiNumber, ImageButtonPointer> lockButtons;
+    std::map<Note, ImageButtonPointer> lockButtons;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LockableKeys);
 };
