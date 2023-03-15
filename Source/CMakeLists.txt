@@ -31,6 +31,8 @@ set(Piano960Plugin_SOURCES
     app.cpp
     audio_processor.h
     audio_processor.cpp
+    main_view.h
+    main_view.cpp
     samples.h
     samples.cpp
     lockable_keys.cpp
