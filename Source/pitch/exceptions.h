@@ -1,4 +1,4 @@
-/*** pitch/exceptions.h ***/
+/*** Piano960 | pitch/exceptions.h ***/
 
 #pragma once
 
@@ -16,7 +16,7 @@ struct PitchDetectionModelLoadingError : public std::exception
 {
     const char * what () const throw ()
     {
-        return "The pitch detection model could not be loaded";
+        return "Tensorflow pitch detection model could not be loaded";
     }
 };
 
