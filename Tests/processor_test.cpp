@@ -12,6 +12,7 @@
 
 #include "audio_processor.h"
 #include "config.h"
+#include "samples.h"
 #include "pitch/pitch.h"
 
 TEST_CASE("processor: Name", "[processor]")
@@ -90,6 +91,12 @@ TEST_CASE("processor: BusesLayoutSupportInvalid", "[processor]")
     layout.outputBuses = juce::AudioChannelSet::stereo();
 
     REQUIRE(processor.isBusesLayoutSupported(layout) == false);
+}
+
+TEST_CASE("get random sampler sound", "[processor]")
+{
+    int C3 = 48;
+    REQUIRE(getRandomSamplerSound(C3));
 }
 
 TEST_CASE("processor: randomize samples", "[processor]")
