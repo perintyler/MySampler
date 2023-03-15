@@ -1,4 +1,6 @@
-/* plugin_editor.cpp */
+/*** Piano960 | app.cpp ***/
+
+#include <assert.h>
 
 #include <juce_graphics/juce_graphics.h>
 #include <functional>
@@ -15,75 +17,71 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-App::App(AudioProcessor& audioProcessor) : AudioProcessorEditor(&audioProcessor)
-    , processor       (audioProcessor)
-    , randomizeButton (RANDOMIZE_BUTTON_LABEL)
-    , saveButton      (SAVE_BUTTON_LABEL)
-    , keyboard        (processor.getKeyboardState(), [this](Note note)
-    {
-        if (this->processor.isKeyLocked(note))
-            this->processor.unlockKey(note);
-        else
-            this->processor.lockKey(note);
-    })
-{
+const float PLUGIN_HEIGHT = 250.0;
+
+App::App(AudioProcessor& audioProcessor) 
+    : AudioProcessorEditor (&audioProcessor)
+    , synthProcessor (audioProcessor)
+    , view (std::make_unique<MainView>(
+        synthProcessor.getKeyboardState(),
+        [this]() { synthProcessor.randomizeSamples(); }, // randomize button click callback
+        [this]() { synthProcessor.randomizeSamples(); }, // save button click callback
+        [this](Note note) {                              // lock key button click callback
+            if (this->synthProcessor.isKeyLocked(note)) {
+                this->synthProcessor.unlockKey(note);
+            } else {
+                this->synthProcessor.lockKey(note);
+            }
+        }
+    ))
+{  
+    // std::function<void()> onRandomizeButtonClicked = [this]() {
+    //     synthProcessor.randomizeSamples();
+    // };
+
+    // std::function<void()> onSaveButtonClicked = [this]() {
+    //     synthProcessor.randomizeSamples();
+    // };
+
+    // std::function<void(Note note)> onLockButtonClicked = [this](Note note) {
+    //     if (this->synthProcessor.isKeyLocked(note))
+    //         this->synthProcessor.unlockKey(note);
+    //     else
+    //         this->synthProcessor.lockKey(note);
+    // };
+
+    // view = std::make_unique<MainView>(
+    //     synthProcessor.getKeyboardState(), 
+    //     onRandomizeButtonClicked,
+    //     onSaveButtonClicked,
+    //     onLockButtonClicked
+    // );
+
+    setSize(view->getMinimumWidth() + 2*HORIZONTAL_MARGIN_SIZE, PLUGIN_HEIGHT);
+
+    addAndMakeVisible(view.get());
+
     setResizable(false, false);
-
-    saveButton.onClick      = [&]() { processor.logSamples(); };
-    randomizeButton.onClick = [&]() { processor.randomize_samples(); };
-    
-    // the editor's sub-components use plugin dimensions to set their
-    // own bounds, so the plugin size must be set before adding sub-components
-    setSize(
-        keyboard.getTotalKeyboardWidth() + 2*HORIZONTAL_MARGIN_SIZE,
-        250.0
-    );
-
-    addAndMakeVisible(saveButton);
-    addAndMakeVisible(randomizeButton);
-    addAndMakeVisible(keyboard, 0);
-
-    #ifdef TESTMODE
-      setComponentID("app");
-      keyboard.setComponentID("keyboard");
-      randomizeButton.setComponentID("randomize-button");
-      saveButton.setComponentID("save-button");
-    #else
-      processor.randomize_samples();
-    #endif
 }
+
+App::~App()
+{
+    // assert(view);
+    // removeChildComponent(view.get());
+    // view.release();
+}
+
 
 /** Render the UI
  **/
 void App::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-    g.setColour(BACKGROUND_COLOR);
 }
 
-/** Lay out subcomponents
+/** Layout subcomponents
  **/
 void App::resized()
 {
-    int keyboardWidth = getWidth() - HORIZONTAL_MARGIN_SIZE*2;
-    int keyboardHeight = 200;
-
-    int randomizeButtonHeight = 30;
-    int randomizeButtonWidth = 0.8*keyboardWidth;
-    
-    int saveButtonHeight = randomizeButtonHeight;
-    int saveButtonWidth = 0.2*keyboardWidth - 5;
-    
-    int keyboardXCoord = HORIZONTAL_MARGIN_SIZE;
-    int keyboardYCoord = VERTICAL_MARGIN_SIZE + randomizeButtonHeight + 5;
-    
-    int randomizeButtonXCoord = HORIZONTAL_MARGIN_SIZE;
-    int randomizeButtonYCoord = VERTICAL_MARGIN_SIZE;
-
-    int saveButtonXCoord = HORIZONTAL_MARGIN_SIZE + randomizeButtonWidth + 5;
-    int saveButtonYCoord = VERTICAL_MARGIN_SIZE;
-
-    keyboard.setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
-    randomizeButton.setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
-    saveButton.setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
+    view->setBounds(getLocalBounds());
 }

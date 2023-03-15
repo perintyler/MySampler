@@ -10,19 +10,21 @@
 
 #pragma once
 
+#include <memory>
+
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "lockable_keys.h"
 #include "audio_processor.h"
+#include "main_view.h"
 
 class App: public juce::AudioProcessorEditor {
 public:
     
     App(AudioProcessor&);
     
-    ~App() override = default;
+    virtual ~App() override;
 
     void paint(juce::Graphics&) override;
 
@@ -30,13 +32,9 @@ public:
     
 private:
 
-    AudioProcessor& processor;
+    AudioProcessor& synthProcessor;
     
-    juce::TextButton randomizeButton;
-    
-    juce::TextButton saveButton;
-
-    LockableKeys keyboard;
+    std::unique_ptr<MainView> view;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(App)
 };
