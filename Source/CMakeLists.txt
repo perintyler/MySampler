@@ -59,7 +59,8 @@ else()
     list(APPEND Piano960Plugin_SOURCES "pitch/crepe.cpp")
 endif()
 
-message("Source Files: ${Piano960Plugin_SOURCES}")
+include(CMakePrintHelpers)
+cmake_print_variables(Piano960Plugin_SOURCES)
 
 target_sources(Piano960Plugin PRIVATE ${Piano960Plugin_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${Piano960Plugin_SOURCES})
@@ -86,7 +87,7 @@ if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
 endif()
 
-message("Libraries: ${Piano960Plugin_LIBRARIES}")
+cmake_print_variables(Piano960Plugin_LIBRARIES)
 
 target_link_libraries(Piano960Plugin PRIVATE ${Piano960Plugin_LIBRARIES})
 
