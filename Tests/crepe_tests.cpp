@@ -2,11 +2,14 @@
 
 #ifdef CREPE_MODEL
 
+#include <iostream>
+#include <fstream>
 #include <filesystem>
 #include <string>
 
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
+#include "JsonCpp/json/json.h"
 
 #include "pitch/crepe.h"
 #include "config.h"
@@ -14,12 +17,24 @@
 
 using BufferAndSampleRate = std::pair<juce::AudioBuffer<float>, float>;
 
+Json::Value TEST_DATA = []{
+    std::string pathToCrepeTestData = (
+        std::filesystem::path { TEST_DATA_DIRECTORY } 
+      / std::filesystem::path { "crepe-preparation.json" }
+    ).string();
+    std::ifstream file(pathToCrepeTestData);
+    Json::Reader reader;
+    Json::Value jsonData;
+    reader.parse(file, jsonData);
+    return jsonData;
+}();
+
 BufferAndSampleRate get_audio_buffer(const char* testFileName)
 {
     std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } 
                                    / std::filesystem::path { testFileName };
     juce::File wavFile { filePath.string() };
-    std::cout << filePath.string() << std::endl;
+
     assert(wavFile.existsAsFile());
     juce::WavAudioFormat wavFormat;
     std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
