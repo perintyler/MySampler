@@ -156,7 +156,7 @@ void pitch_detection::load_model()
  * 
  * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L200
  **/
-void pitch_detection::create1024SampleFrames(juce::AudioBuffer<float>& buffer, int sampleRate)
+void pitch_detection::create1024SampleFrames(juce::AudioBuffer<double>& buffer, int sampleRate)
 {
     // TODO
 }
@@ -169,13 +169,13 @@ void pitch_detection::create1024SampleFrames(juce::AudioBuffer<float>& buffer, i
  * 
  * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L207
  **/
-void pitch_detection::normalizeAudio(juce::AudioBuffer<float>& buffer, int sampleRate)
+void pitch_detection::normalizeAudio(juce::AudioBuffer<double>& buffer, int sampleRate)
 {
     // TODO
 }
 
 // model requires single channel audio with a sample rate of 16000
-void pitch_detection::downSampleAudio(juce::AudioBuffer<float>& buffer, int sampleRate)
+void pitch_detection::downSampleAudio(juce::AudioBuffer<double>& buffer, int sampleRate)
 {
     if(sampleRate < CREPE_MODEL_SAMPLE_RATE || buffer.getNumChannels() == 0) {
         throw BadAudioException();
@@ -183,25 +183,25 @@ void pitch_detection::downSampleAudio(juce::AudioBuffer<float>& buffer, int samp
         return;
     }
     
-    float sampleRateRatio = CREPE_MODEL_SAMPLE_RATE / sampleRate;
+    double sampleRateRatio = CREPE_MODEL_SAMPLE_RATE / sampleRate;
     int numSamplesAfterDownSampling = sampleRateRatio*buffer.getNumSamples();
 
     for (int newSignalIndex = 0; newSignalIndex < numSamplesAfterDownSampling; newSignalIndex += 1)
     {
         int oldSignalIndex = static_cast<int>(std::round(sampleRateRatio*newSignalIndex));
         for (int channelIndex = 0; channelIndex < buffer.getNumChannels(); channelIndex++) {
-            float newSample = buffer.getSample(channelIndex, oldSignalIndex);
+            double newSample = buffer.getSample(channelIndex, oldSignalIndex);
             buffer.setSample(channelIndex, newSignalIndex, newSample);
         }
     }
 
-    buffer.setSize(buffer.getNumChannels(), numSamplesAfterDownSampling);
+    buffer.setSize(buffer.getNumChannels(), numSamplesAfterDownSampling, true, true);
 }
 
 /** Turns the audio into a single channel signal by computing the mean sample amplitude 
  ** of all channels 
  **/
-void pitch_detection::makeAudioMono(juce::AudioBuffer<float>& buffer) 
+void pitch_detection::makeAudioMono(juce::AudioBuffer<double>& buffer) 
 {
     if (buffer.getNumChannels() == 0) {
         throw BadAudioException();
@@ -211,18 +211,18 @@ void pitch_detection::makeAudioMono(juce::AudioBuffer<float>& buffer)
 
     for (int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); sampleIndex++) 
     {
-        float sumOfAllChannels = 0;
+        double sumOfAllChannels = 0;
         for (int channelIndex = 0; channelIndex < buffer.getNumChannels(); channelIndex++) {
             sumOfAllChannels += buffer.getSample(channelIndex, sampleIndex);
         }
-        float averagedSample = sumOfAllChannels / buffer.getNumChannels();
+        double averagedSample = sumOfAllChannels / static_cast<double>(buffer.getNumChannels());
         buffer.setSample(0 /* index of first and only channel */, sampleIndex, averagedSample);
     }
 
-    buffer.setSize(1 /* num channels */, buffer.getNumSamples());
+    buffer.setSize(1 /* num channels */, buffer.getNumSamples(), true, true);
 }
 
-void feedAudioIntoModel(juce::AudioBuffer<float>& buffer)
+void feedAudioIntoModel(juce::AudioBuffer<double>& buffer)
 {
     assert(model);
     assert(interpreter);
@@ -246,10 +246,10 @@ float convertModelOutputToFrequency(float* classification_output, float* confide
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
     if (true) { return 1000.0; }
-    downSampleAudio(buffer, sampleRate);
-    normalizeAudio(buffer, sampleRate);
-    create1024SampleFrames(buffer, sampleRate);
-    feedAudioIntoModel(buffer);
+    // downSampleAudio(buffer, sampleRate);
+    // normalizeAudio(buffer, sampleRate);
+    // create1024SampleFrames(buffer, sampleRate);
+    // feedAudioIntoModel(buffer);
     float* classification_output = interpreter->typed_output_tensor<float>(CLASSIFICATION_TENSOR_ID);
     float* confidence_output = interpreter->typed_output_tensor<float>(CONFIDENCE_TENSOR_ID);
     return convertModelOutputToFrequency(classification_output, confidence_output);

@@ -17,10 +17,10 @@ namespace pitch_detection
     float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
 
     #ifdef TESTMODE
-    void create1024SampleFrames(juce::AudioBuffer<float>&, int sampleRate);
-    void makeAudioMono(juce::AudioBuffer<float>& buffer);
-    void normalizeAudio(juce::AudioBuffer<float>&, int sampleRate);
-    void downSampleAudio(juce::AudioBuffer<float>&, int sampleRate);
+    void create1024SampleFrames(juce::AudioBuffer<double>&, int sampleRate);
+    void makeAudioMono(juce::AudioBuffer<double>& buffer);
+    void normalizeAudio(juce::AudioBuffer<double>&, int sampleRate);
+    void downSampleAudio(juce::AudioBuffer<double>&, int sampleRate);
     #endif
 }
 

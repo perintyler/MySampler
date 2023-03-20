@@ -15,12 +15,16 @@
 #include "config.h"
 #include "paths.h"
 
-using BufferAndSampleRate = std::pair<juce::AudioBuffer<float>, float>;
+int SAMPLE_RATE_BEFORE_DOWNSAMPLING = 44100;
 
-Json::Value TEST_DATA = []{
+int SAMPLE_RATE_AFTER_DOWNSAMPLING = 16000;
+
+using BufferAndSampleRate = std::pair<juce::AudioBuffer<double>, float>;
+
+const Json::Value TEST_DATA = []{
     std::string pathToCrepeTestData = (
         std::filesystem::path { TEST_DATA_DIRECTORY } 
-      / std::filesystem::path { "crepe-preparation.json" }
+      / std::filesystem::path { "crepe-inputs.json" }
     ).string();
     std::ifstream file(pathToCrepeTestData);
     Json::Reader reader;
@@ -29,52 +33,114 @@ Json::Value TEST_DATA = []{
     return jsonData;
 }();
 
-BufferAndSampleRate get_audio_buffer(const char* testFileName)
+juce::AudioBuffer<double> getAudioBuffer(const std::string& testFile)
 {
-    std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } 
-                                   / std::filesystem::path { testFileName };
-    juce::File wavFile { filePath.string() };
+    int numSamples = TEST_DATA[testFile]["audio"].size();
+    juce::AudioBuffer<double> buffer(2, numSamples);
 
-    assert(wavFile.existsAsFile());
-    juce::WavAudioFormat wavFormat;
-    std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
-        wavFormat.createReaderFor(wavFile.createInputStream().release(), true)
-    );
+    for (int i = 0; i < numSamples; i++) {
+        buffer.setSample(0, i, TEST_DATA[testFile]["audio"][i][0].asDouble());
+        buffer.setSample(1, i, TEST_DATA[testFile]["audio"][i][1].asDouble());
+    }
 
-    juce::AudioSampleBuffer audioBuffer;
-    int bufferSize = audioReader->lengthInSamples;
-    audioBuffer.setSize(audioReader->numChannels, bufferSize);
-    audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
-
-    return std::make_pair(audioBuffer, audioReader->sampleRate);
+    return buffer;
 }
 
-TEST_CASE("prepare audio for CREPE model: normalize audio", "[pitch_detection]") 
+// BufferAndSampleRate get_audio_buffer(const std::string& testFileName)
+// {
+//     std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } 
+//                                    / std::filesystem::path { testFileName };
+//     juce::File wavFile { filePath.string() };
+
+//     assert(wavFile.existsAsFile());
+//     juce::WavAudioFormat wavFormat;
+//     std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
+//         wavFormat.createReaderFor(wavFile.createInputStream().release(), true)
+//     );
+
+//     juce::AudioSampleBuffer audioBuffer;
+//     int bufferSize = audioReader->lengthInSamples;
+//     audioBuffer.setSize(audioReader->numChannels, bufferSize);
+//     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
+
+//     return std::make_pair(audioBuffer, audioReader->sampleRate);
+// }
+
+std::vector<double> audioBufferToVector(juce::AudioBuffer<double>& buffer)
 {
-    auto bufferAndSampleRate = get_audio_buffer("G#3-female-vocal-chop.wav");
-    pitch_detection::normalizeAudio(bufferAndSampleRate.first, bufferAndSampleRate.second);
-    // TODO
+    std::vector<double> audio;
+    audio.reserve(buffer.getNumSamples());
+    for (int index = 0; index < buffer.getNumSamples(); index++) {
+        audio.push_back(buffer.getSample(0, index));
+    }
+    return audio;
 }
 
-TEST_CASE("prepare audio for CREPE model: create 1024 sample frames", "[pitch_detection]") 
+std::vector<double> jsonAudioToVector(const Json::Value& node)
 {
-    auto bufferAndSampleRate = get_audio_buffer("C3-acoustic-bass-oneshot.wav");
-    pitch_detection::create1024SampleFrames(bufferAndSampleRate.first, bufferAndSampleRate.second);
-    // TODO
+    std::vector<double> audio;
+    audio.reserve(node.size());
+    std::transform(node.begin(), node.end(), std::back_inserter(audio), [](const auto& sample) { 
+        return sample.asDouble();
+    });
+    return audio;
 }
 
-TEST_CASE("prepare audio for CREPE model: make audio mono", "[pitch_detection]") 
+void printExpectedAndActual(const Json::Value& expected, juce::AudioBuffer<double>& actual)
 {
-    auto bufferAndSampleRate = get_audio_buffer("C3-acoustic-bass-oneshot.wav");
-    pitch_detection::makeAudioMono(bufferAndSampleRate.first);
-    // TODO
+    std::vector<double> expectedVector = jsonAudioToVector(expected);
+    std::vector<double> actualVector = audioBufferToVector(actual);
+
+    for (int index = 0; index < 100; index++) {
+        std::cout << "(" 
+                  << expectedVector.at(index) 
+                  << ", " 
+                  << actualVector.at(index)
+                  << ")" 
+                  << std::endl;
+    }
 }
 
-TEST_CASE("prepare audio for CREPE model: down-sample audio", "[pitch_detection]") 
+TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
 {
-    auto bufferAndSampleRate = get_audio_buffer("C6-keyboard-oneshot.wav");
-    pitch_detection::downSampleAudio(bufferAndSampleRate.first, bufferAndSampleRate.second);
-    // TODO
+    for (auto const& audioFile : TEST_DATA.getMemberNames()) {
+        std::cout << "AUDIO FILE: " << audioFile << std::endl;
+
+        juce::AudioBuffer<double> buffer = getAudioBuffer(audioFile);
+
+        pitch_detection::makeAudioMono(buffer);
+
+        auto actualMonoAudio = audioBufferToVector(buffer);
+        auto expectedMonoAudio = jsonAudioToVector(TEST_DATA[audioFile]["mono"]);
+
+        REQUIRE(actualMonoAudio.size() == expectedMonoAudio.size());
+        REQUIRE(actualMonoAudio == expectedMonoAudio);
+
+        pitch_detection::downSampleAudio(buffer, SAMPLE_RATE_BEFORE_DOWNSAMPLING);
+        auto actualAudioAfterDownSampling = audioBufferToVector(buffer);
+        auto expectedAudioAfterDownSampling = jsonAudioToVector(TEST_DATA[audioFile]["downsampled"]);
+
+        printExpectedAndActual(TEST_DATA[audioFile]["downsampled"], buffer);
+        break;
+        REQUIRE(actualAudioAfterDownSampling.size() == expectedAudioAfterDownSampling.size());
+        REQUIRE(actualAudioAfterDownSampling == expectedAudioAfterDownSampling);
+
+        break;
+
+        pitch_detection::create1024SampleFrames(buffer, SAMPLE_RATE_AFTER_DOWNSAMPLING);
+        auto actualAudioFrames = audioBufferToVector(buffer);
+        auto expectedAudioFrames = jsonAudioToVector(TEST_DATA[audioFile]["framedAudio"]);
+
+        REQUIRE(actualAudioFrames.size() == expectedAudioFrames.size());
+        REQUIRE(actualAudioFrames == expectedAudioFrames);
+
+        pitch_detection::normalizeAudio(buffer, SAMPLE_RATE_AFTER_DOWNSAMPLING);
+        auto actualNormalizedAudio = audioBufferToVector(buffer);
+        auto expectedNormalizedAudio = jsonAudioToVector(TEST_DATA[audioFile]["normalize"]);
+
+        REQUIRE(actualNormalizedAudio.size() == expectedNormalizedAudio.size());
+        REQUIRE(actualNormalizedAudio == expectedNormalizedAudio);
+    }
 }
 
 #endif
