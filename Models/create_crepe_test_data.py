@@ -9,11 +9,11 @@ import pathlib
 
 CREPE_MODEL_SAMPLE_RATE = 16000
 
-MODELS_DIRECTORY = pathlib.Path(__file__).parent.parent.resolve()
+MODELS_DIRECTORY = pathlib.Path(__file__).resolve().parent.parent.resolve()
 
-TEST_AUDIO_DIRECTORY = MODELS_DIRECTORY.parent.joinpath('Tests').joinpath('test-data').resolve()
+TEST_AUDIO_DIRECTORY = MODELS_DIRECTORY.parent.resolve().joinpath('Tests').joinpath('test-data').resolve()
 
-OUTPUT_FILE = TEST_AUDIO_DIRECTORY.joinpath('crepe-preparation.json').resolve()
+OUTPUT_FILE = TEST_AUDIO_DIRECTORY.joinpath('crepe-inputs.json').resolve()
 
 TEST_FILES = [TEST_AUDIO_DIRECTORY.joinpath(filename) for filename in (
   'G#3-female-vocal-chop.wav',
@@ -45,14 +45,15 @@ def create_test_data():
   test_data = {}
   for file in TEST_FILES:
       sample_rate, audio = wavfile.read(str(file))
+
       audio = audio.astype(np.float32)
-      
-      monoAudio = audio.mean(1)
+      monoAudio = audio.copy().mean(1)
       downsampledAudio = downsample(monoAudio.copy(), sample_rate);
       framedAudio = create_audio_frames(downsampledAudio.copy()),
       normalizedAudio = normalize_audio(tuple(framedAudio))
 
       test_data[file.name] = {
+        'audio': [channel.tolist() for channel in audio],
         'mono': monoAudio.tolist(),
         'downsampled': downsampledAudio.tolist(),
         'framedAudio': [frame.tolist() for frame in framedAudio],
@@ -64,6 +65,6 @@ def create_test_data():
 if __name__ == '__main__':
   listOfTestFiles = "\n\t - ".join([str(file) for file in TEST_FILES])
   print(f'\ncompiling test data for:\n\t - {listOfTestFiles}\n')
-  test_data_file_path = MODELS_DIRECTORY.joinpath()
-  with open(OUTPUT_FILE, 'w+') as test_data_file:
-    json.dump(create_test_data(), test_data_file, indent=4)
+  test_data = create_test_data()
+  with open('crepe-inputs.json', 'w') as test_data_file:
+    json.dump(test_data, test_data_file, indent=4)
