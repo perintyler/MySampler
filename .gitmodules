@@ -19,3 +19,6 @@
 [submodule "Libraries/jsoncpp"]
 	path = Libraries/jsoncpp
 	url = git@github.com:open-source-parsers/jsoncpp.git
+[submodule "Libraries/soxr"]
+	path = Libraries/soxr
+	url = https://github.com/chirlu/soxr
