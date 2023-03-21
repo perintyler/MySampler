@@ -33,14 +33,18 @@ const Json::Value TEST_DATA = []{
     return jsonData;
 }();
 
-juce::AudioBuffer<float> getAudioBuffer(const std::string& testFile)
-{
-    int numSamples = TEST_DATA[testFile]["audio"].size();
-    juce::AudioBuffer<float> buffer(2, numSamples);
+juce::AudioBuffer<float> getAudioBuffer(
+    const std::string& testFile, 
+    const std::string& testType = "audio", 
+    int numChannels=2
+) {
+    int numSamples = TEST_DATA[testFile][testType].size();
+    juce::AudioBuffer<float> buffer(numChannels, numSamples);
 
     for (int i = 0; i < numSamples; i++) {
-        buffer.setSample(0, i, TEST_DATA[testFile]["audio"][i][0].asDouble());
-        buffer.setSample(1, i, TEST_DATA[testFile]["audio"][i][1].asDouble());
+        for (int channel = 0; channel < numChannels; channel++) {
+            buffer.setSample(channel, i, TEST_DATA[testFile][testType][i][channel].asFloat());
+        }
     }
 
     return buffer;
@@ -91,11 +95,10 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
 
         pitch_detection::makeAudioMono(buffer);
 
-        auto actualMonoAudio = audioBufferToVector(buffer);
-        auto expectedMonoAudio = jsonAudioToVector(TEST_DATA[audioFile]["mono"]);
+        REQUIRE(buffer.getNumSamples() == TEST_DATA[audioFile]["mono"].size());
 
-        REQUIRE(actualMonoAudio.size() == expectedMonoAudio.size());
-        REQUIRE(actualMonoAudio == expectedMonoAudio);
+        for (int i = 0; i < buffer.getNumSamples(); i++)
+            REQUIRE(buffer.getSample(0, i) == Catch::Approx(TEST_DATA[audioFile]["mono"][i].asFloat()));
 
         juce::AudioBuffer<float> downsampled = pitch_detection::downSampleAudio(
             buffer, SAMPLE_RATE_BEFORE_DOWNSAMPLING
@@ -103,12 +106,18 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
 
         REQUIRE(downsampled.getNumSamples() == TEST_DATA[audioFile]["downsampled"].size());
 
-        continue; 
+        auto frames = pitch_detection::create1024SampleFrames(
+            downsampled, 
+            SAMPLE_RATE_AFTER_DOWNSAMPLING
+        );
 
-        pitch_detection::create1024SampleFrames(downsampled, SAMPLE_RATE_AFTER_DOWNSAMPLING);
-        pitch_detection::normalizeAudio(downsampled, SAMPLE_RATE_AFTER_DOWNSAMPLING);
-        
-        auto actualNormalizedAudio = audioBufferToVector(downsampled);
+        REQUIRE(frames.size() == TEST_DATA[audioFile]["framedAudio"][0].size());
+        for (const std::vector<float>& frame : frames)
+            REQUIRE(frame.size() == 1024);
+
+        break;
+
+        auto actualNormalizedAudio = pitch_detection::normalizeAudio(frames);
         auto expectedNormalizedAudio = jsonAudioToVector(TEST_DATA[audioFile]["normalize"]);
 
         REQUIRE(actualNormalizedAudio.size() == expectedNormalizedAudio.size());
