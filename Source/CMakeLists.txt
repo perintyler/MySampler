@@ -62,7 +62,11 @@ set(Piano960Plugin_LIBRARIES
     ff_meters
 )
 
-if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
+if(PITCH_DETECTION STREQUAL "CREPE")
+    list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
+    list(APPEND Piano960Plugin_LIBRARIES "soxr")
+    list(APPEND Piano960Plugin_LIBRARIES "soxr-lsr")
+elseif(PITCH_DETECTION STREQUAL "SPICE")
     list(APPEND Piano960Plugin_LIBRARIES "tensorflow-lite")
 endif()
 

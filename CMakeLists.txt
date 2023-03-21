@@ -14,7 +14,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
-
 # ================== Installation ====================
 
 
@@ -76,6 +75,15 @@ if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
       "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite" 
       EXCLUDE_FROM_ALL
     )
+endif()
+
+
+# =============== Build libsoxr (Resampling Library) =================
+
+
+if(PITCH_DETECTION STREQUAL "CREPE")
+    list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/Libraries/soxr/cmake/Modules)
+    add_subdirectory("${CMAKE_SOURCE_DIR}/Libraries/soxr" EXCLUDE_FROM_ALL)
 endif()
 
 
