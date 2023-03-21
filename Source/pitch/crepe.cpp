@@ -85,6 +85,8 @@ Tensor  70 (nil)                     kTfLiteNoType   kTfLiteMemNone     0       
 
 #include <memory>
 
+#include <soxr/src/soxr-lsr.h>
+
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
 #include "tensorflow/lite/model.h"
@@ -96,6 +98,16 @@ Tensor  70 (nil)                     kTfLiteNoType   kTfLiteMemNone     0       
 #include "crepe.h"
 #include "exceptions.h"
 
+using Buffer = juce::AudioBuffer<float>;
+
+#ifdef PATH_TO_CREPE_MODEL
+  const std::string CREPE_TFLITE_FILE { PATH_TO_CREPE_MODEL };
+#else
+  const std::string CREPE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/model-full.tflite" };
+#endif
+
+const int DOWNSAMPLING_METHOD = SRC_SINC_MEDIUM_QUALITY;
+
 const float CREPE_MODEL_SAMPLE_RATE = 16000;
 
 const float CLASSIFICATION_TENSOR_ID = 63;
@@ -103,12 +115,6 @@ const float CLASSIFICATION_TENSOR_ID = 63;
 const float CONFIDENCE_TENSOR_ID = 64;
 
 const bool VERBOSE = false;
-
-#ifdef PATH_TO_CREPE_MODEL
-  const std::string CREPE_TFLITE_FILE { PATH_TO_CREPE_MODEL };
-#else
-  const std::string CREPE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/model-full.tflite" };
-#endif
 
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
@@ -139,69 +145,53 @@ void pitch_detection::load_model()
     }
 }
 
-/** The CREPE model expects 1024-sample frames of the audio with hop 
- ** length of 10 milliseconds
- * 
- * 
- * pandas implementation from crepe repo below
- * 
- * ```
- * # make 1024-sample frames of the audio with hop length of 10 milliseconds
- * hop_length = int(model_srate * step_size / 1000)
- * n_frames = 1 + int((len(audio) - 1024) / hop_length)
- * frames = as_strided(audio, shape=(1024, n_frames),
- *                     strides=(audio.itemsize, hop_length * audio.itemsize))
- * frames = frames.transpose().copy()
- * ```
- * 
- * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L200
+/** Down-Sampling with Band-limited Sinc Interpolation (libsoxr)
+ **
+ ** - The crepe model used the `Resampy` (https://github.com/bmcfee/resampy) python package 
+ **   to downsample inputs while training. Therefore, the crepe model expects inputs to be 
+ **   downsampled using a:
+ ** 
+ **     "band-limited sinc interpolation method for sampling rate conversion as described 
+ **      by Smith, Julius O. Digital Audio Resampling Home Page Center for Computer Research 
+ **      in Music and Acoustics (CCRMA), Stanford University, 2015-02-23. Web published at 
+ **      http://ccrma.stanford.edu/~jos/resample/."
+ **
+ ** - SOXR C Library: https://github.com/chirlu/soxr
  **/
-void pitch_detection::create1024SampleFrames(juce::AudioBuffer<double>& buffer, int sampleRate)
+Buffer pitch_detection::downSampleAudio(Buffer& inBuffer, int sampleRate)
 {
-    // TODO
-}
+    double inputSampleRate = sampleRate;
+    double outpuSampleRate = CREPE_MODEL_SAMPLE_RATE;
 
-/**
- * ```
- * frames -= np.mean(frames, axis=1)[:, np.newaxis]
- * frames /= np.clip(np.std(frames, axis=1)[:, np.newaxis], 1e-8, None)
- * ```
- * 
- * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L207
- **/
-void pitch_detection::normalizeAudio(juce::AudioBuffer<double>& buffer, int sampleRate)
-{
-    // TODO
-}
+    int inputLength = inBuffer.getNumSamples();
+    int outputLength = (int)(inputLength * outpuSampleRate / inputSampleRate);
 
-// model requires single channel audio with a sample rate of 16000
-void pitch_detection::downSampleAudio(juce::AudioBuffer<double>& buffer, int sampleRate)
-{
-    if(sampleRate < CREPE_MODEL_SAMPLE_RATE || buffer.getNumChannels() == 0) {
-        throw BadAudioException();
-    } else if (sampleRate == CREPE_MODEL_SAMPLE_RATE) {
-        return;
-    }
+    Buffer outBuffer(1, outputLength);
+
+    // Ideally, the inSignal would be `inBuffer.getReadPointer(0)` (since it doesn't get modified), 
+    // but `src_simple` doesn't allow the type `const float *` for its `in` parameter. 
+    float * inSignal = inBuffer.getWritePointer(0);
+    float * outSignal = outBuffer.getWritePointer(0);
     
-    double sampleRateRatio = CREPE_MODEL_SAMPLE_RATE / sampleRate;
-    int numSamplesAfterDownSampling = sampleRateRatio*buffer.getNumSamples();
+    SRC_DATA data;
+    data.data_in = inSignal;
+    data.data_out = outSignal;
+    data.input_frames = inputLength;
+    data.output_frames = outputLength;
+    data.src_ratio = outpuSampleRate / inputSampleRate;
+    int error = src_simple(&data, DOWNSAMPLING_METHOD, 1);
 
-    for (int newSignalIndex = 0; newSignalIndex < numSamplesAfterDownSampling; newSignalIndex += 1)
-    {
-        int oldSignalIndex = static_cast<int>(std::round(sampleRateRatio*newSignalIndex));
-        for (int channelIndex = 0; channelIndex < buffer.getNumChannels(); channelIndex++) {
-            double newSample = buffer.getSample(channelIndex, oldSignalIndex);
-            buffer.setSample(channelIndex, newSignalIndex, newSample);
-        }
+    if (error) {
+        throw BadAudioException();
     }
 
-    buffer.setSize(buffer.getNumChannels(), numSamplesAfterDownSampling, true, true);
+    return outBuffer;
 }
 
 /** Turns the audio into a single channel signal by computing the mean sample amplitude 
  ** of all channels 
  **/
-void pitch_detection::makeAudioMono(juce::AudioBuffer<double>& buffer) 
+void pitch_detection::makeAudioMono(juce::AudioBuffer<float>& buffer) 
 {
     if (buffer.getNumChannels() == 0) {
         throw BadAudioException();
@@ -222,7 +212,42 @@ void pitch_detection::makeAudioMono(juce::AudioBuffer<double>& buffer)
     buffer.setSize(1 /* num channels */, buffer.getNumSamples(), true, true);
 }
 
-void feedAudioIntoModel(juce::AudioBuffer<double>& buffer)
+/** The CREPE model expects 1024-sample frames of the audio with hop 
+ ** length of 10 milliseconds
+ * 
+ * 
+ * pandas implementation from crepe repo below
+ * 
+ * ```
+ * # make 1024-sample frames of the audio with hop length of 10 milliseconds
+ * hop_length = int(model_srate * step_size / 1000)
+ * n_frames = 1 + int((len(audio) - 1024) / hop_length)
+ * frames = as_strided(audio, shape=(1024, n_frames),
+ *                     strides=(audio.itemsize, hop_length * audio.itemsize))
+ * frames = frames.transpose().copy()
+ * ```
+ * 
+ * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L200
+ **/
+void pitch_detection::create1024SampleFrames(Buffer& buffer, int sampleRate)
+{
+    // TODO
+}
+
+/**
+ * ```
+ * frames -= np.mean(frames, axis=1)[:, np.newaxis]
+ * frames /= np.clip(np.std(frames, axis=1)[:, np.newaxis], 1e-8, None)
+ * ```
+ * 
+ * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L207
+ **/
+void pitch_detection::normalizeAudio(Buffer& buffer, int sampleRate)
+{
+    // TODO
+}
+
+void feedAudioIntoModel(juce::AudioBuffer<float>& buffer)
 {
     assert(model);
     assert(interpreter);
