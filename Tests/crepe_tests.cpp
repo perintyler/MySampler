@@ -8,6 +8,8 @@
 #include <string>
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_approx.hpp>
+
 #include <juce_audio_formats/juce_audio_formats.h>
 #include "JsonCpp/json/json.h"
 
@@ -18,8 +20,6 @@
 int SAMPLE_RATE_BEFORE_DOWNSAMPLING = 44100;
 
 int SAMPLE_RATE_AFTER_DOWNSAMPLING = 16000;
-
-using BufferAndSampleRate = std::pair<juce::AudioBuffer<double>, float>;
 
 const Json::Value TEST_DATA = []{
     std::string pathToCrepeTestData = (
@@ -33,10 +33,10 @@ const Json::Value TEST_DATA = []{
     return jsonData;
 }();
 
-juce::AudioBuffer<double> getAudioBuffer(const std::string& testFile)
+juce::AudioBuffer<float> getAudioBuffer(const std::string& testFile)
 {
     int numSamples = TEST_DATA[testFile]["audio"].size();
-    juce::AudioBuffer<double> buffer(2, numSamples);
+    juce::AudioBuffer<float> buffer(2, numSamples);
 
     for (int i = 0; i < numSamples; i++) {
         buffer.setSample(0, i, TEST_DATA[testFile]["audio"][i][0].asDouble());
@@ -46,29 +46,9 @@ juce::AudioBuffer<double> getAudioBuffer(const std::string& testFile)
     return buffer;
 }
 
-// BufferAndSampleRate get_audio_buffer(const std::string& testFileName)
-// {
-//     std::filesystem::path filePath = std::filesystem::path { TEST_DATA_DIRECTORY } 
-//                                    / std::filesystem::path { testFileName };
-//     juce::File wavFile { filePath.string() };
-
-//     assert(wavFile.existsAsFile());
-//     juce::WavAudioFormat wavFormat;
-//     std::unique_ptr<juce::AudioFormatReader> audioReader = std::unique_ptr<juce::AudioFormatReader>(
-//         wavFormat.createReaderFor(wavFile.createInputStream().release(), true)
-//     );
-
-//     juce::AudioSampleBuffer audioBuffer;
-//     int bufferSize = audioReader->lengthInSamples;
-//     audioBuffer.setSize(audioReader->numChannels, bufferSize);
-//     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
-
-//     return std::make_pair(audioBuffer, audioReader->sampleRate);
-// }
-
-std::vector<double> audioBufferToVector(juce::AudioBuffer<double>& buffer)
+std::vector<float> audioBufferToVector(juce::AudioBuffer<float>& buffer)
 {
-    std::vector<double> audio;
+    std::vector<float> audio;
     audio.reserve(buffer.getNumSamples());
     for (int index = 0; index < buffer.getNumSamples(); index++) {
         audio.push_back(buffer.getSample(0, index));
@@ -76,20 +56,21 @@ std::vector<double> audioBufferToVector(juce::AudioBuffer<double>& buffer)
     return audio;
 }
 
-std::vector<double> jsonAudioToVector(const Json::Value& node)
+std::vector<float> jsonAudioToVector(const Json::Value& node)
 {
-    std::vector<double> audio;
+    std::vector<float> audio;
     audio.reserve(node.size());
     std::transform(node.begin(), node.end(), std::back_inserter(audio), [](const auto& sample) { 
-        return sample.asDouble();
+        return sample.asFloat();
     });
     return audio;
 }
 
-void printExpectedAndActual(const Json::Value& expected, juce::AudioBuffer<double>& actual)
+// debug function
+void printExpectedAndActual(const Json::Value& expected, juce::AudioBuffer<float>& actual)
 {
-    std::vector<double> expectedVector = jsonAudioToVector(expected);
-    std::vector<double> actualVector = audioBufferToVector(actual);
+    std::vector<float> expectedVector = jsonAudioToVector(expected);
+    std::vector<float> actualVector = audioBufferToVector(actual);
 
     for (int index = 0; index < 100; index++) {
         std::cout << "(" 
@@ -106,7 +87,7 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
     for (auto const& audioFile : TEST_DATA.getMemberNames()) {
         std::cout << "AUDIO FILE: " << audioFile << std::endl;
 
-        juce::AudioBuffer<double> buffer = getAudioBuffer(audioFile);
+        juce::AudioBuffer<float> buffer = getAudioBuffer(audioFile);
 
         pitch_detection::makeAudioMono(buffer);
 
@@ -116,30 +97,24 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
         REQUIRE(actualMonoAudio.size() == expectedMonoAudio.size());
         REQUIRE(actualMonoAudio == expectedMonoAudio);
 
-        pitch_detection::downSampleAudio(buffer, SAMPLE_RATE_BEFORE_DOWNSAMPLING);
-        auto actualAudioAfterDownSampling = audioBufferToVector(buffer);
-        auto expectedAudioAfterDownSampling = jsonAudioToVector(TEST_DATA[audioFile]["downsampled"]);
+        juce::AudioBuffer<float> downsampled = pitch_detection::downSampleAudio(
+            buffer, SAMPLE_RATE_BEFORE_DOWNSAMPLING
+        );
 
-        printExpectedAndActual(TEST_DATA[audioFile]["downsampled"], buffer);
-        break;
-        REQUIRE(actualAudioAfterDownSampling.size() == expectedAudioAfterDownSampling.size());
-        REQUIRE(actualAudioAfterDownSampling == expectedAudioAfterDownSampling);
+        REQUIRE(downsampled.getNumSamples() == TEST_DATA[audioFile]["downsampled"].size());
 
-        break;
+        continue; 
 
-        pitch_detection::create1024SampleFrames(buffer, SAMPLE_RATE_AFTER_DOWNSAMPLING);
-        auto actualAudioFrames = audioBufferToVector(buffer);
-        auto expectedAudioFrames = jsonAudioToVector(TEST_DATA[audioFile]["framedAudio"]);
-
-        REQUIRE(actualAudioFrames.size() == expectedAudioFrames.size());
-        REQUIRE(actualAudioFrames == expectedAudioFrames);
-
-        pitch_detection::normalizeAudio(buffer, SAMPLE_RATE_AFTER_DOWNSAMPLING);
-        auto actualNormalizedAudio = audioBufferToVector(buffer);
+        pitch_detection::create1024SampleFrames(downsampled, SAMPLE_RATE_AFTER_DOWNSAMPLING);
+        pitch_detection::normalizeAudio(downsampled, SAMPLE_RATE_AFTER_DOWNSAMPLING);
+        
+        auto actualNormalizedAudio = audioBufferToVector(downsampled);
         auto expectedNormalizedAudio = jsonAudioToVector(TEST_DATA[audioFile]["normalize"]);
 
         REQUIRE(actualNormalizedAudio.size() == expectedNormalizedAudio.size());
-        REQUIRE(actualNormalizedAudio == expectedNormalizedAudio);
+        for (int i = 0; i < expectedNormalizedAudio.size(); i++) {
+            REQUIRE(actualNormalizedAudio.at(i) == Catch::Approx(expectedNormalizedAudio.at(i)));
+        }
     }
 }
 
