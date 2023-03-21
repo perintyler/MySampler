@@ -13,14 +13,21 @@ namespace pitch_detection
     bool model_is_loaded();
 
     void load_model();
-    
+   
     float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
 
+    // ------ the functions below are only exposed for testing purposes ------
+   
     #ifdef TESTMODE
-    void create1024SampleFrames(juce::AudioBuffer<float>&, int sampleRate);
-    void makeAudioMono(juce::AudioBuffer<float>& buffer);
-    void normalizeAudio(juce::AudioBuffer<float>&, int sampleRate);
-    juce::AudioBuffer<float> downSampleAudio(juce::AudioBuffer<float>&, int sampleRate);
+     
+      void makeAudioMono(juce::AudioBuffer<float>& buffer);
+
+      juce::AudioBuffer<float> downSampleAudio(juce::AudioBuffer<float>&, int sampleRate);
+
+      std::vector<std::vector<float>> create1024SampleFrames(juce::AudioBuffer<float>&, int sampleRate);
+     
+      std::vector<float> normalizeAudio(std::vector<std::vector<float>> sampleFrames);
+   
     #endif
 }
 

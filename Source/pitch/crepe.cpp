@@ -84,6 +84,7 @@ Tensor  70 (nil)                     kTfLiteNoType   kTfLiteMemNone     0       
 #ifdef CREPE_MODEL
 
 #include <memory>
+#include <assert.h>
 
 #include <soxr/src/soxr-lsr.h>
 
@@ -113,6 +114,10 @@ const float CREPE_MODEL_SAMPLE_RATE = 16000;
 const float CLASSIFICATION_TENSOR_ID = 63;
 
 const float CONFIDENCE_TENSOR_ID = 64;
+
+const int STEP_SIZE = 10; // milliseconds
+
+const int FRAME_SIZE = 1024; // # of samples
 
 const bool VERBOSE = false;
 
@@ -205,7 +210,7 @@ void pitch_detection::makeAudioMono(juce::AudioBuffer<float>& buffer)
         for (int channelIndex = 0; channelIndex < buffer.getNumChannels(); channelIndex++) {
             sumOfAllChannels += buffer.getSample(channelIndex, sampleIndex);
         }
-        double averagedSample = sumOfAllChannels / static_cast<double>(buffer.getNumChannels());
+        float averagedSample = static_cast<float>(sumOfAllChannels / buffer.getNumChannels());
         buffer.setSample(0 /* index of first and only channel */, sampleIndex, averagedSample);
     }
 
@@ -229,10 +234,32 @@ void pitch_detection::makeAudioMono(juce::AudioBuffer<float>& buffer)
  * 
  * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L200
  **/
-void pitch_detection::create1024SampleFrames(Buffer& buffer, int sampleRate)
+std::vector<std::vector<float>> pitch_detection::create1024SampleFrames(Buffer& buffer, int sampleRate)
 {
-    // TODO
+    int hopLength = static_cast<int>(CREPE_MODEL_SAMPLE_RATE * STEP_SIZE / 1000);
+    int numFrames = 1 + static_cast<int>((buffer.getNumSamples() - FRAME_SIZE) / hopLength);
+
+    std::vector<std::vector<float>> allFrames;
+    allFrames.reserve(numFrames);
+
+    for (int firstIndexInFrame = 0
+      ; firstIndexInFrame + FRAME_SIZE < buffer.getNumSamples()
+      ; firstIndexInFrame += hopLength
+    ) {
+        std::vector<float> frame;
+        frame.reserve(FRAME_SIZE);
+
+        for (int sampleIndex = firstIndexInFrame; sampleIndex < firstIndexInFrame+FRAME_SIZE; sampleIndex++) {
+            assert(sampleIndex < buffer.getNumSamples());
+            frame.push_back(buffer.getSample(0, sampleIndex));
+        }
+
+        allFrames.push_back(frame);
+    }   
+
+    return allFrames;
 }
+
 
 /**
  * ```
@@ -242,9 +269,10 @@ void pitch_detection::create1024SampleFrames(Buffer& buffer, int sampleRate)
  * 
  * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L207
  **/
-void pitch_detection::normalizeAudio(Buffer& buffer, int sampleRate)
+std::vector<float> pitch_detection::normalizeAudio(std::vector<std::vector<float>> sampleFrames) 
 {
-    // TODO
+    std::vector<float> normalized;
+    return normalized;
 }
 
 void feedAudioIntoModel(juce::AudioBuffer<float>& buffer)

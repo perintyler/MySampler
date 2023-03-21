@@ -25,7 +25,7 @@ def downsample(audio, sample_rate):
   return resample(audio, sample_rate, CREPE_MODEL_SAMPLE_RATE).copy()
 
 def create_audio_frames(audio):
-  step_size = 1024
+  step_size = 10
   hop_length = int(CREPE_MODEL_SAMPLE_RATE * step_size / 1000)
   n_frames = 1 + int((len(audio) - 1024) / hop_length)
   frames = as_strided(
