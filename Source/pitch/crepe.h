@@ -26,7 +26,7 @@ namespace pitch_detection
 
       std::vector<std::vector<float>> create1024SampleFrames(juce::AudioBuffer<float>&, int sampleRate);
      
-      std::vector<float> normalizeAudio(std::vector<std::vector<float>> sampleFrames);
+      void normalizeAudioFrames(std::vector<std::vector<float>>& frames);
    
     #endif
 }
