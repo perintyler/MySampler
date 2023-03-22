@@ -93,6 +93,8 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
 
         juce::AudioBuffer<float> buffer = getAudioBuffer(audioFile);
 
+        /* --- TEST STEREO TO MONO --- */
+
         pitch_detection::makeAudioMono(buffer);
 
         REQUIRE(buffer.getNumSamples() == TEST_DATA[audioFile]["mono"].size());
@@ -100,11 +102,15 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
         for (int i = 0; i < buffer.getNumSamples(); i++)
             REQUIRE(buffer.getSample(0, i) == Catch::Approx(TEST_DATA[audioFile]["mono"][i].asFloat()));
 
+        /* --- TEST DOWN SAMPLING --- */
+
         juce::AudioBuffer<float> downsampled = pitch_detection::downSampleAudio(
             buffer, SAMPLE_RATE_BEFORE_DOWNSAMPLING
         );
 
         REQUIRE(downsampled.getNumSamples() == TEST_DATA[audioFile]["downsampled"].size());
+
+        /* --- TEST FRAMING --- */
 
         auto frames = pitch_detection::create1024SampleFrames(
             downsampled, 
@@ -112,17 +118,20 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
         );
 
         REQUIRE(frames.size() == TEST_DATA[audioFile]["framedAudio"][0].size());
+
         for (const std::vector<float>& frame : frames)
             REQUIRE(frame.size() == 1024);
 
-        break;
+        /* --- TEST NORMALIZATION --- */
 
-        auto actualNormalizedAudio = pitch_detection::normalizeAudio(frames);
-        auto expectedNormalizedAudio = jsonAudioToVector(TEST_DATA[audioFile]["normalize"]);
+        pitch_detection::normalizeAudioFrames(frames);
 
-        REQUIRE(actualNormalizedAudio.size() == expectedNormalizedAudio.size());
-        for (int i = 0; i < expectedNormalizedAudio.size(); i++) {
-            REQUIRE(actualNormalizedAudio.at(i) == Catch::Approx(expectedNormalizedAudio.at(i)));
+        for (int frameIndex = 0; frameIndex < 1; frameIndex++) {
+            for (int sampleIndex = 0; sampleIndex < frames[frameIndex].size(); sampleIndex++) {
+                float actual = frames.at(frameIndex).at(sampleIndex);
+                float expected = TEST_DATA[audioFile]["framedAudio"][0][frameIndex][sampleIndex].asFloat();
+                REQUIRE(actual == Catch::Approx(expected));
+            }
         }
     }
 }
