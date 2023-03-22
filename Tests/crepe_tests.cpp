@@ -126,10 +126,11 @@ TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
 
         pitch_detection::normalizeAudioFrames(frames);
 
-        for (int frameIndex = 0; frameIndex < 1; frameIndex++) {
+        for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
             for (int sampleIndex = 0; sampleIndex < frames[frameIndex].size(); sampleIndex++) {
                 float actual = frames.at(frameIndex).at(sampleIndex);
-                float expected = TEST_DATA[audioFile]["framedAudio"][0][frameIndex][sampleIndex].asFloat();
+                float expected = TEST_DATA[audioFile]["normalize"][0][frameIndex][sampleIndex].asFloat();
+                std::cout << "(" << actual << ", " << expected << ")" << std::endl;
                 REQUIRE(actual == Catch::Approx(expected));
             }
         }
