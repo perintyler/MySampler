@@ -112,8 +112,12 @@ As of now, the YIN implementation will successfully identify the correct note of
 
 [The Spice model is a pitch detection model](https://www.tensorflow.org/hub/tutorials/spice) hosted on the Tensorflow model hub. The downside of this model is it requires 10 seconds of audio to work. Also, this model has complications with dynamic sized tensors, but the tensorflow lite c++ API only has experimental support for dynamic sized tensors.
 
+NOTE: WIP
+
 ### Crepe Model (Tensorflow Lite)
 
 The Crepe Pitch Detection Model seems to give the fastest and most accurate results. The models are build by the `Models/build_models.sh` bash script, which creates `.tflite` files of varying sizes and puts them in `Models/crepe-models`.
+
+NOTE: WIP
 
 

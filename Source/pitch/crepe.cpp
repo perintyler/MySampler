@@ -85,6 +85,7 @@ Tensor  70 (nil)                     kTfLiteNoType   kTfLiteMemNone     0       
 
 #include <memory>
 #include <assert.h>
+#include <cmath>
 
 #include <soxr/src/soxr-lsr.h>
 
@@ -269,43 +270,101 @@ std::vector<std::vector<float>> pitch_detection::create1024SampleFrames(Buffer& 
  * 
  * - https://github.com/marl/crepe/blob/d714d9ec88319af477301942efa82d604f1fd84b/crepe/core.py#L207
  **/
-std::vector<float> pitch_detection::normalizeAudio(std::vector<std::vector<float>> sampleFrames) 
+void pitch_detection::normalizeAudioFrames(std::vector<std::vector<float>>& frames) 
 {
     std::vector<float> normalized;
-    return normalized;
+
+    const float standardDeviationClippingCutoff = 0.00000001; // 1e-8
+
+    for (std::vector<float>& frame : frames) {
+
+        // Step 1) calculate the frame's mean and subtract it from each sample
+
+        assert(frame.size() > 0);
+        float mean = std::reduce(frame.begin(), frame.end()) / static_cast<float>(frame.size());
+        
+        for (int index = 0; index < frame.size(); index++) {
+            frame[index] -= mean;
+        }
+
+        // Step 2) now calculate the standard deviation for the manipulated frame
+
+        float standardDeviation = ([&frame]() {
+            float sum = 0.0, mean, standardDeviation = 0.0;
+
+            for(int index = 0; index < frame.size(); ++index) {
+                sum += frame.at(index);
+            }
+           
+            mean = sum / static_cast<float>(frame.size());
+
+            for(int index = 0; index < frame.size(); ++index) {
+                standardDeviation += std::pow(frame.at(index) - mean, 2);
+            }
+
+            return std::sqrt(standardDeviation / 10);
+        })();
+
+        // Step 3) clip the standard deviation if it's too small
+
+        if (standardDeviation < standardDeviationClippingCutoff)
+            standardDeviation = standardDeviationClippingCutoff;
+
+        assert(standardDeviation > 0);
+
+        // Step 4) divide each sample by the standard deviation
+
+        for (int index = 0; index < frame.size(); index++) {
+            frame[index] /= standardDeviation;
+            assert(frame[index] >= 0);
+            assert(frame[index] <= 0);
+        }
+    }
 }
 
-void feedAudioIntoModel(juce::AudioBuffer<float>& buffer)
+void runCREPEModel(std::vector<std::vector<float>>& frames)
 {
     assert(model);
     assert(interpreter);
 
-    float* input = interpreter->typed_input_tensor<float>(0);
-    for (int sampleIndex = 0; sampleIndex < buffer.getNumSamples(); sampleIndex++) {
-        input[sampleIndex] = buffer.getSample(0, sampleIndex);
+    int input_tensor_index = 0;
+    int input_tensor_id = interpreter->inputs()[input_tensor_index];
+    float* input_tensor = interpreter->typed_tensor<float>(input_tensor_id);
+
+    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
+        input_tensor[sampleIndex] = &frames[frameIndex];
     }
 
     auto allocationResults = interpreter->AllocateTensors();
-    if (allocationResults != kTfLiteOk) { throw PitchDetectionModelLoadingError(); };
+    if (allocationResults != kTfLiteOk) { 
+        throw FrequencyNotDetectedException(); 
+    };
 
-    interpreter->Invoke();
+    interpreter->Invoke();    
 }
 
-float convertModelOutputToFrequency(float* classification_output, float* confidence_output)
+float convertModelOutputToFrequency()
 {
+    int classification_tensor_index = 63;
+    int classification_tensor_id = interpreter->outputs()[classification_tensor_index];
+    float* classification_tensor = interpreter->typed_tensor<float>(classification_tensor_id);
+
+    int confidence_tensor_index = 64;
+    int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
+    float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
+
     return 0.0; // TODO
 }
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
     if (true) { return 1000.0; }
-    // downSampleAudio(buffer, sampleRate);
-    // normalizeAudio(buffer, sampleRate);
-    // create1024SampleFrames(buffer, sampleRate);
-    // feedAudioIntoModel(buffer);
-    float* classification_output = interpreter->typed_output_tensor<float>(CLASSIFICATION_TENSOR_ID);
-    float* confidence_output = interpreter->typed_output_tensor<float>(CONFIDENCE_TENSOR_ID);
-    return convertModelOutputToFrequency(classification_output, confidence_output);
+    makeAudioMono(buffer);
+    juce::AudioBuffer<float> downsampled = downSampleAudio(buffer, sampleRate);
+    std::vector<std::vector<float>> audioFrames = create1024SampleFrames(downsampled, sampleRate);
+    normalizeAudioFrames(audioFrames);
+    runCREPEModel(audioFrames);
+    return convertModelOutputToFrequency();
 }
 
 #endif
