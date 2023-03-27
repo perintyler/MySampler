@@ -122,6 +122,24 @@ const int FRAME_SIZE = 1024; // # of samples
 
 const bool VERBOSE = false;
 
+const std::vector<float> CENTS_MAPPING = []() {
+    // this constant must replicat: `np.linspace(0, 7180, 360) + 1997.3794084376191`
+    int numMappings = 360;
+    int start = 0;
+    int stop = 7180;
+    float modifier = 1997.3794084376191;
+
+    std::vector<float> centsMapping;
+    centsMapping.reserve(numMappings);
+    float stepLength = static_cast<float>(stop - start) / static_cast<float>(numMappings);
+
+    for (int index = start; index < stop; index++) {
+        centsMapping[index] = start + index*stepLength + modifier;
+    }
+
+    return centsMapping;
+}();
+
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
 std::unique_ptr<tflite::InterpreterOptions> options { };
@@ -343,6 +361,36 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
     interpreter->Invoke();    
 }
 
+/** Salience to cents
+ ** 
+ ** ```
+ ** def to_local_average_cents(salience, center=None):
+ **     """
+ **     find the weighted average cents near the argmax bin
+ **     """
+ ** 
+ **     if not hasattr(to_local_average_cents, 'cents_mapping'):
+ **         # the bin number-to-cents mapping
+ **         to_local_average_cents.cents_mapping = (
+ **                 np.linspace(0, 7180, 360) + 1997.3794084376191)
+ ** 
+ **     if salience.ndim == 1:
+ **         if center is None:
+ **             center = int(np.argmax(salience))
+ **         start = max(0, center - 4)
+ **         end = min(len(salience), center + 5)
+ **         salience = salience[start:end]
+ **         product_sum = np.sum(
+ **             salience * to_local_average_cents.cents_mapping[start:end])
+ **         weight_sum = np.sum(salience)
+ **         return product_sum / weight_sum
+ **     if salience.ndim == 2:
+ **         return np.array([to_local_average_cents(salience[i, :]) for i in
+ **                          range(salience.shape[0])])
+ ** 
+ **     raise Exception("label should be either 1d or 2d ndarray")
+ ** ```
+ **/
 float convertModelOutputToFrequency()
 {
     int classification_tensor_index = 63;
