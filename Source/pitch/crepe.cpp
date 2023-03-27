@@ -316,8 +316,8 @@ void pitch_detection::normalizeAudioFrames(std::vector<std::vector<float>>& fram
 
         for (int index = 0; index < frame.size(); index++) {
             frame[index] /= standardDeviation;
-            assert(frame[index] >= 0);
-            assert(frame[index] <= 0);
+            assert(frame[index] >= -1);
+            assert(frame[index] <= 1);
         }
     }
 }
@@ -331,8 +331,8 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
     int input_tensor_id = interpreter->inputs()[input_tensor_index];
     float* input_tensor = interpreter->typed_tensor<float>(input_tensor_id);
 
-    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
-        input_tensor[sampleIndex] = &frames[frameIndex];
+    for (int sampleIndex = 0; sampleIndex < frames.at(0).size(); sampleIndex++) {
+        input_tensor[sampleIndex] = frames.at(0).at(sampleIndex);
     }
 
     auto allocationResults = interpreter->AllocateTensors();
