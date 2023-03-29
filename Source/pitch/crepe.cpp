@@ -393,13 +393,24 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
  **/
 float convertModelOutputToFrequency()
 {
-    int classification_tensor_index = 63;
-    int classification_tensor_id = interpreter->outputs()[classification_tensor_index];
-    float* classification_tensor = interpreter->typed_tensor<float>(classification_tensor_id);
+    int salience_tensor_index = 63;
+    int salience_tensor_id = interpreter->outputs()[salience_tensor_index];
+    float* salience_tensor = interpreter->typed_tensor<float>(salience_tensor_id);
 
     int confidence_tensor_index = 64;
     int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
     float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
+
+    int maxIndex = [&salience_tensor]() {
+        const int outputSize = 360;
+        int max_index = 0;
+        for (int output_index = 0; output_index < 360; output_index++) {
+            if (salience_tensor[output_index] > salience_tensor[max_index]) {
+                max_index = output_index;
+            }
+        }
+        return max_index;
+    }();
 
     return 0.0; // TODO
 }
