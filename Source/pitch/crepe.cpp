@@ -122,16 +122,17 @@ const int FRAME_SIZE = 1024; // # of samples
 
 const bool VERBOSE = false;
 
+const int OUTPUT_SIZE = 360;
+
 const std::vector<float> CENTS_MAPPING = []() {
     // this constant must replicat: `np.linspace(0, 7180, 360) + 1997.3794084376191`
-    int numMappings = 360;
-    int start = 0;
-    int stop = 7180;
-    float modifier = 1997.3794084376191;
+    const int start = 0;
+    const int stop = 7180;
+    const float modifier = 1997.3794084376191;
 
     std::vector<float> centsMapping;
-    centsMapping.reserve(numMappings);
-    float stepLength = static_cast<float>(stop - start) / static_cast<float>(numMappings);
+    centsMapping.reserve(OUTPUT_SIZE);
+    float stepLength = static_cast<float>(stop - start) / static_cast<float>(OUTPUT_SIZE);
 
     for (int index = start; index < stop; index++) {
         centsMapping[index] = start + index*stepLength + modifier;
@@ -347,7 +348,7 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
 
     int input_tensor_index = 0;
     int input_tensor_id = interpreter->inputs()[input_tensor_index];
-    float* input_tensor = interpreter->typed_tensor<float>(input_tensor_id);
+    float* input_tensor = interpreter->typed_tensor<float>(0);
 
     for (int sampleIndex = 0; sampleIndex < frames.at(0).size(); sampleIndex++) {
         input_tensor[sampleIndex] = frames.at(0).at(sampleIndex);
@@ -401,10 +402,10 @@ float convertModelOutputToFrequency()
     int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
     float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
 
-    int maxIndex = [&salience_tensor]() {
-        const int outputSize = 360;
+    int maxIndex = [&salience_tensor]() 
+    {
         int max_index = 0;
-        for (int output_index = 0; output_index < 360; output_index++) {
+        for (int output_index = 0; output_index < OUTPUT_SIZE; output_index++) {
             if (salience_tensor[output_index] > salience_tensor[max_index]) {
                 max_index = output_index;
             }
@@ -412,7 +413,20 @@ float convertModelOutputToFrequency()
         return max_index;
     }();
 
-    return 0.0; // TODO
+    float weightedSum = [maxIndex, &salience_tensor]() 
+    {
+        int startIndex = std::max(0, maxIndex - 4);
+        int endIndex = std::min(maxIndex + 5, OUTPUT_SIZE);
+
+        float sum = 0;
+        for (int index = startIndex; index < endIndex; index++) {
+            assert(index < OUTPUT_SIZE);
+            sum += salience_tensor[index] * CENTS_MAPPING[index];
+        }
+        return sum;
+    }();
+
+    return 0.0;
 }
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
