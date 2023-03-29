@@ -426,6 +426,15 @@ float convertModelOutputToFrequency()
         return sum;
     }();
 
+    float salienceSum = [&salience_tensor]()
+    {
+        int sum = 0;
+        for (int index = 0; index < OUTPUT_SIZE; index++) {
+            sum += salience_tensor[index];
+        }
+        return sum;
+    }();
+    
     return 0.0;
 }
 
