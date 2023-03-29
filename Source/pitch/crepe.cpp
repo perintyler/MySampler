@@ -122,6 +122,25 @@ const int FRAME_SIZE = 1024; // # of samples
 
 const bool VERBOSE = false;
 
+const int OUTPUT_SIZE = 360;
+
+const std::vector<float> CENTS_MAPPING = []() {
+    // this constant must replicat: `np.linspace(0, 7180, 360) + 1997.3794084376191`
+    const int start = 0;
+    const int stop = 7180;
+    const float modifier = 1997.3794084376191;
+
+    std::vector<float> centsMapping;
+    centsMapping.reserve(OUTPUT_SIZE);
+    float stepLength = static_cast<float>(stop - start) / static_cast<float>(OUTPUT_SIZE);
+
+    for (int index = start; index < stop; index++) {
+        centsMapping[index] = start + index*stepLength + modifier;
+    }
+
+    return centsMapping;
+}();
+
 std::unique_ptr<tflite::FlatBufferModel> model { };
 std::unique_ptr<tflite::Interpreter> interpreter { };
 std::unique_ptr<tflite::InterpreterOptions> options { };
@@ -316,8 +335,8 @@ void pitch_detection::normalizeAudioFrames(std::vector<std::vector<float>>& fram
 
         for (int index = 0; index < frame.size(); index++) {
             frame[index] /= standardDeviation;
-            assert(frame[index] >= 0);
-            assert(frame[index] <= 0);
+            assert(frame[index] >= -1);
+            assert(frame[index] <= 1);
         }
     }
 }
@@ -329,10 +348,10 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
 
     int input_tensor_index = 0;
     int input_tensor_id = interpreter->inputs()[input_tensor_index];
-    float* input_tensor = interpreter->typed_tensor<float>(input_tensor_id);
+    float* input_tensor = interpreter->typed_tensor<float>(0);
 
-    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
-        input_tensor[sampleIndex] = &frames[frameIndex];
+    for (int sampleIndex = 0; sampleIndex < frames.at(0).size(); sampleIndex++) {
+        input_tensor[sampleIndex] = frames.at(0).at(sampleIndex);
     }
 
     auto allocationResults = interpreter->AllocateTensors();
@@ -343,17 +362,82 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
     interpreter->Invoke();    
 }
 
+/** Salience to cents
+ ** 
+ ** ```
+ ** def to_local_average_cents(salience, center=None):
+ **     """
+ **     find the weighted average cents near the argmax bin
+ **     """
+ ** 
+ **     if not hasattr(to_local_average_cents, 'cents_mapping'):
+ **         # the bin number-to-cents mapping
+ **         to_local_average_cents.cents_mapping = (
+ **                 np.linspace(0, 7180, 360) + 1997.3794084376191)
+ ** 
+ **     if salience.ndim == 1:
+ **         if center is None:
+ **             center = int(np.argmax(salience))
+ **         start = max(0, center - 4)
+ **         end = min(len(salience), center + 5)
+ **         salience = salience[start:end]
+ **         product_sum = np.sum(
+ **             salience * to_local_average_cents.cents_mapping[start:end])
+ **         weight_sum = np.sum(salience)
+ **         return product_sum / weight_sum
+ **     if salience.ndim == 2:
+ **         return np.array([to_local_average_cents(salience[i, :]) for i in
+ **                          range(salience.shape[0])])
+ ** 
+ **     raise Exception("label should be either 1d or 2d ndarray")
+ ** ```
+ **/
 float convertModelOutputToFrequency()
 {
-    int classification_tensor_index = 63;
-    int classification_tensor_id = interpreter->outputs()[classification_tensor_index];
-    float* classification_tensor = interpreter->typed_tensor<float>(classification_tensor_id);
+    int salience_tensor_index = 63;
+    int salience_tensor_id = interpreter->outputs()[salience_tensor_index];
+    float* salience_tensor = interpreter->typed_tensor<float>(salience_tensor_id);
 
     int confidence_tensor_index = 64;
     int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
     float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
 
-    return 0.0; // TODO
+    int maxIndex = [&salience_tensor]() 
+    {
+        int max_index = 0;
+        for (int output_index = 0; output_index < OUTPUT_SIZE; output_index++) {
+            if (salience_tensor[output_index] > salience_tensor[max_index]) {
+                max_index = output_index;
+            }
+        }
+        return max_index;
+    }();
+
+    float weightedSum = [maxIndex, &salience_tensor]() 
+    {
+        int startIndex = std::max(0, maxIndex - 4);
+        int endIndex = std::min(maxIndex + 5, OUTPUT_SIZE);
+
+        float sum = 0;
+        for (int index = startIndex; index < endIndex; index++) {
+            assert(index < OUTPUT_SIZE);
+            sum += salience_tensor[index] * CENTS_MAPPING[index];
+        }
+        return sum;
+    }();
+
+    float salienceSum = [&salience_tensor]()
+    {
+        int sum = 0;
+        for (int index = 0; index < OUTPUT_SIZE; index++) {
+            sum += salience_tensor[index];
+        }
+        return sum;
+    }();
+
+    assert(weightedSum != 0);
+
+    return salienceSum / weightedSum;
 }
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
