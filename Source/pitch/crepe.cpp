@@ -434,8 +434,10 @@ float convertModelOutputToFrequency()
         }
         return sum;
     }();
-    
-    return 0.0;
+
+    assert(weightedSum != 0);
+
+    return salienceSum / weightedSum;
 }
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
