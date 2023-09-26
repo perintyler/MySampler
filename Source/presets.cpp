@@ -60,3 +60,32 @@ static bool presetExists(std::string presetName)
 {
   return __presets__.count(presetName);
 }
+
+static void overwritePresetsFile()
+{
+    Json::Value presetsFileJSONObject;
+
+    for (const std::string& presetName : getPresetNames()) {
+        Json::Value jsonPreset;
+
+        for (const const auto& [midiNumber, Sample] : getPreset(presetName).samples.asVector()) 
+        {
+            Json::Value jsonSample;
+            jsonSample["path"] = sample.filepath;
+            jsonSample["note"] = static_cast<int>(Sample.rootNote);
+            jsonPreset[static_cast<int>(midiNumber)] = jsonSample;
+        }
+
+        presetsFileJSONObject[presetName] = jsonPreset;
+    }
+
+    std::ofstream presetsFile(std::string { PATH_TO_PRESETS_FILE });
+
+    if (!presetsFile.is_open()) {
+        std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
+    } else {
+        Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
+        presetsFile << Json::writeString(presetFileWriter, presetsFileJSONObject) << std::endl;
+        presetsFile.close();
+    }
+}
