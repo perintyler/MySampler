@@ -31,3 +31,27 @@
   #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
 #endif
 
+static std::unordered_map<std::string, Preset> __presets__ = []{
+    std::ifstream file(std::string { PATH_TO_PRESETS_FILE });
+    Json::Reader reader;
+    Json::Value presetsJSON;
+    reader.parse(file, presetsAsJSON);
+
+    std::unordered_map<std::string, Preset> loadedPresets;
+
+    for (auto const& presetName : presetsAsJSON.getMemberNames()) {
+        SampleSet samples;
+
+        for (auto const& keyNumber : presetsJSON[presetName].getMemberNames()) {
+            samples.set(
+              keyNumber, 
+              presetsJSON[presetName][keyNumber]["path"].asString(), 
+              presetsJSON[presetName][keyNumber]["note"].asInt()
+            );
+        }
+
+        loadedPresets.emplace_back(presetName, Preset(presetName, samples));
+    }
+
+    return loadedPresets;
+}();
