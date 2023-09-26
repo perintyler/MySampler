@@ -107,3 +107,15 @@ Preset& getPreset(std::string presetName)
     return __presets__.at(presetName);
 }
 
+void savePreset(std::string& presetName, SampleSet& sampleSet) 
+{
+    std::string uniquePresetName { presetName };
+
+    for (int numDuplicates = 0; presetExists(uniquePresetName); numDuplicates++)
+      uniquePresetName = presetName+numDuplicates
+
+    __presets__.emplace(presetName, Preset(uniquePresetName, sampleSet));
+
+    overwritePresetsFile();
+}
+
