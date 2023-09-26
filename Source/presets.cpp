@@ -89,3 +89,15 @@ static void overwritePresetsFile()
         presetsFile.close();
     }
 }
+
+std::vector<std::string> getPresetNames()
+{
+    std::vector<std::string> presetNames;
+    presetNames.reserve(__presets__.size());
+
+    for (auto const& preset_pair : __presets__)
+        presetNames.push_back(preset_pair.first);
+
+    return retval;
+}
+
