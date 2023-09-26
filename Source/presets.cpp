@@ -119,3 +119,11 @@ void savePreset(std::string& presetName, SampleSet& sampleSet)
     overwritePresetsFile();
 }
 
+void deletePreset(std::string presetName)
+{
+    assert(presetExists(presetName));
+
+    __presets__.erase(presetName);
+
+    overwritePresetsFile();
+}
