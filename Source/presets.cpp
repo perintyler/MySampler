@@ -101,3 +101,9 @@ std::vector<std::string> getPresetNames()
     return retval;
 }
 
+Preset& getPreset(std::string presetName)
+{
+    assert(presetExists(presetName));
+    return __presets__.at(presetName);
+}
+
