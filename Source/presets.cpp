@@ -55,3 +55,8 @@ static std::unordered_map<std::string, Preset> __presets__ = []{
 
     return loadedPresets;
 }();
+
+static bool presetExists(std::string presetName)
+{
+  return __presets__.count(presetName);
+}
