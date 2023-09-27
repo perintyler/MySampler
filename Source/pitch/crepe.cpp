@@ -120,7 +120,7 @@ const int STEP_SIZE = 10; // milliseconds
 
 const int FRAME_SIZE = 1024; // # of samples
 
-const bool VERBOSE = false;
+const bool VERBOSE = true;
 
 const int OUTPUT_SIZE = 360;
 
@@ -309,7 +309,7 @@ void pitch_detection::normalizeAudioFrames(std::vector<std::vector<float>>& fram
         // Step 2) now calculate the standard deviation for the manipulated frame
 
         float standardDeviation = ([&frame]() {
-            float sum = 0.0, mean, standardDeviation = 0.0;
+            float sum = 0.0, mean = 0.0, standardDeviation = 0.0;
 
             for(int index = 0; index < frame.size(); ++index) {
                 sum += frame.at(index);
@@ -334,10 +334,14 @@ void pitch_detection::normalizeAudioFrames(std::vector<std::vector<float>>& fram
         // Step 4) divide each sample by the standard deviation
 
         for (int index = 0; index < frame.size(); index++) {
+            std::cout << frame[index] << ", ";
             frame[index] /= standardDeviation;
+            std::cout << frame[index] << std::endl;
             assert(frame[index] >= -1);
             assert(frame[index] <= 1);
         }
+
+        break;
     }
 }
 
@@ -354,12 +358,11 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
         input_tensor[sampleIndex] = frames.at(0).at(sampleIndex);
     }
 
-    auto allocationResults = interpreter->AllocateTensors();
-    if (allocationResults != kTfLiteOk) { 
+    if (interpreter->AllocateTensors() != kTfLiteOk) { 
         throw FrequencyNotDetectedException(); 
     };
 
-    interpreter->Invoke();    
+    interpreter->Invoke();
 }
 
 /** Salience to cents
@@ -394,13 +397,13 @@ void runCREPEModel(std::vector<std::vector<float>>& frames)
  **/
 float convertModelOutputToFrequency()
 {
-    int salience_tensor_index = 63;
+    int salience_tensor_index = 64;
     int salience_tensor_id = interpreter->outputs()[salience_tensor_index];
     float* salience_tensor = interpreter->typed_tensor<float>(salience_tensor_id);
 
-    int confidence_tensor_index = 64;
-    int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
-    float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
+    // int confidence_tensor_index = 64;
+    // int confidence_tensor_id = interpreter->outputs()[confidence_tensor_index];
+    // float* confidence_tensor = interpreter->typed_tensor<float>(confidence_tensor_id);
 
     int maxIndex = [&salience_tensor]() 
     {
@@ -442,12 +445,14 @@ float convertModelOutputToFrequency()
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-    if (true) { return 1000.0; }
+    if (!model_is_loaded()) { load_model(); }
+
     makeAudioMono(buffer);
     juce::AudioBuffer<float> downsampled = downSampleAudio(buffer, sampleRate);
     std::vector<std::vector<float>> audioFrames = create1024SampleFrames(downsampled, sampleRate);
     normalizeAudioFrames(audioFrames);
     runCREPEModel(audioFrames);
+    std::cout << "converting output now." << std::endl;
     return convertModelOutputToFrequency();
 }
 
