@@ -7,8 +7,8 @@
 #include "JsonCpp/json/json.h"
 
 #include "presets.h"
-
 #include "paths.h"
+#include "logs.h"
 
 #ifndef PATH_TO_PRESETS_FILE
   #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
@@ -37,12 +37,12 @@ static std::unordered_map<std::string, Preset> __presets__ = []
             Json::Value presetJson = presetsFileContents[presetName];
             SampleSet samples;
 
-            for (auto const& midiNumber : presetJson.getMemberNames()) {
-
-                std::string rootNoteOfSample = presetJson[midiNumber]["note"].asString();
-                std::string samplePath = presetJson[midiNumber]["path"].asString();
-
-                samples.set(std::stoi(midiNumber), samplePath, std::stoi(rootNoteOfSample));
+            for (auto const& sampleJson : presetJson) {
+                samples.set(
+                    (Note) sampleJson["assignedKey"].asInt(), 
+                    sampleJson["pathToSample"].asString(),
+                    (Note) sampleJson["detectedNote"].asInt()
+                );
             }
 
             presets.insert({ presetName, Preset{presetName, samples} });
@@ -61,20 +61,22 @@ static bool presetExists(std::string presetName)
 
 static void overwritePresetsFile()
 {
-    Json::Value presetsFileJSONObject;
+    Json::Value presetsJson;
 
     for (const std::string& presetName : getPresetNames()) {
-        Json::Value jsonPreset;
 
-        for (const auto& [midiNumber, sample] : getPreset(presetName).samples.asVector()) 
+        Json::Value jsonSampleArray;
+
+        for (const auto& [note, sample] : getPreset(presetName).samples.asVector())
         {
             Json::Value jsonSample;
-            jsonSample["path"] = sample.filepath.string();
-            jsonSample["note"] = static_cast<int>(sample.rootNote);
-            jsonPreset[static_cast<int>(midiNumber)] = jsonSample;
+            jsonSample["pathToSample"] = sample.filepath.string();
+            jsonSample["assignedKey"] = static_cast<int>(note);
+            jsonSample["detectedNote"] = static_cast<int>(sample.rootNote);
+            jsonSampleArray.append(jsonSample);
         }
 
-        presetsFileJSONObject[presetName] = jsonPreset;
+        presetsJson[presetName] = jsonSampleArray;
     }
 
     std::ofstream presetsFile(std::string { PATH_TO_PRESETS_FILE });
@@ -83,7 +85,7 @@ static void overwritePresetsFile()
         std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
     } else {
         Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
-        presetsFile << Json::writeString(presetFileWriter, presetsFileJSONObject) << std::endl;
+        presetsFile << Json::writeString(presetFileWriter, presetsJson) << std::endl;
         presetsFile.close();
     }
 }
@@ -105,18 +107,15 @@ Preset& getPreset(std::string presetName)
     return __presets__.at(presetName);
 }
 
-void savePreset(std::string& presetName, SampleSet& samples) 
+void savePreset(std::string presetName, const SampleSet& samples) 
 {
+    logs::debug("saving new preset: " + presetName);
     std::string uniqueName { presetName };
 
     for (int numDuplicates = 0; presetExists(uniqueName); numDuplicates++)
       uniqueName = presetName + std::to_string(numDuplicates);
 
-    Preset preset;
-    preset.name = uniqueName;
-    preset.samples = samples;
-
-    __presets__.insert({uniqueName, preset});
+    __presets__.insert({uniqueName, Preset{uniqueName, samples}});
 
     overwritePresetsFile();
 }

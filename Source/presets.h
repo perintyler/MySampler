@@ -7,13 +7,15 @@
  *  
  * ```json
  * {
- *    "my preset": {
- *      23: {
- *        "path": "path/to/sample/for/key/with/midi/number/23.wav",
- *        "note": 42
+ *    "my first preset": [
+ *      {
+*         "assignedKey": 23,
+ *        "pathToSample": "path/to/sample/for/key/with/midi/number/23.wav",
+ *        "detectedNote": 42
  *      },
  *      ...
- *    },
+ *    ],
+ *    "my second preset": [ ... ]
  * }
  * ```
  * 
@@ -26,13 +28,13 @@
 struct Preset 
 {
     std::string name;
-    SampleSet samples;
+    const SampleSet& samples;
 };
 
 std::vector<std::string> getPresetNames();
 
 Preset& getPreset(std::string presetName);
 
-void savePreset(std::string presetName, SampleSet&);
+void savePreset(std::string presetName, const SampleSet&);
 
 void deletePreset(std::string presetName);
