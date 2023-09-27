@@ -2,7 +2,12 @@
 
 #pragma once
 
+#include <string>
 #include "pitch/notes.h"
+
+// #define NO_LOG // uncomment this line out to turn off logging
+
+const std::string PLUGIN_NAME { "Piano960" };
 
 const Note FIRST_MIDI_NOTE = C2;
 
