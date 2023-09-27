@@ -8,8 +8,15 @@
 #pragma once
 
 #include <memory>
-#include <juce_audio_formats/juce_audio_formats.h>
 
 #include "pitch/notes.h"
 
-juce::SynthesiserSound::Ptr getRandomSamplerSound(Note);
+/***
+ ** A locally installed audio file
+ ***/
+struct Sample 
+{
+  std::string name;
+  std::filesystem::path filepath;
+  MidiNumber rootNote;
+}
