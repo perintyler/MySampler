@@ -18,8 +18,8 @@
 #include "pitch/pitch.h"
 #include "samples.h"
 #include "logs.h"
+#include "config.h"
 
-const juce::String PLUGIN_NAME { "Piano960" };
 
 class AudioProcessor: public juce::AudioProcessor 
 {
@@ -43,7 +43,7 @@ public:
 
     bool hasEditor() const override { return true; }
 
-    const juce::String getName() const override { return PLUGIN_NAME; }
+    const juce::String getName() const override { return juce::String{PLUGIN_NAME}; }
 
     bool acceptsMidi() const override { return true; }
     
@@ -70,6 +70,8 @@ public:
     juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
     
     juce::Synthesiser& synthesiser() { return sampler.synthesiser; }
+
+    void randomizeSamples() { sampler.randomize(); }
     
     void logSamples() const;
 
