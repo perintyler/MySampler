@@ -86,7 +86,7 @@ void printExpectedAndActual(const Json::Value& expected, juce::AudioBuffer<float
     }
 }
 
-TEST_CASE("prepare audio for crepe model", "[pitch_detection]")
+TEST_CASE("prepare audio for crepe model", "[pitch_detection][crepe][slow]")
 {
     for (auto const& audioFile : TEST_DATA.getMemberNames()) {
         std::cout << "AUDIO FILE: " << audioFile << std::endl;
