@@ -11,6 +11,8 @@
 #include "config.h"
 #include "pitch/pitch.h"
 
+#include <juce_audio_formats/juce_audio_formats.h>
+
 #ifdef SAMPLES_DIRECTORY
   const std::string PATH_TO_SAMPLES_DIRECTORY { SAMPLES_DIRECTORY };
 #else
@@ -20,6 +22,8 @@
 static std::random_device randomDevice;
 static std::mt19937 numberGenerator(randomDevice()); // Mersenne Twister
 static std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0); // unit interval uniform distribution
+
+using SampleReader = std::unique_ptr<Juce::AudioFormatReader>;
 
 /** Randomly selects a file from a nested directory of sample-packs
  **  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
@@ -53,42 +57,95 @@ void validateSample(juce::File& sample, juce::String pathToFile)
     }
 }
 
-/** Generates a random sample from the installed wav files. The sample will be transposed
- ** to match the pitch of the desired MIDI key.
- **/
-juce::SynthesiserSound::Ptr getRandomSamplerSound(Note note)
-{
-    juce::File randomSample;
-    int rootNoteOfSample;
-    juce::String pathToFile;
-    juce::WavAudioFormat wavFormat;
-    std::unique_ptr<juce::AudioFormatReader> audioReader;
-    bool foundValidSample = false;
+// --------------------------------
 
-    while (!foundValidSample) {
-        pathToFile = getPathToRandomSample();
-        juce::File randomSample(pathToFile);
-        validateSample(randomSample, pathToFile);        
-        audioReader = std::unique_ptr<juce::AudioFormatReader>(
-            wavFormat.createReaderFor(randomSample.createInputStream().release(), true));
-        
-        juce::AudioSampleBuffer buffer;
-        int bufferSize = static_cast<int>(audioReader->lengthInSamples);
-        buffer.setSize(audioReader->numChannels, bufferSize);
-        audioReader->read(&buffer, 0, bufferSize, 0, true, true);
-        
-        try {
-            rootNoteOfSample = detectNote(buffer, audioReader->sampleRate);
-            foundValidSample = true;
-        } catch (PitchDetectionException) {
-            logs::newBadSample(pathToFile);
+Sample SampleSet::get(MidiNote note) const 
+{
+    return samples.at(note);
+}
+
+void SampleSet::set(MidiNote key, std::filesystem::path filepath, MidiNumber rootNote)
+{
+    std::string sampleName = filepath.stem().string();
+    samples.insert(key, Sample(sampleName, filepath, rootNote));
+}
+
+std::vector<std::pair<MidiNumber, Sample>> SampleSet::asVector()
+{
+    return std::vector<std::pair<MidiNumber, Sample>>(begin(), end());
+}
+
+RandomSampler::RandomSampler(MidiNumber firstNote, MidiNumber lastNote)
+    : synthesiser()
+    , firstNote(firstNote)
+    , lastNote(lastNote)
+{
+    for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
+        lockedKeys[midiNumber] = false;
+
+    for (auto i = 0; i < NUM_VOICES; ++i)
+        synthesiser.addVoice(new juce::SamplerVoice());
+}
+
+bool RandomSampler::isKeyLocked(MidiNumber note) 
+{
+    jassert(lockedKeys.count(note));
+    return lockedKeys.at(note) == true;
+}
+
+void RandomSampler::lockKey(MidiNumber note)
+{
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = true;
+}
+
+void RandomSampler::randomize() 
+{
+    synthesizer.clearSounds();
+
+    for (Note note = firstNote; note <= lastNote; note++) 
+    {
+        if (!isKeyLocked(note)) 
+        {
+            juce::File randomSample;
+            int rootNoteOfSample;
+            juce::String pathToFile;
+            juce::WavAudioFormat wavFormat;
+            std::unique_ptr<juce::AudioFormatReader> audioReader;
+            bool foundValidSample = false;
+
+            while (!foundValidSample) {
+                pathToFile = getPathToRandomSample();
+                juce::File randomSample(pathToFile);
+                validateSample(randomSample, pathToFile);
+
+                audioReader = std::unique_ptr<juce::AudioFormatReader>(
+                    wavFormat.createReaderFor(randomSample.createInputStream().release(), true)
+                );
+                
+                juce::AudioSampleBuffer buffer;
+                int bufferSize = static_cast<int>(audioReader->lengthInSamples);
+                buffer.setSize(audioReader->numChannels, bufferSize);
+                audioReader->read(&buffer, 0, bufferSize, 0, true, true);
+                
+                try {
+                    rootNoteOfSample = detectNote(buffer, audioReader->sampleRate);
+                    foundValidSample = true;
+                } catch (PitchDetectionException) {
+                    logs::newBadSample(pathToFile);
+                }
+            }
+
+            samples.set(note, pathToFile, rootNote)
+
+            juce::BigInteger keyRange;
+            keyRange.setRange(note, note+1, true);
+
+            synthesiser.addSound(
+                juce::SynthesiserSound::Ptr(new juce::SamplerSound(
+                    pathToFile, *audioReader, keyRange, rootNoteOfSample, ATTACK, RELEASE, SUSTAIN
+                ))
+            );
         }
     }
-
-    juce::BigInteger keyRange;
-    keyRange.setRange(note, note+1, true);
-
-    return juce::SynthesiserSound::Ptr(new juce::SamplerSound(
-        pathToFile, *audioReader, keyRange, rootNoteOfSample, ATTACK, RELEASE, SUSTAIN
-    ));
 }
