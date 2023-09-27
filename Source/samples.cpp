@@ -109,6 +109,12 @@ void RandomSampler::lockKey(Note note)
     lockedKeys[note] = true;
 }
 
+void RandomSampler::unlockKey(Note note)
+{
+    jassert(lockedKeys.count(note));
+    lockedKeys[note] = false;
+}
+
 void RandomSampler::randomize() 
 {
     synthesiser.clearSounds();
