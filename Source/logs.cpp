@@ -18,21 +18,28 @@ public:
     }
 };
 
+#ifndef NO_LOG
 static NonDebugLogger goodSampleLogger("/var/log/Piano960/good-samples.txt");
 static NonDebugLogger badSampleLogger("/var/log/Piano960/bad-samples.txt");
+#endif
 
 void logs::newGoodSample(const juce::String& sampleName)
 {
+    #ifndef NO_LOG
     goodSampleLogger.logMessage(sampleName);
+    #endif
 }
 
 void logs::newBadSample(const juce::String& sampleName)
 {
+    #ifndef NO_LOG
     badSampleLogger.logMessage(sampleName);
+    #endif
 }
 
 void logs::debug(const juce::String& message)
 {
+    #if !defined(NO_LOG) && !defined(PRODUCTION)
     juce::Logger::outputDebugString(message);
+    #endif
 }
-
