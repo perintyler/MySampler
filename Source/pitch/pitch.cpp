@@ -1,8 +1,12 @@
 /*** pitch/pitch.cpp ***/
 
 #include <iostream>
+#include <filesystem>
+#include <iostream>
+#include <fstream>
 
 #include "pitch.h"
+#include "../JsonCpp/json/json.h"
 
 #if defined(CREPE_MODEL)
     #include "crepe.h"
@@ -14,6 +18,69 @@
     #include "yin.h"
     const std::string PITCH_DETECTION_ALGO = "YIN";
 #endif
+
+#ifndef PITCH_DETECTION_CACHE_FILE
+    #define PITCH_DETECTION_CACHE_FILE "/usr/local/include/Piano960/pitch_detection_cache.json"
+#endif
+
+// the pitch detection cache is stored as a JSON file in the installation directory
+static std::unordered_map<std::string, Note> __pitch_detection_cache__ = []
+{
+    std::unordered_map<std::string, Note> pitchDetectionCache;
+
+    // ---------------------------------------------
+    #ifndef NO_PITCH_DETECTION_CACHE
+
+    if (!std::filesystem::exists(PITCH_DETECTION_CACHE_FILE)) {
+        std::cerr << "pitch detection cache file does not exist: " << PITCH_DETECTION_CACHE_FILE << std::endl;
+        return pitchDetectionCache;
+    }
+
+    std::ifstream file(PITCH_DETECTION_CACHE_FILE);
+    Json::Reader reader;
+    Json::Value cachefileContents;
+    reader.parse(file, cachefileContents);
+
+    try {
+        for (auto const& sampleName : cachefileContents.getMemberNames()) 
+        {
+            Note note = cachefileContents[sampleName].asInt();
+            pitchDetectionCache.insert({ sampleName, note });
+        }
+    } catch(Json::LogicError) {
+        std::cerr << "pitch detection cache file is invalid and can't be parsed: " << PITCH_DETECTION_CACHE_FILE << std::endl;
+    }
+
+    #endif 
+    // ---------------------------------------------
+
+    return pitchDetectionCache;
+}();
+
+static void cache_pitch_detection(std::string sampleName, Note note)
+{
+    #ifndef NO_PITCH_DETECTION_CACHE
+    __pitch_detection_cache__.insert({ sampleName, note });
+
+    if (std::filesystem::exists(PITCH_DETECTION_CACHE_FILE)) 
+    {
+        Json::Value jsonCache;
+
+        for (const auto& pitch_detection_pair : __pitch_detection_cache__) 
+            jsonCache[pitch_detection_pair.first] = static_cast<int>(pitch_detection_pair.second);
+
+        std::ofstream cachefile(PITCH_DETECTION_CACHE_FILE);
+
+        if (!cachefile.is_open()) {
+            std::cerr << "pitch detection cache file could not be overwritten: " << PITCH_DETECTION_CACHE_FILE << std::endl;
+        } else {
+            Json::StreamWriterBuilder cachefileWriter; // writer["indentation"] = "\t";
+            cachefile << Json::writeString(cachefileWriter, jsonCache) << std::endl;
+            cachefile.close();
+        }
+    }
+    #endif
+}
 
 void loadPitchDetectionModel()
 {
@@ -29,9 +96,17 @@ float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
     return pitch_detection::getFundementalFrequency(buffer, sampleRate);
 }
 
-Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate)
-{
-    return matchNoteToFrequency(detectFrequency(buffer, sampleRate));
+Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate, std::string sampleName /* = "" */)
+{    
+    if (!sampleName.empty() && __pitch_detection_cache__.count(sampleName) != 0)
+        return __pitch_detection_cache__.at(sampleName);
+
+    Note detectedNote = matchNoteToFrequency(detectFrequency(buffer, sampleRate));
+
+    if (!sampleName.empty())
+        cache_pitch_detection(sampleName, detectedNote);
+
+    return detectedNote;
 }
 
 void printPitchDetectionInfo()
