@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string>
 
+#include "config.h"
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
@@ -27,7 +28,7 @@ void AudioProcessor::releaseResources()
 
     synthesiser().clearSounds();
 
-    for (auto i = 0; i < NUM_VOICES; ++i) {
+    for (auto i = 0; i < NUM_SYNTH_VOICES; ++i) {
         synthesiser().removeVoice(i);
     }
 }

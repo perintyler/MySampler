@@ -19,8 +19,6 @@
 #include "samples.h"
 #include "logs.h"
 
-const int NUM_VOICES = 8;
-
 const juce::String PLUGIN_NAME { "Piano960" };
 
 class AudioProcessor: public juce::AudioProcessor 
