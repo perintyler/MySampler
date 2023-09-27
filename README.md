@@ -2,7 +2,7 @@
 
 ![Build & Test](https://github.com/perintyler/Piano960/actions/workflows/tests.yml/badge.svg)
 
-Piano960 is a cross platform audio plugin: a virtual keyboard instrument where every key plays a different, random sound. Each of these samples is transposed to match the pitch of the key it's assigned to.
+Piano960 is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
 
 ![plugin demo GIF](Assets/readme/demo.gif "Piano960 Plugin Demo")
 
@@ -26,18 +26,36 @@ https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-
 
 ## Building the Plugin
 
-To quickly build and install Piano960, use the `build.sh` convencience script with an `-i` option.
-
-```
-bash ./build.sh -i
-```
-
-or, to build/install the plugin manually with cmake:
+To build the plugin with CMake:
 
 ```bash
 mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 make install
+```
+
+To quickly build and install Piano960, use the `build.sh` convencience script with an `-i` option. (you might have to change the file permision: `chmod +x ./bs` ).
+
+```bash
+bs -i
+```
+
+#### Build Script Options
+
+```shell
+options:
+v   output excessive debug info to stdout
+s   supress cmake output
+t   build and run unit tests
+i   locally install samples, pitch detection models, and presets
+c   Clean any existing and build the plugin from scratch
+2   use spice model for pitch detection
+3   use crepe model for pitch detection
+d   sets the CMAKE build type to Debug
+e   enables GPU for tensorflow operations
+g   compile with GCC
+f   only run fast tests (i.e. no pitch detection tests)
+l   turns on the logger, which writes verbose messages to a logfile
 ```
 
 ### Building with Ubuntu/Debian-like Distributions
@@ -58,17 +76,21 @@ apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound
 Use `build.sh` with a `-t` option to build and run the unit tests.
 
 ```bash
-Piano960 % bash ./build.sh -t
+Piano960 % ./bs -t
 [ 78%] Built target Catch2
 [ 95%] Built target Piano960Plugin
 [ 96%] Building CXX object Tests/CMakeFiles/unit-tests.dir/pitch_detection_tests.cpp.o
 [ 97%] Building CXX object Tests/CMakeFiles/unit-tests.dir/processor_test.cpp.o
 [ 98%] Linking CXX executable unit-tests
 [100%] Built target unit-tests
-Randomness seeded to: 4098072686
+JUCE v7.0.3
+Randomness seeded to: 2100061589
+Using YIN pitch detection algorithm.
 ===============================================================================
-All tests passed (32 assertions in 28 test cases)
+All tests passed (77 assertions in 32 test cases)
 ```
+
+>>> The pitch detection tests are quite slow, but you can use a `-tf` option to exclude the slow tests.
 
 ## Xcode Integration
 
@@ -103,6 +125,8 @@ This codebase currently supports 3 different pitch detection algorithm. The desi
 3. `-DPITCH_DETECTION_ALGORITHM=CREPE`
 
 NOTE: Each algorithm currently exists as different builds because Tensorflow is a giant build dependency. The branching builds will be consolidated when pitch detection is ironed out.
+
+>>> use the build script (`bs`) and a `-g` to enable GPU usage, which will make `crepe` and `spice` faster
 
 ### [YIN Algorithm](http://audition.ens.fr/adc/pdf/2002_JASA_YIN.pdf) 
 
