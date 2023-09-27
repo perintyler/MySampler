@@ -42,7 +42,7 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
         
         lockButtons.insert(std::pair<Note, ImageButtonPointer>(note, lockButton));
         setLockButtonImage(lockButton, note);
-        addAndMakeVisible(lockButton);
+        addAndMakeVisible(std::move(lockButton));
     }
 }
 
