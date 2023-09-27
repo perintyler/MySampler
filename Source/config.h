@@ -15,3 +15,5 @@ const double ATTACK = 0.1; // seconds
 const double RELEASE = 0.1; // seconds
 
 const double SUSTAIN = 10.0; // seconds
+
+const int NUM_SYNTH_VOICES = 8;
