@@ -1,22 +1,5 @@
 /*** Piano960 | presets.cpp ***/
 
-/***
- * 
- * The preset file is a JSON file where each key is a preset name. Each value
- * will be an object mapping a key's MIDI number to a sample file path.
- *  
- * ```
- * {
- *    "my preset": {
- *      23: {
- *        "path": "path/to/sample/for/key/with/midi/number/23.wav",
- *        "note": 42
- *      },
- *      ...
- *    },
- * }
- ***/
-
 #include <assert.h>
 #include <iostream>
 #include <fstream>
@@ -31,33 +14,44 @@
   #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
 #endif
 
-static std::unordered_map<std::string, Preset> __presets__ = []{
-    std::ifstream file(std::string { PATH_TO_PRESETS_FILE });
-    Json::Reader reader;
-    Json::Value presetsJSON;
-    reader.parse(file, presetsJSON);
+// load presets from the installed presets file
+static std::unordered_map<std::string, Preset> __presets__ = []
+{
+    std::unordered_map<std::string, Preset> presets;
 
-    std::unordered_map<std::string, Preset> loadedPresets;
-
-    for (auto const& presetName : presetsJSON.getMemberNames()) {
-        SampleSet samples;
-
-        for (auto const& keyNumber : presetsJSON[presetName].getMemberNames()) {
-            samples.set(
-                std::stoi(keyNumber),
-                presetsJSON[presetName][keyNumber]["path"].asString(), 
-                presetsJSON[presetName][keyNumber]["note"].asInt()
-            );
-        }
-
-        Preset preset;
-        preset.name = presetName;
-        preset.samples = samples;
-
-        loadedPresets.insert({presetName, preset});
+    // if the presets file doesn't exist (which means the plugin wasn't 
+    // installed correctly), just return the empty presets map
+    if (!std::filesystem::exists(PATH_TO_PRESETS_FILE)) {
+        std::cerr << "presets file does not exist: " << PATH_TO_PRESETS_FILE << std::endl;
+        return presets;
     }
 
-    return loadedPresets;
+    std::ifstream file(PATH_TO_PRESETS_FILE);
+    Json::Reader reader;
+    Json::Value presetsFileContents;
+    reader.parse(file, presetsFileContents);
+
+    try {
+        for (auto const& presetName : presetsFileContents.getMemberNames()) {
+
+            Json::Value presetJson = presetsFileContents[presetName];
+            SampleSet samples;
+
+            for (auto const& midiNumber : presetJson.getMemberNames()) {
+
+                std::string rootNoteOfSample = presetJson[midiNumber]["note"].asString();
+                std::string samplePath = presetJson[midiNumber]["path"].asString();
+
+                samples.set(std::stoi(midiNumber), samplePath, std::stoi(rootNoteOfSample));
+            }
+
+            presets.insert({ presetName, Preset{presetName, samples} });
+        }
+    } catch(Json::LogicError) {
+        std::cerr << "presets file is invalid and can't be parsed: " << PATH_TO_PRESETS_FILE << std::endl;
+    }
+
+    return presets;
 }();
 
 static bool presetExists(std::string presetName)
