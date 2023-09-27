@@ -1,17 +1,4 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   pitch_detection_tests.cpp
-//   ~~~~~~~~~~~~~~~~~~~~~~~~~
-//
-// This file contains unit tests for the `PitchDetection`
-// translation unit.
-//
-// MIDI Note Numbers Reference: 
-//   | https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
-// Note Frequencies Reference
-//   | https://pages.mtu.edu/~suits/notefreqs.html
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/*** Piano960 Tests | pitch_tests.cpp ***/
 
 #include <vector>
 #include <string>
@@ -49,6 +36,15 @@ float get_frequency(std::filesystem::path fileName)
     audioReader->read(&audioBuffer, 0, bufferSize, 0, true, true);
 
     return detectFrequency(audioBuffer, audioReader->sampleRate);
+}
+
+TEST_CASE("Semitone Test #1: get semitone from note", "[pitch][semitone][note]")
+{
+    REQUIRE(getSemitone(C0) == C);
+    REQUIRE(getSemitone(C1) == C);
+    REQUIRE(getSemitone(G0) == G);
+    REQUIRE(getSemitone(B8) == B);
+    REQUIRE(getSemitone(G8) == G);
 }
 
 TEST_CASE("Pitch Detection Test #1: lower frequency than lowest note", "[pitch_detection][slow]")

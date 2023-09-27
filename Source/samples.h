@@ -73,6 +73,10 @@ public:
 
     bool isReady() const;
 
+    const SampleSet& getAllSamples() const;
+
+    const SampleSet getLockedSamples() const;
+
 private:
     Note firstNote;
     Note lastNote;

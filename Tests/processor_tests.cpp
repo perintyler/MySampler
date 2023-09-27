@@ -1,12 +1,4 @@
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//
-//   processor_test.cpp
-//   ~~~~~~~~~~~~~~~~~~
-//
-// This file contains unit tests for the `PitchDetection`
-// translation unit.
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/*** Piano960 Tests | processor_tests.cpp ***/
 
 #include <catch2/catch_test_macros.hpp>
 

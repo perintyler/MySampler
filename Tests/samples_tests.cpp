@@ -1,4 +1,4 @@
-/*** Piano960 Tests | samples_test.cpp ***/
+/*** Piano960 Tests | samples_tests.cpp ***/
 
 #include <filesystem>
 

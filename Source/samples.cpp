@@ -127,6 +127,23 @@ bool RandomSampler::isReady() const
     return samples.length() == (lastNote - firstNote);
 }
 
+const SampleSet& RandomSampler::getAllSamples() const
+{ 
+    return samples; 
+}
+
+const SampleSet RandomSampler::getLockedSamples() const
+{
+    SampleSet lockedSamples;
+
+    for (const auto& [note, sample] : samples.asVector()) {
+        if (isKeyLocked(note))
+            lockedSamples.set(note, sample.filepath, sample.rootNote);
+    }
+
+    return lockedSamples;
+}
+
 void RandomSampler::randomize(bool pitch_shift /* = true */) 
 {
     synthesiser.clearSounds();
