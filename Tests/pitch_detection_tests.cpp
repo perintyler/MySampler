@@ -26,6 +26,8 @@
 #include "pitch/pitch.h"
 #include "paths.h"
 
+#define NO_PITCH_DETECTION_CACHE
+
 bool ONLY_TEST_SEMITONES = true;
 
 float get_frequency(std::filesystem::path fileName)
@@ -49,27 +51,27 @@ float get_frequency(std::filesystem::path fileName)
     return detectFrequency(audioBuffer, audioReader->sampleRate);
 }
 
-TEST_CASE("lower frequency than lowest note", "[matchNoteToFrequency]")
+TEST_CASE("Pitch Detection Test #1: lower frequency than lowest note", "[pitch_detection][slow]")
 {
     REQUIRE_THROWS_AS(matchNoteToFrequency(10.0), NoteDoesNotExistException);
 }
 
-TEST_CASE("inbetween B3 and C4", "[matchNoteToFrequency]") 
+TEST_CASE("Pitch Detection Test #2: inbetween B3 and C4", "[pitch_detection][slow]") 
 {
     REQUIRE(matchNoteToFrequency(250.7) == 59);
 }
 
-TEST_CASE("G4", "[matchNoteToFrequency]") 
+TEST_CASE("Pitch Detection Test #3: G4", "[matchNoteToFrequency]") 
 {
     REQUIRE(matchNoteToFrequency(392.0) == 67);
 }
 
-TEST_CASE("close to Csharp6", "[matchNoteToFrequency]") 
+TEST_CASE("Pitch Detection Test #4: close to Csharp6", "[pitch_detection][slow]") 
 {
     REQUIRE(matchNoteToFrequency(1100.8) == 85);
 }
 
-TEST_CASE("Female Vocal: G5", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #5: Female Vocal: G5", "[pitch_detection][slow]") 
 {
     printPitchDetectionInfo();
     float frequency = get_frequency("G5-female-vocal-chop.wav");
@@ -82,7 +84,7 @@ TEST_CASE("Female Vocal: G5", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == G);
 }
 
-TEST_CASE("Female Vocal: G#3", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #6: Female Vocal: G#3", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("G#3-female-vocal-chop.wav");
 
@@ -94,7 +96,7 @@ TEST_CASE("Female Vocal: G#3", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == Gsharp);
 }
 
-TEST_CASE("Male Vocal: A4", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #7: Male Vocal: A4", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("A4-male-vocal-chop.wav");
 
@@ -106,7 +108,7 @@ TEST_CASE("Male Vocal: A4", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == A);
 }
 
-TEST_CASE("Acoustic Bass: C3", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #8: Acoustic Bass: C3", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C3-acoustic-bass-oneshot.wav");
 
@@ -118,7 +120,7 @@ TEST_CASE("Acoustic Bass: C3", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == C);
 }
 
-TEST_CASE("Guitar: A2", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #9: Guitar: A2", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("A2-guitar-oneshot.wav");
 
@@ -130,7 +132,7 @@ TEST_CASE("Guitar: A2", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == A);
 }
 
-TEST_CASE("Keyboard: C6", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #10: Keyboard: C6", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C6-keyboard-oneshot.wav");
 
@@ -142,7 +144,7 @@ TEST_CASE("Keyboard: C6", "[pitch_detection]")
     REQUIRE(getSemitone(frequency) == C);
 }
 
-TEST_CASE("Upright Bass: C2", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #11: Upright Bass: C2", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C2-uprite-bass-oneshot.wav");
 
@@ -157,7 +159,7 @@ TEST_CASE("Upright Bass: C2", "[pitch_detection]")
 /************************************************************
  * FAILING PITCH DETECTION TESTS
 
-TEST_CASE("Guitar: C3", "[pitch_detection]")
+TEST_CASE("Pitch Detection Test #12: Guitar: C3", "[pitch_detection][slow]")
 {
     float frequency = get_frequency("C3-guitar-oneshot.wav");
 
@@ -170,7 +172,7 @@ TEST_CASE("Guitar: C3", "[pitch_detection]")
     REQUIRE(semitone == midi::C);
 }
 
-TEST_CASE("Exchange Bass: C4", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #13: Exchange Bass: C4", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C4-exchange-bass-oneshot.wav");
 
@@ -183,7 +185,7 @@ TEST_CASE("Exchange Bass: C4", "[pitch_detection]")
     REQUIRE(semitone == midi::C);
 }
 
-TEST_CASE("Piano: G3", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #14: Piano: G3", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("G3-piano-oneshot.wav");
 
@@ -196,7 +198,7 @@ TEST_CASE("Piano: G3", "[pitch_detection]")
     REQUIRE(semitone == midi::G);
 }
 
-TEST_CASE("Guitar: E4", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #15: Guitar: E4", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("E4-guitar-oneshot.wav");
 
@@ -209,7 +211,7 @@ TEST_CASE("Guitar: E4", "[pitch_detection]")
     REQUIRE(semitone == midi::E);
 }
 
-TEST_CASE("Keyboard: C5", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #16: Keyboard: C5", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C5-keyboard-oneshot.wav");
 
@@ -222,7 +224,7 @@ TEST_CASE("Keyboard: C5", "[pitch_detection]")
     REQUIRE(semitone == midi::C);
 }
 
-TEST_CASE("Piano: C6", "[pitch_detection]") 
+TEST_CASE("Pitch Detection Test #17: Piano: C6", "[pitch_detection][slow]") 
 {
     float frequency = get_frequency("C6-piano-oneshot.wav");
 

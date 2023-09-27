@@ -8,7 +8,7 @@
 #include "audio_processor.h"
 #include "app.h"
 
-TEST_CASE("app", "[ui]") 
+TEST_CASE("UI Test #1: app", "[ui][app]") 
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
@@ -21,7 +21,7 @@ TEST_CASE("app", "[ui]")
     REQUIRE(app.getBounds().getWidth() * app.getBounds().getHeight() > 0);
 }
 
-TEST_CASE("main view", "[ui]") 
+TEST_CASE("UI Test #2: main view", "[ui][main_view]") 
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
@@ -54,7 +54,7 @@ TEST_CASE("main view", "[ui]")
     }
 }
 
-TEST_CASE("lockable keys", "[ui]") 
+TEST_CASE("UI Test #3: lockable keys", "[ui][lockable_keys]") 
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;

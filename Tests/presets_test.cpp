@@ -7,7 +7,7 @@
 #include "presets.h"
 #include "pitch/notes.h"
 
-TEST_CASE("presets: get all preset names")
+TEST_CASE("Preset Test #1: get all preset names", "[presets]")
 {
   std::vector<std::string> expected { "default-1", "default-2", "default-3" };
   std::vector<std::string> acutal= getPresetNames();
@@ -16,8 +16,8 @@ TEST_CASE("presets: get all preset names")
     REQUIRE(std::find(acutal.begin(), acutal.end(), presetName) != acutal.end());
 }
 
-TEST_CASE("presets: get preset")
+TEST_CASE("Preset Test #2: get preset", "[presets]")
 {}
 
-TEST_CASE("presets: add/delete preset")
+TEST_CASE("Preset Test #3: add/delete preset", "[presets]")
 {}
