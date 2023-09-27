@@ -23,8 +23,11 @@ const int NUM_VOICES = 8;
 
 const juce::String PLUGIN_NAME { "Piano960" };
 
-class AudioProcessor: public juce::AudioProcessor {
+class AudioProcessor: public juce::AudioProcessor 
+{
 public:
+
+    RandomSampler sampler;
 
     AudioProcessor();
     
@@ -68,31 +71,15 @@ public:
 
     juce::MidiKeyboardState& getKeyboardState() { return keyboardState; }
     
-    void randomizeSamples();
-
-    bool isKeyLocked(Note) const;
-    
-    void lockKey(Note);
-    
-    void unlockKey(Note);
+    juce::Synthesiser& synthesiser() { return sampler.synthesiser; }
     
     void logSamples() const;
-
-    #ifdef TESTMODE
-    const std::map<Note, juce::String>& getSampleNames() const { return sampleNames; }
-    #endif
 
 private:
 
     juce::MidiKeyboardState keyboardState;
 
     juce::MidiMessageCollector midiCollector;
-
-    juce::Synthesiser synthesiser;
     
-    std::map<Note, bool> lockedKeys {};
-
-    std::map<Note, juce::String> sampleNames {};
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioProcessor)
 };
