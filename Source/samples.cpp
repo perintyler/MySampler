@@ -46,15 +46,17 @@ juce::String getPathToRandomSample()
     return juce::String { path };
 }
 
-void validateSample(juce::File& sample, juce::String pathToFile)
+bool validateSample(juce::File& sample, juce::String pathToFile)
 {
     if (!sample.existsAsFile()) {
-        juce::String errorMessage = "wav file does not exist: " + pathToFile;
-        throw std::filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
+        std::cerr << "wav file does not exist: " << pathToFile.toStdString() << std::endl;
+        return false;
     } else if (sample.getFileExtension() != ".wav") {
-        juce::String errorMessage = "sample is not a wav file: " + pathToFile;
-        throw std::filesystem::filesystem_error(errorMessage.toStdString(), std::error_code());
+        std::cerr << "sample is not a wav file: " << pathToFile.toStdString() << std::endl;
+        return false;
     }
+
+    return true;
 }
 
 // --------------------------------
@@ -65,10 +67,15 @@ const Sample& SampleSet::get(Note note) const
     return at(note);
 }
 
+int SampleSet::length() const
+{
+    return static_cast<int>(size());
+}
+
 void SampleSet::set(Note key, std::filesystem::path filepath, Note rootNote)
 {
     std::string sampleName = filepath.stem().string();
-    insert({key, Sample{sampleName, filepath, rootNote}});
+    insert_or_assign(key, Sample{sampleName, filepath, rootNote});
 }
 
 std::vector<std::pair<Note, const Sample&>> SampleSet::asVector() const
@@ -115,7 +122,12 @@ void RandomSampler::unlockKey(Note note)
     lockedKeys[note] = false;
 }
 
-void RandomSampler::randomize() 
+bool RandomSampler::isReady() const
+{
+    return samples.length() == (lastNote - firstNote);
+}
+
+void RandomSampler::randomize(bool pitch_shift /* = true */) 
 {
     synthesiser.clearSounds();
 
@@ -126,14 +138,20 @@ void RandomSampler::randomize()
             juce::File randomSample;
             int rootNoteOfSample;
             juce::String pathToFile;
+            std::string sampleName;
             juce::WavAudioFormat wavFormat;
             std::unique_ptr<juce::AudioFormatReader> audioReader;
             bool foundValidSample = false;
 
             while (!foundValidSample) {
                 pathToFile = getPathToRandomSample();
+                sampleName = pathToFile.toStdString();
                 juce::File randomSample(pathToFile);
-                validateSample(randomSample, pathToFile);
+                
+                if (!validateSample(randomSample, pathToFile)) {
+                    logs::newBadSample(pathToFile);
+                    continue;
+                }
 
                 audioReader = std::unique_ptr<juce::AudioFormatReader>(
                     wavFormat.createReaderFor(randomSample.createInputStream().release(), true)
@@ -144,15 +162,19 @@ void RandomSampler::randomize()
                 buffer.setSize(audioReader->numChannels, bufferSize);
                 audioReader->read(&buffer, 0, bufferSize, 0, true, true);
                 
-                try {
-                    rootNoteOfSample = detectNote(buffer, audioReader->sampleRate);
+                if (pitch_shift) {
+                    try {
+                        rootNoteOfSample = detectNote(buffer, audioReader->sampleRate, sampleName);
+                        foundValidSample = true;
+                    } catch (PitchDetectionException) {
+                        logs::newBadSample(pathToFile);
+                    }
+                } else {
                     foundValidSample = true;
-                } catch (PitchDetectionException) {
-                    logs::newBadSample(pathToFile);
                 }
             }
 
-            samples.set(note, pathToFile.toStdString(), rootNoteOfSample);
+            samples.set(note, sampleName, rootNoteOfSample);
 
             juce::BigInteger keyRange;
             keyRange.setRange(note, note+1, true);
