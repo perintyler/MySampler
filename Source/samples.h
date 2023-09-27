@@ -8,7 +8,9 @@
 #pragma once
 
 #include <memory>
+#include <map>
 #include <filesystem>
+#include <juce_audio_devices/juce_audio_devices.h>
 
 #include "pitch/notes.h"
 
@@ -29,11 +31,14 @@ struct Sample
 class SampleSet: private std::unordered_map<Note, Sample>
 {
 public:
-  Sample get(Note note) const;
+
+  SampleSet(): std::unordered_map<Note, Sample>() {}
+
+  const Sample& get(Note) const;
 
   void set(Note key, std::filesystem::path, Note rootNote);
 
-  std::vector<std::pair<Note, Sample>> asVector();
+  std::vector<std::pair<Note, const Sample&>> asVector() const;
 };
 
 /***
@@ -58,7 +63,7 @@ public:
 
     void unlockKey(Note);
 
-    Sample& getSample(Note) const;
+    const Sample& getSample(Note) const;
 
     void randomize();
 

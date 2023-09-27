@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <random>
+#include <assert.h>
 
 #include "samples.h"
 #include "logs.h"
@@ -22,7 +23,7 @@ static std::random_device randomDevice;
 static std::mt19937 numberGenerator(randomDevice()); // Mersenne Twister
 static std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0); // unit interval uniform distribution
 
-using SampleReader = std::unique_ptr<Juce::AudioFormatReader>;
+using SampleReader = std::unique_ptr<juce::AudioFormatReader>;
 
 /** Randomly selects a file from a nested directory of sample-packs
  **  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
@@ -58,20 +59,21 @@ void validateSample(juce::File& sample, juce::String pathToFile)
 
 // --------------------------------
 
-Sample SampleSet::get(Note note) const 
+const Sample& SampleSet::get(Note note) const 
 {
-    return samples.at(note);
+    assert(count(note) != 0);
+    return at(note);
 }
 
 void SampleSet::set(Note key, std::filesystem::path filepath, Note rootNote)
 {
     std::string sampleName = filepath.stem().string();
-    samples.insert(key, Sample(sampleName, filepath, rootNote));
+    insert({key, Sample{sampleName, filepath, rootNote}});
 }
 
-std::vector<std::pair<Note, Sample>> SampleSet::asVector()
+std::vector<std::pair<Note, const Sample&>> SampleSet::asVector() const
 {
-    return std::vector<std::pair<Note, Sample>>(begin(), end());
+    return std::vector<std::pair<Note, const Sample&>>(begin(), end());
 }
 
 RandomSampler::RandomSampler(Note firstNote, Note lastNote)
@@ -82,7 +84,7 @@ RandomSampler::RandomSampler(Note firstNote, Note lastNote)
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
 
-    for (auto i = 0; i < NUM_VOICES; ++i)
+    for (auto i = 0; i < NUM_SYNTH_VOICES; ++i)
         synthesiser.addVoice(new juce::SamplerVoice());
 }
 
@@ -90,7 +92,7 @@ RandomSampler::RandomSampler()
     : RandomSampler(FIRST_MIDI_NOTE, LAST_MIDI_NOTE)
 {}
 
-Sampler& getSample(Note note) const
+const Sample& RandomSampler::getSample(Note note) const
 {
     return samples.get(note);
 }
@@ -109,7 +111,7 @@ void RandomSampler::lockKey(Note note)
 
 void RandomSampler::randomize() 
 {
-    synthesizer.clearSounds();
+    synthesiser.clearSounds();
 
     for (Note note = firstNote; note <= lastNote; note++) 
     {
@@ -144,7 +146,7 @@ void RandomSampler::randomize()
                 }
             }
 
-            samples.set(note, pathToFile, rootNote)
+            samples.set(note, pathToFile.toStdString(), rootNoteOfSample);
 
             juce::BigInteger keyRange;
             keyRange.setRange(note, note+1, true);
