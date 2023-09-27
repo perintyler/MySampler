@@ -33,5 +33,12 @@ TEST_CASE("RandomSampler: get sample")
   REQUIRE(sample.rootNote < G8);
 }
 
-
+TEST_CASE("RandomSampler: randomize samples") 
+{
+  RandomSampler sampler(C4, C5);
+  std::string sampleNameBeforeRandomizing = sampler.getSample(C4).name;
+  sampler.randomize();
+  std::string sampleNameAfterRandomizing = sampler.getSample(C4).name;
+  REQUIRE(sampleNameBeforeRandomizing != sampleNameAfterRandomizing);
+}
 
