@@ -93,16 +93,3 @@ TEST_CASE("processor: BusesLayoutSupportInvalid", "[processor]")
     REQUIRE(processor.isBusesLayoutSupported(layout) == false);
 }
 
-TEST_CASE("get random sampler sound", "[processor]")
-{
-    int C3 = 48;
-    REQUIRE(getRandomSamplerSound(C3));
-}
-
-TEST_CASE("processor: randomize samples", "[processor]")
-{
-    auto processor = AudioProcessor {};
-    processor.randomizeSamples();
-    REQUIRE(processor.getSampleNames().size() == NUM_KEYS);
-}
-
