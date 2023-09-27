@@ -35,22 +35,26 @@ static std::unordered_map<std::string, Preset> __presets__ = []{
     std::ifstream file(std::string { PATH_TO_PRESETS_FILE });
     Json::Reader reader;
     Json::Value presetsJSON;
-    reader.parse(file, presetsAsJSON);
+    reader.parse(file, presetsJSON);
 
     std::unordered_map<std::string, Preset> loadedPresets;
 
-    for (auto const& presetName : presetsAsJSON.getMemberNames()) {
+    for (auto const& presetName : presetsJSON.getMemberNames()) {
         SampleSet samples;
 
         for (auto const& keyNumber : presetsJSON[presetName].getMemberNames()) {
             samples.set(
-              keyNumber, 
-              presetsJSON[presetName][keyNumber]["path"].asString(), 
-              presetsJSON[presetName][keyNumber]["note"].asInt()
+                std::stoi(keyNumber),
+                presetsJSON[presetName][keyNumber]["path"].asString(), 
+                presetsJSON[presetName][keyNumber]["note"].asInt()
             );
         }
 
-        loadedPresets.emplace_back(presetName, Preset(presetName, samples));
+        Preset preset;
+        preset.name = presetName;
+        preset.samples = samples;
+
+        loadedPresets.insert({presetName, preset});
     }
 
     return loadedPresets;
@@ -68,11 +72,11 @@ static void overwritePresetsFile()
     for (const std::string& presetName : getPresetNames()) {
         Json::Value jsonPreset;
 
-        for (const const auto& [midiNumber, Sample] : getPreset(presetName).samples.asVector()) 
+        for (const auto& [midiNumber, sample] : getPreset(presetName).samples.asVector()) 
         {
             Json::Value jsonSample;
-            jsonSample["path"] = sample.filepath;
-            jsonSample["note"] = static_cast<int>(Sample.rootNote);
+            jsonSample["path"] = sample.filepath.string();
+            jsonSample["note"] = static_cast<int>(sample.rootNote);
             jsonPreset[static_cast<int>(midiNumber)] = jsonSample;
         }
 
@@ -98,7 +102,7 @@ std::vector<std::string> getPresetNames()
     for (auto const& preset_pair : __presets__)
         presetNames.push_back(preset_pair.first);
 
-    return retval;
+    return presetNames;
 }
 
 Preset& getPreset(std::string presetName)
@@ -107,14 +111,18 @@ Preset& getPreset(std::string presetName)
     return __presets__.at(presetName);
 }
 
-void savePreset(std::string& presetName, SampleSet& sampleSet) 
+void savePreset(std::string& presetName, SampleSet& samples) 
 {
-    std::string uniquePresetName { presetName };
+    std::string uniqueName { presetName };
 
-    for (int numDuplicates = 0; presetExists(uniquePresetName); numDuplicates++)
-      uniquePresetName = presetName+numDuplicates
+    for (int numDuplicates = 0; presetExists(uniqueName); numDuplicates++)
+      uniqueName = presetName + std::to_string(numDuplicates);
 
-    __presets__.emplace(presetName, Preset(uniquePresetName, sampleSet));
+    Preset preset;
+    preset.name = uniqueName;
+    preset.samples = samples;
+
+    __presets__.insert({uniqueName, preset});
 
     overwritePresetsFile();
 }
