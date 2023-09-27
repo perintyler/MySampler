@@ -1,5 +1,7 @@
 /*** Piano960 Tests | presets_test.cpp ***/
 
+#include <algorithm>
+
 #include <catch2/catch_test_macros.hpp>
 
 #include "presets.h"
@@ -7,11 +9,11 @@
 
 TEST_CASE("presets: get all preset names")
 {
-  std::vector<std::string> expectedPresetNames { "default #1", "default #2", "default #3" };
-  std::vector<std::string> actualPresetNames = getPresetNames();
+  std::vector<std::string> expected { "default #1", "default #2", "default #3" };
+  std::vector<std::string> acutal= getPresetNames();
 
-  for (const std::string& presetName : expectedPresetNames)
-    REQUIRE(actualPresetNames.count(presetName) == 1);
+  for (const std::string& presetName : expected)
+    REQUIRE(std::find(acutal.begin(), acutal.end(), presetName) != acutal.end());
 }
 
 TEST_CASE("presets: get preset")
