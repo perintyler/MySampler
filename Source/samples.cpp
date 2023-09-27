@@ -179,11 +179,11 @@ void RandomSampler::randomize(bool pitch_shift /* = true */)
             juce::BigInteger keyRange;
             keyRange.setRange(note, note+1, true);
 
-            synthesiser.addSound(
+            synthesiser.addSound(std::move(
                 juce::SynthesiserSound::Ptr(new juce::SamplerSound(
                     pathToFile, *audioReader, keyRange, rootNoteOfSample, ATTACK, RELEASE, SUSTAIN
                 ))
-            );
+            ));
         }
     }
 }
