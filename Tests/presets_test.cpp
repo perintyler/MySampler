@@ -9,7 +9,7 @@
 
 TEST_CASE("presets: get all preset names")
 {
-  std::vector<std::string> expected { "default #1", "default #2", "default #3" };
+  std::vector<std::string> expected { "default-1", "default-2", "default-3" };
   std::vector<std::string> acutal= getPresetNames();
 
   for (const std::string& presetName : expected)
