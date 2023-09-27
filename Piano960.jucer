@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="iT4mh4" name="Piano960D" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Sound Voyage"
+<JUCERPROJECT id="iT4mh4" name="Piano960" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Sound Voyager"
               companyWebsite="soundvoyager.xyz" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
               pluginVST3Category="Instrument" cppLanguageStandard="17" displaySplashScreen="1"
               pluginCode="Tyle" pluginFormats="buildAU,buildStandalone,buildVST3"
               defines="YIN_ALGO=1">
-  <MAINGROUP id="gfHjMe" name="Piano960D">
+  <MAINGROUP id="gfHjMe" name="Piano960">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="./Source">
+      <GROUP id="{F3E0D793-1346-EF5B-FBB9-CF22BEE78DEC}" name="JsonCpp">
+        <GROUP id="{68691749-F265-B79D-4834-C39A124E69AE}" name="json">
+          <FILE id="mbLdlH" name="json-forwards.h" compile="0" resource="0" file="Source/JsonCpp/json/json-forwards.h"/>
+          <FILE id="SeRQjl" name="json.h" compile="0" resource="0" file="Source/JsonCpp/json/json.h"/>
+        </GROUP>
+        <FILE id="l7I2hd" name="jsoncpp.cpp" compile="1" resource="0" file="Source/JsonCpp/jsoncpp.cpp"/>
+      </GROUP>
       <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch">
         <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch/crepe.cpp"/>
         <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch/crepe.h"/>
