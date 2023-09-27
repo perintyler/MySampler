@@ -15,16 +15,16 @@ const float PLUGIN_HEIGHT = 250.0;
 
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
-    , synthProcessor (audioProcessor)
+    , processor (audioProcessor)
     , view (std::make_unique<MainView>(
-        synthProcessor.getKeyboardState(),
-        [this]() { synthProcessor.randomizeSamples(); }, // randomize button click callback
-        [this]() { synthProcessor.randomizeSamples(); }, // save button click callback
+        processor.getKeyboardState(),
+        [this]() { processor.sampler.randomize(); }, // randomize button click callback
+        [this]() { processor.sampler.randomize(); }, // save button click callback
         [this](Note note) {                              // lock key button click callback
-            if (this->synthProcessor.isKeyLocked(note)) {
-                this->synthProcessor.unlockKey(note);
+            if (this->processor.sampler.isKeyLocked(note)) {
+                this->processor.sampler.unlockKey(note);
             } else {
-                this->synthProcessor.lockKey(note);
+                this->processor.sampler.lockKey(note);
             }
         }
     ))

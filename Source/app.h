@@ -32,7 +32,7 @@ public:
     
 private:
 
-    AudioProcessor& synthProcessor;
+    AudioProcessor& processor;
     
     std::unique_ptr<MainView> view;
 
