@@ -19,24 +19,33 @@ endif()
 
 set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
-# install samples
+message("installing all Piano960 samples")
+
 install(
    DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
    DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-# install crepe pitch detection models
+message("installing crepe pitch detection model")
+
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-# install spice pitch detection model
+message("installing spice pitch detection model")
+
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
+message("installing presets")
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/presets.json
+  DESTINATION ${PIANO960_INSTALLATION_DIR}
+)
 
 # ============= Define Pre-Compiler Variables ===============
 
