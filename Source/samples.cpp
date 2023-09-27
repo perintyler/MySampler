@@ -59,23 +59,23 @@ void validateSample(juce::File& sample, juce::String pathToFile)
 
 // --------------------------------
 
-Sample SampleSet::get(MidiNote note) const 
+Sample SampleSet::get(Note note) const 
 {
     return samples.at(note);
 }
 
-void SampleSet::set(MidiNote key, std::filesystem::path filepath, MidiNumber rootNote)
+void SampleSet::set(Note key, std::filesystem::path filepath, Note rootNote)
 {
     std::string sampleName = filepath.stem().string();
     samples.insert(key, Sample(sampleName, filepath, rootNote));
 }
 
-std::vector<std::pair<MidiNumber, Sample>> SampleSet::asVector()
+std::vector<std::pair<Note, Sample>> SampleSet::asVector()
 {
-    return std::vector<std::pair<MidiNumber, Sample>>(begin(), end());
+    return std::vector<std::pair<Note, Sample>>(begin(), end());
 }
 
-RandomSampler::RandomSampler(MidiNumber firstNote, MidiNumber lastNote)
+RandomSampler::RandomSampler(Note firstNote, Note lastNote)
     : synthesiser()
     , firstNote(firstNote)
     , lastNote(lastNote)
@@ -87,13 +87,13 @@ RandomSampler::RandomSampler(MidiNumber firstNote, MidiNumber lastNote)
         synthesiser.addVoice(new juce::SamplerVoice());
 }
 
-bool RandomSampler::isKeyLocked(MidiNumber note) 
+bool RandomSampler::isKeyLocked(Note note) 
 {
     jassert(lockedKeys.count(note));
     return lockedKeys.at(note) == true;
 }
 
-void RandomSampler::lockKey(MidiNumber note)
+void RandomSampler::lockKey(Note note)
 {
     jassert(lockedKeys.count(note));
     lockedKeys[note] = true;

@@ -18,21 +18,21 @@ struct Sample
 {
   std::string name;
   std::filesystem::path filepath;
-  MidiNumber rootNote;
+  Note rootNote;
 }
 
 /***
  ** A collection of audio files used by a `RandomSampler`. Each sample corresponds 
  ** to a midi note.
  ***/
-class SampleSet: private std::unordered_map<MidiNote, Sample>
+class SampleSet: private std::unordered_map<Note, Sample>
 {
 public:
-  Sample get(MidiNote note) const;
+  Sample get(Note note) const;
 
-  void set(MidiNote key, std::filesystem::path, MidiNumber rootNote);
+  void set(Note key, std::filesystem::path, Note rootNote);
 
-  std::vector<std::pair<MidiNumber, Sample>> asVector();
+  std::vector<std::pair<Note, Sample>> asVector();
 }
 
 /***
@@ -47,23 +47,23 @@ class RandomSampler
 public:
     juce::Synthesiser synthesiser; // make this private
 
-    RandomSampler(MidiNumber firstNote, MidiNumber lastNote);
+    RandomSampler(Note firstNote, Note lastNote);
 
-    bool isKeyLocked(MidiNumber);
+    bool isKeyLocked(Note);
 
-    void lockKey(MidiNumber);
+    void lockKey(Note);
 
-    void unlockKey(MidiNumber);
+    void unlockKey(Note);
 
-    Sample& getSample(MidiNumber) const;
+    Sample& getSample(Note) const;
 
     void randomize();
 
     bool isReady();
 
 private:
-    MidiNumber firstNote;
-    MidiNumber lastNote;
+    Note firstNote;
+    Note lastNote;
     SampleSet samples {};
     std::map<Note, bool> lockedKeys {};
 }
