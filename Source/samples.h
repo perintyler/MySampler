@@ -22,6 +22,8 @@ struct Sample
   std::string name;
   std::filesystem::path filepath;
   Note rootNote;
+
+  int id() const { return static_cast<int>(std::filesystem::hash_value(filepath)); }
 };
 
 /***
@@ -37,6 +39,8 @@ public:
   const Sample& get(Note) const;
 
   void set(Note key, std::filesystem::path, Note rootNote);
+
+  int length() const;
 
   std::vector<std::pair<Note, const Sample&>> asVector() const;
 };
@@ -65,9 +69,9 @@ public:
 
     const Sample& getSample(Note) const;
 
-    void randomize();
+    void randomize(bool pitch_shift = true);
 
-    bool isReady();
+    bool isReady() const;
 
 private:
     Note firstNote;
