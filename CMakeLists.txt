@@ -19,28 +19,28 @@ endif()
 
 set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME}")
 
-message("installing all Piano960 samples")
+message("installing Piano960 samples to ${PIANO960_INSTALLATION_DIR}/samples")
 
 install(
    DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
    DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-message("installing crepe pitch detection model")
+message("installing CREPE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/crepe-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-message("installing spice pitch detection model")
+message("installing SPICE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/spice-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
-message("installing presets")
+message("installing presets to ${PIANO960_INSTALLATION_DIR}/presets.json")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/presets.json
@@ -64,6 +64,17 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
+
+
+# ============= Setup Pitch Detection Cache ===============
+
+
+set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
+
+if(NOT EXISTS "${PITCH_DETECTION_CACHE_FILE}")
+    message("creating empty pitch detection cache file: ${PITCH_DETECTION_CACHE_FILE}")
+    file(WRITE "${PITCH_DETECTION_CACHE_FILE}" "{}")
+endif()
 
 
 # =============== Build JUCE framework =================
