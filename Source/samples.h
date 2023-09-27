@@ -8,6 +8,7 @@
 #pragma once
 
 #include <memory>
+#include <filesystem>
 
 #include "pitch/notes.h"
 
@@ -19,7 +20,7 @@ struct Sample
   std::string name;
   std::filesystem::path filepath;
   Note rootNote;
-}
+};
 
 /***
  ** A collection of audio files used by a `RandomSampler`. Each sample corresponds 
@@ -33,7 +34,7 @@ public:
   void set(Note key, std::filesystem::path, Note rootNote);
 
   std::vector<std::pair<Note, Sample>> asVector();
-}
+};
 
 /***
  ** A synthesizer that generates a sound source for each key using a different 
@@ -49,7 +50,9 @@ public:
 
     RandomSampler(Note firstNote, Note lastNote);
 
-    bool isKeyLocked(Note);
+    RandomSampler();
+
+    bool isKeyLocked(Note) const;
 
     void lockKey(Note);
 
@@ -66,4 +69,4 @@ private:
     Note lastNote;
     SampleSet samples {};
     std::map<Note, bool> lockedKeys {};
-}
+};

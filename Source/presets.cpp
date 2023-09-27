@@ -17,7 +17,7 @@
  * }
  ***/
 
-#include <assert>
+#include <assert.h>
 #include <iostream>
 #include <fstream>
 

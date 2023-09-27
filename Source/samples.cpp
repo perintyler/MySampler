@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <string>
-#include <filesystem>
 #include <random>
 
 #include "samples.h"
@@ -87,7 +86,16 @@ RandomSampler::RandomSampler(Note firstNote, Note lastNote)
         synthesiser.addVoice(new juce::SamplerVoice());
 }
 
-bool RandomSampler::isKeyLocked(Note note) 
+RandomSampler::RandomSampler() 
+    : RandomSampler(FIRST_MIDI_NOTE, LAST_MIDI_NOTE)
+{}
+
+Sampler& getSample(Note note) const
+{
+    return samples.get(note);
+}
+
+bool RandomSampler::isKeyLocked(Note note) const
 {
     jassert(lockedKeys.count(note));
     return lockedKeys.at(note) == true;

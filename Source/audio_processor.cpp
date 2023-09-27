@@ -67,11 +67,11 @@ void AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
 void AudioProcessor::logSamples() const
 {
     for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
-        juce::String sampleName = sampleNames.at(note);
-        if (isKeyLocked(note)) {
-            logs::newGoodSample(sampleName);
+        const Sample& sample = sampler.getSample(note);
+        if (sampler.isKeyLocked(note)) {
+            logs::newGoodSample(sample.name);
         } else {
-            logs::newBadSample(sampleName);
+            logs::newBadSample(sample.name);
         }
     }
 }
