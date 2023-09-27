@@ -23,3 +23,15 @@ TEST_CASE("RandomSampler: locking / unlocking keys")
   }
 }
 
+TEST_CASE("RandomSampler: get sample")
+{
+  RandomSampler sampler(C4, C4+1);
+  Sample& sample = sampler.getSample(C4);
+  REQUIRE(!sample.name.empty());
+  REQUIRE(sample.filePath.exists());
+  REQUIRE(sample.rootNote > B0);
+  REQUIRE(sample.rootNote < G8);
+}
+
+
+
