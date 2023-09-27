@@ -8,7 +8,7 @@ struct Preset
 {
     std::string name;
     SampleSet samples;
-}
+};
 
 std::vector<std::string> getPresetNames();
 
