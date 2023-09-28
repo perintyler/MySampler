@@ -18,6 +18,10 @@
               file="Source/gui/new_preset_dialog.cpp"/>
         <FILE id="Mu2Oc7" name="new_preset_dialog.h" compile="0" resource="0"
               file="Source/gui/new_preset_dialog.h"/>
+        <FILE id="VYmRwo" name="presets_dropdown_menu.cpp" compile="1" resource="0"
+              file="Source/gui/presets_dropdown_menu.cpp"/>
+        <FILE id="YlsUEk" name="presets_dropdown_menu.h" compile="0" resource="0"
+              file="Source/gui/presets_dropdown_menu.h"/>
       </GROUP>
       <FILE id="uG4Xyl" name="presets.cpp" compile="1" resource="0" file="Source/presets.cpp"/>
       <FILE id="pXXPS8" name="presets.h" compile="0" resource="0" file="Source/presets.h"/>
