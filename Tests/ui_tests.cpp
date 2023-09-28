@@ -4,8 +4,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <juce_graphics/juce_graphics.h>
 
-#include "lockable_keys.h"
-#include "main_view.h"
+#include "gui/lockable_keys.h"
+#include "gui/main_view.h"
 #include "audio_processor.h"
 #include "app.h"
 
