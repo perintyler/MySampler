@@ -11,15 +11,11 @@
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor (BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true))
-    , sampler ()
+    , sampler (FIRST_MIDI_NOTE, LAST_MIDI_NOTE)
     , keyboardState ()
     , midiCollector ()
 {
     loadPitchDetectionModel();
-
-    #ifndef TESTMODE
-    sampler.randomize();
-    #endif
 }
 
 void AudioProcessor::releaseResources()
