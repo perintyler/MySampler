@@ -4,10 +4,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <juce_graphics/juce_graphics.h>
 
-#include "gui/lockable_keys.h"
-#include "gui/main_view.h"
 #include "audio_processor.h"
 #include "app.h"
+
+#include "gui/lockable_keys.h"
+#include "gui/main_view.h"
+#include "gui/presets_dropdown_menu.h"
 
 TEST_CASE("UI Test #1: app", "[ui][app]") 
 {
@@ -28,7 +30,7 @@ TEST_CASE("UI Test #2: main view", "[ui][main_view]")
     const juce::MessageManagerLock mml;
 
     juce::MidiKeyboardState keyboardState;
-    MainView view(keyboardState, [](){}, [](){}, [](std::string){return true;}, [](Note){});
+    MainView view(keyboardState, [](){}, [](std::string){return true;}, [](Note){});
 
     SECTION("sub-components are created and visible") 
     {
@@ -72,8 +74,13 @@ TEST_CASE("UI Test #4: click randomize button", "[ui][main_view][randomize_butto
 TEST_CASE("UI Test #5: new preset dialog", "[ui][dialog][new_preset_dialog][user_input]")
 {}
 
-TEST_CASE("UI Test #6: preset dropdown", "[ui][preset_dropdown][user_input]")
-{}
+TEST_CASE("UI Test #6: presets dropdown menu", "[ui][presets_dropdown_menu][user_input]")
+{
+    juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+    const juce::MessageManagerLock mml;
+    PresetsDropdownMenu dropdown([](std::string){return true;});
+    REQUIRE(dropdown.getNumItems() == 3);
+}
 
 
 
