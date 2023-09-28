@@ -10,14 +10,6 @@
 #include "paths.h"
 #include "logs.h"
 
-#ifndef PATH_TO_PRESETS_FILE
-  #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
-#endif
-
-const std::vector<std::string> PRESET_TYPES {"default-presets", "custom-presets"};
-
-const std::vector<std::string> DEFAULT_PRESET_NAMES {"test-preset-1", "test-preset-2", "test-preset-3"};
-
 //
 // Note:
 //  Default presets are currently stored in the same JSON file as custom presets.
@@ -25,10 +17,24 @@ const std::vector<std::string> DEFAULT_PRESET_NAMES {"test-preset-1", "test-pres
 //  be embedded into the binary) 
 //
 
-// load presets from the installed presets file
-static std::unordered_map<std::string, Preset> __presets__ = []
+#ifndef PATH_TO_PRESETS_FILE
+  #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
+#endif
+
+const std::vector<std::string> DEFAULT_PRESET_NAMES {"test-preset-1", "test-preset-2", "test-preset-3"};
+
+#ifdef TESTMODE
+    const std::vector<std::string> PRESET_TYPES {"default-presets"}; // only load default presets when testing
+#else
+    const std::vector<std::string> PRESET_TYPES {"default-presets", "custom-presets"};
+#endif
+
+/**
+ * load the installed presets file into the `__presets__` map right away
+ **/
+static std::map<std::string, Preset> __presets__ = []
 {
-    std::unordered_map<std::string, Preset> presets;
+    std::map<std::string, Preset> presets;
 
     // if the presets file doesn't exist (which means the plugin wasn't 
     // installed correctly), just return the empty presets map
