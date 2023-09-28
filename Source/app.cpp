@@ -12,29 +12,35 @@ const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
 const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
 
-const float PLUGIN_HEIGHT = 250.0;
+const float PLUGIN_HEIGHT = 500.0;
 
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
     , processor (audioProcessor)
-    , view (std::make_unique<MainView>(
-        processor.getKeyboardState(),
-        [&processor = processor]() { processor.sampler.randomize(); }, // randomize button click callback
-        [&processor = processor]() { processor.sampler.randomize(); }, // save button click callback
-
-        // save presets
-        [&processor = processor](std::string presetName) 
+    , view (std::make_unique<MainView>(processor.getKeyboardState(),
+    
+        // called when the randomize button is clicked
+        [&processor = processor]() 
+        { 
+            processor.sampler.randomize(); 
+        },
+    
+        // called when the user clicks the save button on the new preset dialog
+        [&processor=processor, &view=view](std::string presetName) 
         {
             const SampleSet lockedSamples = processor.sampler.getLockedSamples();
-
-            if (lockedSamples.length() == 0)
+    
+            if (lockedSamples.length() == 0) {
                 return false;
-
-            savePreset(presetName, processor.sampler.getLockedSamples()); 
-            return true;
+            } else {
+                savePreset(presetName, processor.sampler.getLockedSamples());
+                view->refresh();
+                return true;
+            }
         },
-
-        [&processor = processor](Note note) {                              // lock key button click callback
+    
+        // called when the lock button on a key is clicked/unclicked (i.e. locked/unlocked)
+        [&processor = processor](Note note) {
             if (processor.sampler.isKeyLocked(note)) {
                 processor.sampler.unlockKey(note);
             } else {
@@ -52,7 +58,7 @@ App::App(AudioProcessor& audioProcessor)
     processor.randomizeSamples();
 }
 
-/** Render the UI
+/** Renders the UI
  **/
 void App::paint(juce::Graphics& g)
 {
@@ -60,7 +66,7 @@ void App::paint(juce::Graphics& g)
     g.setColour(BACKGROUND_COLOR);
 }
 
-/** Layout subcomponents
+/** Lays out subcomponents
  **/
 void App::resized()
 {
