@@ -1,6 +1,6 @@
 /*** Piano960: pitch/yin.cpp ***/
 
-#include <cassert>
+#include <assert.h>
 
 #include "yin.h"
 #include "exceptions.h"
@@ -55,7 +55,6 @@ float convertToHz(float positionOfQuadraticPeak, int sampleRate)
  **/
 float detectPitchWithYIN(const float* signal, int bufferSize, int startSample, int sampleRate)
 {
-//    assert(bufferSize > startSample);
     int period = 0;
     float delta = 0.0;
     float rollingSum = 0.0;
@@ -102,18 +101,24 @@ float detectPitchWithYIN(const float* signal, int bufferSize, int startSample, i
 
 float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
 {
-    int bufferSize = (int) std::min(0.10*sampleRate, 0.50*buffer.getNumSamples());
-    const float* signal = buffer.getReadPointer(0);
-
-    float frequencyOfFirstHalf = detectPitchWithYIN(signal, bufferSize, 0, sampleRate);
-    float frequencyOfSecondHalf = detectPitchWithYIN(signal, bufferSize, bufferSize, sampleRate);
+    int frameSize = std::min((int)(0.10*sampleRate), (int) (0.50*buffer.getNumSamples()));
     
-    if (    !isValidNote(frequencyOfFirstHalf)
-         || !isValidNote(frequencyOfSecondHalf)
-         ||  getSemitone(frequencyOfFirstHalf) != getSemitone(frequencyOfSecondHalf)
-    ) {
-        throw FrequencyNotDetectedException();
-    }
+    std::vector<float> channelFrequencies;
+    channelFrequencies.reserve(buffer.getNumChannels());
+    
+    for (int channel = 0; channel < buffer.getNumChannels(); channel++) {
+        float frequency = detectPitchWithYIN(buffer.getReadPointer(0), frameSize, 0, sampleRate);
+        
+        if (!isValidNote(frequency))
+            throw FrequencyNotDetectedException();
 
-    return (frequencyOfFirstHalf + frequencyOfSecondHalf) / 2.0;
+        channelFrequencies.push_back(frequency);
+    }
+    
+    int fundementalFrequency = std::reduce(channelFrequencies.begin(), channelFrequencies.end()) / buffer.getNumChannels();
+    
+    if (!isValidNote(fundementalFrequency))
+        throw FrequencyNotDetectedException();
+    
+    return fundementalFrequency;
 }
