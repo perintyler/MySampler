@@ -1,4 +1,4 @@
-/*** Piano960 Tests | samples_tests.cpp ***/
+/*** Piano960 Tests | sampler_tests.cpp ***/
 
 #include <filesystem>
 
@@ -7,7 +7,7 @@
 #include "samples.h"
 #include "pitch_detection/notes.h"
 
-TEST_CASE("RandomSampler Test #1: keys start off as unlocked", "[samples]")
+TEST_CASE("RandomSampler Test #1: keys start off as unlocked", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C5);
 
@@ -15,7 +15,7 @@ TEST_CASE("RandomSampler Test #1: keys start off as unlocked", "[samples]")
     REQUIRE(!sampler.isKeyLocked(note));
 }
 
-TEST_CASE("RandomSampler Test #2: locking / unlocking keys", "[samples]")
+TEST_CASE("RandomSampler Test #2: locking / unlocking keys", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C5);
 
@@ -27,7 +27,7 @@ TEST_CASE("RandomSampler Test #2: locking / unlocking keys", "[samples]")
   }
 }
 
-TEST_CASE("RandomSampler Test #3: get sample", "[samples]")
+TEST_CASE("RandomSampler Test #3: get sample", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C4+1);
   sampler.randomize();
@@ -38,7 +38,7 @@ TEST_CASE("RandomSampler Test #3: get sample", "[samples]")
   REQUIRE(sample.rootNote < G8);
 }
 
-TEST_CASE("RandomSampler Test #4: randomize samples", "[samples]")
+TEST_CASE("RandomSampler Test #4: randomize samples", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C5);
   sampler.randomize(false);
