@@ -1,4 +1,4 @@
-/*** Piano960 | ui_tests.cpp ***/
+/*** Piano960 Tests | ui_tests.cpp ***/
 
 #include <catch2/catch_test_macros.hpp>
 #include <juce_graphics/juce_graphics.h>
@@ -64,3 +64,15 @@ TEST_CASE("UI Test #3: lockable keys", "[ui][lockable_keys]")
     REQUIRE(keyboard.getNumChildComponents() > numKeys);
     // TODO: require that each lock button is on the key with the same index 
 }
+
+TEST_CASE("UI Test #4: click randomize button", "[ui][main_view][randomize_button][user_input]")
+{}
+
+TEST_CASE("UI Test #5: new preset dialog", "[ui][dialog][new_preset_dialog][user_input]")
+{}
+
+TEST_CASE("UI Test #6: preset dropdown", "[ui][preset_dropdown][user_input]")
+{}
+
+
+
