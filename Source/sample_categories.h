@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <string>
+
 enum SampleCategory: int {
     Piano = 0,
     Cello,
@@ -25,3 +27,7 @@ enum SampleCategory: int {
     Flute,
     Keyboard
 };
+
+std::string sampleCategoryToString(SampleCategory);
+
+SampleCategory getSampleCategory(std::string);
