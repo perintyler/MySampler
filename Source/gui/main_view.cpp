@@ -1,7 +1,9 @@
+/*** Piano960 | gui/main_view.cpp ***/
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "main_view.h"
 #include "new_preset_dialog.h"
+#include "presets_dropdown_menu.h"
 
 const bool AUTO_FOCUS = false;
 
@@ -16,21 +18,24 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
 MainView::MainView(juce::MidiKeyboardState&  keyboardState,
-                   std::function<void()>     onRandomizeButtonClicked, 
-                   std::function<void()>     onSaveButtonClicked,
-                   SavePresetCallback        savePreset,
+                   std::function<void()>     randomizeSamples, 
+                   SavePresetCallback        createNewPreset,
                    OnKeyLockStateChange      onLockButtonClicked) 
-  : randomizeButton (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
-  , saveButton      (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
-  , keyboard        (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
+  : randomizeButton    (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
+  , saveButton         (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
+  , keyboard           (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
+  , presetDropdownMenu (std::make_unique<PresetsDropdownMenu>(createNewPreset))
 {
-    randomizeButton->onClick = onRandomizeButtonClicked;
+    randomizeButton->onClick = randomizeSamples;
 
-    saveButton->onClick = [savePreset](){ NewPresetDialog::show(savePreset); };
+    saveButton->onClick = [createNewPreset, &presetDropdownMenu=presetDropdownMenu](){ 
+        NewPresetDialog::show(createNewPreset);
+    };
 
     addAndMakeVisible(saveButton.get());
     addAndMakeVisible(randomizeButton.get());
     addAndMakeVisible(keyboard.get());
+    addAndMakeVisible(presetDropdownMenu.get());
 
     // component IDs are only used for testing
     setComponentID("app");
@@ -50,29 +55,45 @@ float MainView::getMinimumWidth() const
     return keyboard->getTotalKeyboardWidth();
 }
 
+void MainView::refresh()
+{
+    presetDropdownMenu->refresh();
+}
+
 /** Set bounds of randomize button, save button, and keyboard 
  */
 void MainView::resized()
 {
+    //
+    // TODO:
+    //  get rid of all these margin constants and apply the margins when adding MainView to App
+    //
+
+    int presetsMenuXCoord = HORIZONTAL_MARGIN_SIZE;
+    int presetsMenuYCoord = VERTICAL_MARGIN_SIZE;
+    int presetsMenuWidth = 100;
+    int presetsMenuHeight = 30;
+
+    int keyboardXCoord = HORIZONTAL_MARGIN_SIZE;
+    int keyboardYCoord = VERTICAL_MARGIN_SIZE + presetsMenuHeight + 5;
     int keyboardWidth = getMinimumWidth();
     int keyboardHeight = 200;
 
-    int randomizeButtonHeight = 30;
-    int randomizeButtonWidth = 0.8*keyboardWidth;
-    
-    int saveButtonHeight = randomizeButtonHeight;
-    int saveButtonWidth = 0.2*keyboardWidth - 5;
-    
-    int keyboardXCoord = HORIZONTAL_MARGIN_SIZE;
-    int keyboardYCoord = VERTICAL_MARGIN_SIZE + randomizeButtonHeight + 5;
-    
+    int randomizeButtonHeight = 40;
+    int randomizeButtonWidth = 0.5*keyboardWidth;
     int randomizeButtonXCoord = HORIZONTAL_MARGIN_SIZE;
-    int randomizeButtonYCoord = VERTICAL_MARGIN_SIZE;
+    int randomizeButtonYCoord = keyboardYCoord + keyboardHeight + 5;
 
-    int saveButtonXCoord = HORIZONTAL_MARGIN_SIZE + randomizeButtonWidth + 5;
-    int saveButtonYCoord = VERTICAL_MARGIN_SIZE;
+    int saveButtonXCoord = randomizeButtonXCoord + randomizeButtonWidth + 5;
+    int saveButtonYCoord = randomizeButtonYCoord;
+    int saveButtonHeight = randomizeButtonHeight;
+    int saveButtonWidth = 0.5*keyboardWidth - 5;
+
+    std::cout << "randomize: " << randomizeButtonXCoord << "," << randomizeButtonYCoord << std::endl;
+    std::cout << "save: " << saveButtonXCoord << "," << saveButtonYCoord << std::endl;
 
     keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
+    presetDropdownMenu->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
     randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
     saveButton->setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
 }

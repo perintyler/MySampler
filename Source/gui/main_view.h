@@ -1,4 +1,4 @@
-/*** Piano960 | main_view.h ***/
+/*** Piano960 | gui/main_view.h ***/
 
 #pragma once
 
@@ -8,15 +8,15 @@
 
 #include "lockable_keys.h"
 #include "new_preset_dialog.h"
+#include "presets_dropdown_menu.h"
 
 class MainView : public juce::Component, private juce::Timer {
 public:
     
     MainView(
         juce::MidiKeyboardState&  keyboardState,
-        std::function<void()>     onRandomizeButtonClicked, 
-        std::function<void()>     onSaveButtonClicked,
-        SavePresetCallback        savePreset,
+        std::function<void()>     randomizeSamples, 
+        SavePresetCallback        createNewPreset,
         OnKeyLockStateChange      onLockButtonClicked);
     
     ~MainView() override = default;
@@ -25,15 +25,22 @@ public:
 
     float getMinimumWidth() const;
 
+    void refresh();
+
 private:
 
     void timerCallback() override;
 
+    /** TODO
+     **   I don't think these members need to be unique_ptr.
+     **/
     std::unique_ptr<juce::TextButton> randomizeButton;
     
     std::unique_ptr<juce::TextButton> saveButton;
 
     std::unique_ptr<LockableKeys> keyboard;
+
+    std::unique_ptr<PresetsDropdownMenu> presetDropdownMenu;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainView)
 };
