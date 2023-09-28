@@ -6,6 +6,7 @@
 #include <functional>
 
 #include "app.h"
+#include "presets.h"
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
@@ -18,13 +19,26 @@ App::App(AudioProcessor& audioProcessor)
     , processor (audioProcessor)
     , view (std::make_unique<MainView>(
         processor.getKeyboardState(),
-        [this]() { processor.sampler.randomize(); }, // randomize button click callback
-        [this]() { processor.sampler.randomize(); }, // save button click callback
-        [this](Note note) {                              // lock key button click callback
-            if (this->processor.sampler.isKeyLocked(note)) {
-                this->processor.sampler.unlockKey(note);
+        [&processor = processor]() { processor.sampler.randomize(); }, // randomize button click callback
+        [&processor = processor]() { processor.sampler.randomize(); }, // save button click callback
+
+        // save presets
+        [&processor = processor](std::string presetName) 
+        {
+            const SampleSet lockedSamples = processor.sampler.getLockedSamples();
+
+            if (lockedSamples.length() == 0)
+                return false;
+
+            savePreset(presetName, processor.sampler.getLockedSamples()); 
+            return true;
+        },
+
+        [&processor = processor](Note note) {                              // lock key button click callback
+            if (processor.sampler.isKeyLocked(note)) {
+                processor.sampler.unlockKey(note);
             } else {
-                this->processor.sampler.lockKey(note);
+                processor.sampler.lockKey(note);
             }
         }
     ))
@@ -34,6 +48,8 @@ App::App(AudioProcessor& audioProcessor)
     addAndMakeVisible(view.get());
 
     setResizable(false, false);
+    
+    processor.randomizeSamples();
 }
 
 /** Render the UI
