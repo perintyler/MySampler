@@ -2,10 +2,16 @@ cmake_minimum_required(VERSION 3.16)
 
 project(Source)
 
+if(DEFINED PRODUCTION)
+    set(PRODUCT_NAME "Piano960")
+else()
+    set(PRODUCT_NAME "Piano960-Development")
+endif()
+
 juce_add_plugin(Piano960Plugin
     VERSION 0.0.1
     FORMATS AU VST3
-    PRODUCT_NAME "Piano960-sep27"
+    PRODUCT_NAME PRODUCT_NAME
     COMPANY_NAME "Sound Voyager"
     COMPANY_WEBSITE "soundvoyager.xyz"
     PLUGIN_MANUFACTURER_CODE Svyg # A four-character manufacturer id with at least one upper-case character.
@@ -15,7 +21,7 @@ juce_add_plugin(Piano960Plugin
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS TRUE # Does the editor need keyboard focus?
     VST3_CATEGORIES Instrument Sampler
-    COPY_PLUGIN_AFTER_BUILD TRUE # copy to default plugin location for IOS
+    COPY_PLUGIN_AFTER_BUILD TRUE # TODO: only set this to true for apple OS
 )
 
 juce_add_binary_data(Piano960PluginBinaryData SOURCES
