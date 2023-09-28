@@ -25,7 +25,8 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
     ../Assets/icons/unlocked-white.png
 )
 
-file(GLOB Piano960Plugin_SOURCES "*.h" "*.cpp" "pitch/*.h" "pitch/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
+file(GLOB Piano960Plugin_SOURCES 
+    "*.h" "*.cpp" "pitch/*.h" "pitch/*.cpp" "gui/*.h" "gui/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
 
 if(PITCH_DETECTION STREQUAL "YIN")
     list(APPEND Piano960Plugin_SOURCES "pitch/yin.h")
