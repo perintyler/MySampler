@@ -1,5 +1,7 @@
 #include <catch2/catch_session.hpp>
 
+#define TESTMODE
+
 int main(int argc, char* argv[])
 {
   Catch::Session session;
