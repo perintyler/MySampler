@@ -13,7 +13,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 #include "JsonCpp/json/json.h"
 
-#include "pitch/crepe.h"
+#include "pitch_detection/crepe.h"
 #include "config.h"
 #include "paths.h"
 

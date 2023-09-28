@@ -1,4 +1,4 @@
-/*** Piano960 | pitch/exceptions.h ***/
+/*** Piano960 | pitch_detection/exceptions.h ***/
 
 #pragma once
 

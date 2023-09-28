@@ -1,4 +1,4 @@
-/*** pitch/semitones.cpp ***/
+/*** pitch_detection/semitones.cpp ***/
 
 #include <assert.h>
 

@@ -12,7 +12,7 @@
 #include <filesystem>
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "pitch/notes.h"
+#include "pitch_detection/notes.h"
 
 /***
  ** A locally installed audio file

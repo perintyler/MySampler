@@ -32,20 +32,20 @@
         </GROUP>
         <FILE id="l7I2hd" name="jsoncpp.cpp" compile="1" resource="0" file="Source/JsonCpp/jsoncpp.cpp"/>
       </GROUP>
-      <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch">
-        <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch/crepe.cpp"/>
-        <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch/crepe.h"/>
-        <FILE id="hQCut2" name="exceptions.h" compile="0" resource="0" file="./Source/pitch/exceptions.h"/>
-        <FILE id="IoCkXB" name="notes.cpp" compile="1" resource="0" file="Source/pitch/notes.cpp"/>
-        <FILE id="bqbWDF" name="notes.h" compile="0" resource="0" file="Source/pitch/notes.h"/>
-        <FILE id="hDwQbf" name="pitch.cpp" compile="1" resource="0" file="Source/pitch/pitch.cpp"/>
-        <FILE id="yqotOS" name="pitch.h" compile="0" resource="0" file="./Source/pitch/pitch.h"/>
-        <FILE id="H0ELnb" name="semitones.cpp" compile="1" resource="0" file="Source/pitch/semitones.cpp"/>
-        <FILE id="ayuPio" name="semitones.h" compile="0" resource="0" file="Source/pitch/semitones.h"/>
-        <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch/spice.cpp"/>
-        <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch/spice.h"/>
-        <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch/yin.cpp"/>
-        <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch/yin.h"/>
+      <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch_detection">
+        <FILE id="jqZagE" name="crepe.cpp" compile="1" resource="0" file="./Source/pitch_detection/crepe.cpp"/>
+        <FILE id="rvEHka" name="crepe.h" compile="0" resource="0" file="./Source/pitch_detection/crepe.h"/>
+        <FILE id="hQCut2" name="exceptions.h" compile="0" resource="0" file="./Source/pitch_detection/exceptions.h"/>
+        <FILE id="IoCkXB" name="notes.cpp" compile="1" resource="0" file="Source/pitch_detection/notes.cpp"/>
+        <FILE id="bqbWDF" name="notes.h" compile="0" resource="0" file="Source/pitch_detection/notes.h"/>
+        <FILE id="hDwQbf" name="pitch.cpp" compile="1" resource="0" file="Source/pitch_detection/pitch.cpp"/>
+        <FILE id="yqotOS" name="pitch.h" compile="0" resource="0" file="./Source/pitch_detection/pitch.h"/>
+        <FILE id="H0ELnb" name="semitones.cpp" compile="1" resource="0" file="Source/pitch_detection/semitones.cpp"/>
+        <FILE id="ayuPio" name="semitones.h" compile="0" resource="0" file="Source/pitch_detection/semitones.h"/>
+        <FILE id="ue9zVK" name="spice.cpp" compile="1" resource="0" file="./Source/pitch_detection/spice.cpp"/>
+        <FILE id="DejzDD" name="spice.h" compile="0" resource="0" file="./Source/pitch_detection/spice.h"/>
+        <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch_detection/yin.cpp"/>
+        <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch_detection/yin.h"/>
       </GROUP>
       <FILE id="O45mgK" name="app.h" compile="0" resource="0" file="./Source/app.h"/>
       <FILE id="Buusbf" name="app.cpp" compile="1" resource="0" file="./Source/app.cpp"/>

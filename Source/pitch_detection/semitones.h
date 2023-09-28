@@ -1,4 +1,4 @@
-/*** pitch/semitones.h ***/
+/*** pitch_detection/semitones.h ***/
 
 #pragma once
 

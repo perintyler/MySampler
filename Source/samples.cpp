@@ -9,7 +9,7 @@
 #include "logs.h"
 #include "paths.h"
 #include "config.h"
-#include "pitch/pitch.h"
+#include "pitch_detection/pitch.h"
 
 #include <juce_audio_formats/juce_audio_formats.h>
 

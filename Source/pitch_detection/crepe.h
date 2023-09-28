@@ -1,4 +1,4 @@
-/*** Piano960 | pitch/crepe.h ***/
+/*** Piano960 | pitch_detection/crepe.h ***/
 
 #pragma once
 

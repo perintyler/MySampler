@@ -1,4 +1,4 @@
-/*** Piano960: pitch/yin.cpp ***/
+/*** Piano960: pitch_detection/yin.cpp ***/
 
 #include <assert.h>
 

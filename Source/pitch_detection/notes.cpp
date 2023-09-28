@@ -1,4 +1,4 @@
-/*** Piano960 | pitch/notes.cpp ***/
+/*** Piano960 | pitch_detection/notes.cpp ***/
 
 #include <vector>
 #include <algorithm>

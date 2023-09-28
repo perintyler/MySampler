@@ -7,7 +7,7 @@
 #include "audio_processor.h"
 #include "app.h"
 #include "logs.h"
-#include "pitch/pitch.h"
+#include "pitch_detection/pitch.h"
 
 AudioProcessor::AudioProcessor()
     : juce::AudioProcessor (BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true))

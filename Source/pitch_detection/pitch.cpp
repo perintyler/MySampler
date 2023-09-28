@@ -1,4 +1,4 @@
-/*** pitch/pitch.cpp ***/
+/*** pitch_detection/pitch.cpp ***/
 
 #include <iostream>
 #include <filesystem>

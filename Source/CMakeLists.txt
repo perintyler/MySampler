@@ -32,17 +32,17 @@ juce_add_binary_data(Piano960PluginBinaryData SOURCES
 )
 
 file(GLOB Piano960Plugin_SOURCES 
-    "*.h" "*.cpp" "pitch/*.h" "pitch/*.cpp" "gui/*.h" "gui/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
+    "*.h" "*.cpp" "pitch_detection/*.h" "pitch_detection/*.cpp" "gui/*.h" "gui/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
 
 if(PITCH_DETECTION STREQUAL "YIN")
-    list(APPEND Piano960Plugin_SOURCES "pitch/yin.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch/yin.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/yin.cpp")
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-    list(APPEND Piano960Plugin_SOURCES "pitch/spice.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch/spice.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/spice.cpp")
 else()
-    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.h")
-    list(APPEND Piano960Plugin_SOURCES "pitch/crepe.cpp")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.h")
+    list(APPEND Piano960Plugin_SOURCES "pitch_detection/crepe.cpp")
 endif()
 
 include(CMakePrintHelpers)

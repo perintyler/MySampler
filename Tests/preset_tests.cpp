@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "presets.h"
-#include "pitch/notes.h"
+#include "pitch_detection/notes.h"
 
 TEST_CASE("Preset Test #1: get all preset names", "[presets]")
 {

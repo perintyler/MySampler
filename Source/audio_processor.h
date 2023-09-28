@@ -15,7 +15,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "pitch/pitch.h"
+#include "pitch_detection/pitch.h"
 #include "samples.h"
 #include "logs.h"
 #include "config.h"

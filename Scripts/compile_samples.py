@@ -19,6 +19,8 @@ import re
 
 NUM_SAMPLES = 500 # TODO: make this a command line argument
 
+NUM_SAMPLES_PER_CATEGORY = 50
+
 PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
 
 PATH_TO_LOG_FILE = PATH_TO_PIANO960_REPO.joinpath('sample-log.json').resolve()

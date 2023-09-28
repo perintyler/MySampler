@@ -10,7 +10,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
 
-#include "pitch/pitch.h"
+#include "pitch_detection/pitch.h"
 #include "paths.h"
 
 #define NO_PITCH_DETECTION_CACHE
