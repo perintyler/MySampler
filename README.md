@@ -90,7 +90,7 @@ Using YIN pitch detection algorithm.
 All tests passed (77 assertions in 32 test cases)
 ```
 
->>> The pitch detection tests are quite slow, but you can use a `-tf` option to exclude the slow tests.
+>>> The pitch detection tests are relatively slow, but you can use a `-tf` option to exclude the slow tests.
 
 ## Xcode Integration
 
@@ -112,7 +112,6 @@ There's a bunch of sample manipulation scripts in the `Scripts` directory:
 - `compile_test_data.py`: this is a convenience script for finding/naming/saving audio files that can be used for unit tests
 - `trim_samples.py`: this script trims every installed sample to a fixed length
 - `normalize_samples`: this script makes sure that the volume levels of each installed sample is about the same
-
 
 ## Pitch Detection
 
@@ -144,4 +143,6 @@ The Crepe Pitch Detection Model seems to give the fastest and most accurate resu
 
 NOTE: WIP
 
+## Presets
 
+Presets allow users to quickly load keyboard configurations from a previously curated sample set. Piano960 provides default presets that are bundled with the plugin by default, but users can also save their own presets to be re-loaded later on. Presets are saved in a JSON file installed to the `include` directory, so they will persist across plugin uses.  
