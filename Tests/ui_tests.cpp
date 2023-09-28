@@ -1,5 +1,6 @@
 /*** Piano960 Tests | ui_tests.cpp ***/
 
+#include <string>
 #include <catch2/catch_test_macros.hpp>
 #include <juce_graphics/juce_graphics.h>
 
@@ -27,7 +28,7 @@ TEST_CASE("UI Test #2: main view", "[ui][main_view]")
     const juce::MessageManagerLock mml;
 
     juce::MidiKeyboardState keyboardState;
-    MainView view(keyboardState, [](){}, [](){}, [](Note){});
+    MainView view(keyboardState, [](){}, [](){}, [](std::string){return true;}, [](Note){});
 
     SECTION("sub-components are created and visible") 
     {

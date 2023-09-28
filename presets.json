@@ -1,12 +1,191 @@
 {
-  "default-1": {
-    "23": "183.wav",
-    "24": "45.wav"
-  },
-  "default-2": {
-    "42": "92.wav"
-  },
-  "default-3": {
-    "50": "63.wav"
-  }
+  "test-preset-1" : 
+  [
+    {
+      "assignedKey" : 42,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav"
+    },
+    {
+      "assignedKey" : 52,
+      "detectedNote" : 65,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav"
+    },
+    {
+      "assignedKey" : 54,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/oneshots-from-songs-by-allstar2x.Juice Wrld - Armed & Dangerous Lead.wav"
+    },
+    {
+      "assignedKey" : 58,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/oneshots-from-songs-by-allstar2x.Kodak, French Montana - Lockjaw VO (90BPM).wav"
+    },
+    {
+      "assignedKey" : 59,
+      "detectedNote" : 79,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.slur (m) G5.wav"
+    },
+    {
+      "assignedKey" : 60,
+      "detectedNote" : 26,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Bell/oneshots-from-songs-by-allstar2x.Destroy Lonely - Mud Bell Layer.wav"
+    },
+    {
+      "assignedKey" : 83,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/oneshots-from-songs-by-allstar2x.Lucki - 2019 Pad.wav"
+    },
+    {
+      "assignedKey" : 61,
+      "detectedNote" : 82,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.FLUTE A#5.wav"
+    },
+    {
+      "assignedKey" : 51,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Keyboard/oneshots-from-songs-by-allstar2x.Nudy - Hell Shell Key (add chorus).wav"
+    },
+    {
+      "assignedKey" : 62,
+      "detectedNote" : 58,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/vocal-chops-by-t3jlzd.Lana Del Rey Vocal Chops.3 A#.wav"
+    },
+    {
+      "assignedKey" : 56,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/instrument-oneshots-by-fredricch.synths.synth ~ azkaban.wav"
+    },
+    {
+      "assignedKey" : 67,
+      "detectedNote" : 40,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Guitar/instrument-oneshots-by-fredricch.guitars.guitar ~ example.wav"
+    }
+  ],
+  "test-preset-2" : 
+  [
+    {
+      "assignedKey" : 42,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav"
+    },
+    {
+      "assignedKey" : 52,
+      "detectedNote" : 65,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav"
+    },
+    {
+      "assignedKey" : 54,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/oneshots-from-songs-by-allstar2x.Juice Wrld - Armed & Dangerous Lead.wav"
+    },
+    {
+      "assignedKey" : 58,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/oneshots-from-songs-by-allstar2x.Kodak, French Montana - Lockjaw VO (90BPM).wav"
+    },
+    {
+      "assignedKey" : 59,
+      "detectedNote" : 79,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.slur (m) G5.wav"
+    },
+    {
+      "assignedKey" : 60,
+      "detectedNote" : 26,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Bell/oneshots-from-songs-by-allstar2x.Destroy Lonely - Mud Bell Layer.wav"
+    },
+    {
+      "assignedKey" : 83,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/oneshots-from-songs-by-allstar2x.Lucki - 2019 Pad.wav"
+    },
+    {
+      "assignedKey" : 61,
+      "detectedNote" : 82,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.FLUTE A#5.wav"
+    },
+    {
+      "assignedKey" : 51,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Keyboard/oneshots-from-songs-by-allstar2x.Nudy - Hell Shell Key (add chorus).wav"
+    },
+    {
+      "assignedKey" : 62,
+      "detectedNote" : 58,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/vocal-chops-by-t3jlzd.Lana Del Rey Vocal Chops.3 A#.wav"
+    },
+    {
+      "assignedKey" : 56,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/instrument-oneshots-by-fredricch.synths.synth ~ azkaban.wav"
+    },
+    {
+      "assignedKey" : 67,
+      "detectedNote" : 40,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Guitar/instrument-oneshots-by-fredricch.guitars.guitar ~ example.wav"
+    }
+  ],
+  "test-preset-3" : 
+  [
+    {
+      "assignedKey" : 42,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav"
+    },
+    {
+      "assignedKey" : 52,
+      "detectedNote" : 65,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav"
+    },
+    {
+      "assignedKey" : 54,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/oneshots-from-songs-by-allstar2x.Juice Wrld - Armed & Dangerous Lead.wav"
+    },
+    {
+      "assignedKey" : 58,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/oneshots-from-songs-by-allstar2x.Kodak, French Montana - Lockjaw VO (90BPM).wav"
+    },
+    {
+      "assignedKey" : 59,
+      "detectedNote" : 79,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.slur (m) G5.wav"
+    },
+    {
+      "assignedKey" : 60,
+      "detectedNote" : 26,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Bell/oneshots-from-songs-by-allstar2x.Destroy Lonely - Mud Bell Layer.wav"
+    },
+    {
+      "assignedKey" : 83,
+      "detectedNote" : 48,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Pad/oneshots-from-songs-by-allstar2x.Lucki - 2019 Pad.wav"
+    },
+    {
+      "assignedKey" : 61,
+      "detectedNote" : 82,
+      "pathToSample" : "/usr/local/include/Piano960/samples/World/instruments-of-the-world.FLUTE A#5.wav"
+    },
+    {
+      "assignedKey" : 51,
+      "detectedNote" : 60,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Keyboard/oneshots-from-songs-by-allstar2x.Nudy - Hell Shell Key (add chorus).wav"
+    },
+    {
+      "assignedKey" : 62,
+      "detectedNote" : 58,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Vocal/vocal-chops-by-t3jlzd.Lana Del Rey Vocal Chops.3 A#.wav"
+    },
+    {
+      "assignedKey" : 56,
+      "detectedNote" : 72,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Synth/instrument-oneshots-by-fredricch.synths.synth ~ azkaban.wav"
+    },
+    {
+      "assignedKey" : 67,
+      "detectedNote" : 40,
+      "pathToSample" : "/usr/local/include/Piano960/samples/Guitar/instrument-oneshots-by-fredricch.guitars.guitar ~ example.wav"
+    }
+  ]
 }
