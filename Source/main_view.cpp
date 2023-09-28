@@ -1,5 +1,7 @@
 
+#include <juce_gui_basics/juce_gui_basics.h>
 #include "main_view.h"
+#include "new_preset_dialog.h"
 
 const bool AUTO_FOCUS = false;
 
@@ -13,17 +15,18 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-MainView::MainView(
-    juce::MidiKeyboardState& keyboardState,
-    std::function<void()> onRandomizeButtonClicked, 
-    std::function<void()> onSaveButtonClicked, 
-    OnKeyLockStateChange onLockButtonClicked
-) : randomizeButton (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
+MainView::MainView(juce::MidiKeyboardState&  keyboardState,
+                   std::function<void()>     onRandomizeButtonClicked, 
+                   std::function<void()>     onSaveButtonClicked,
+                   SavePresetCallback        savePreset,
+                   OnKeyLockStateChange      onLockButtonClicked) 
+  : randomizeButton (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
   , saveButton      (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
   , keyboard        (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
 {
     randomizeButton->onClick = onRandomizeButtonClicked;
-    saveButton->onClick = onSaveButtonClicked;
+
+    saveButton->onClick = [savePreset](){ NewPresetDialog::show(savePreset); };
 
     addAndMakeVisible(saveButton.get());
     addAndMakeVisible(randomizeButton.get());

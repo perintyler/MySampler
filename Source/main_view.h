@@ -7,16 +7,17 @@
 #include <juce_graphics/juce_graphics.h>
 
 #include "lockable_keys.h"
+#include "new_preset_dialog.h"
 
 class MainView : public juce::Component, private juce::Timer {
 public:
     
     MainView(
-        juce::MidiKeyboardState& keyboardState,
-        std::function<void()> onRandomizeButtonClicked, 
-        std::function<void()> onSaveButtonClicked,
-        OnKeyLockStateChange onLockButtonClicked
-    );
+        juce::MidiKeyboardState&  keyboardState,
+        std::function<void()>     onRandomizeButtonClicked, 
+        std::function<void()>     onSaveButtonClicked,
+        SavePresetCallback        savePreset,
+        OnKeyLockStateChange      onLockButtonClicked);
     
     ~MainView() override = default;
 
