@@ -5,8 +5,8 @@ project(Source)
 juce_add_plugin(Piano960Plugin
     VERSION 0.0.1
     FORMATS AU VST3
-    PRODUCT_NAME "Piano960"
-    COMPANY_NAME soundvoyager
+    PRODUCT_NAME "Piano960-sep27"
+    COMPANY_NAME "Sound Voyager"
     COMPANY_WEBSITE "soundvoyager.xyz"
     PLUGIN_MANUFACTURER_CODE Svyg # A four-character manufacturer id with at least one upper-case character.
     IS_SYNTH TRUE
@@ -15,7 +15,7 @@ juce_add_plugin(Piano960Plugin
     IS_MIDI_EFFECT FALSE
     EDITOR_WANTS_KEYBOARD_FOCUS TRUE # Does the editor need keyboard focus?
     VST3_CATEGORIES Instrument Sampler
-    COPY_PLUGIN_AFTER_BUILD APPLE # copy to default plugin location for IOS
+    COPY_PLUGIN_AFTER_BUILD TRUE # copy to default plugin location for IOS
 )
 
 juce_add_binary_data(Piano960PluginBinaryData SOURCES
