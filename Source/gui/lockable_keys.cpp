@@ -4,8 +4,8 @@
 
 #include "lockable_keys.h"
 #include "BinaryData.h"
-#include "pitch/notes.h"
-#include "logs.h"
+#include "../pitch/notes.h"
+#include "../logs.h"
 
 static const juce::MidiKeyboardComponent::Orientation DEFAULT_ORIENTATION 
     = juce::MidiKeyboardComponent::horizontalKeyboard;

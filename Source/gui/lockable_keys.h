@@ -9,8 +9,8 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "pitch/pitch.h"
-#include "config.h"
+#include "../pitch/pitch.h"
+#include "../config.h"
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 
