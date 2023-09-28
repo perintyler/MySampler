@@ -8,6 +8,19 @@
               defines="YIN_ALGO=1">
   <MAINGROUP id="gfHjMe" name="Piano960">
     <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="./Source">
+      <GROUP id="{DC6478D8-1F28-322B-7A3E-AB9199687021}" name="gui">
+        <FILE id="YlbfgN" name="lockable_keys.cpp" compile="1" resource="0"
+              file="Source/gui/lockable_keys.cpp"/>
+        <FILE id="Rq0XSi" name="lockable_keys.h" compile="0" resource="0" file="Source/gui/lockable_keys.h"/>
+        <FILE id="uIn7dI" name="main_view.cpp" compile="1" resource="0" file="Source/gui/main_view.cpp"/>
+        <FILE id="xUjZBy" name="main_view.h" compile="0" resource="0" file="Source/gui/main_view.h"/>
+        <FILE id="SjqKmy" name="new_preset_dialog.cpp" compile="1" resource="0"
+              file="Source/gui/new_preset_dialog.cpp"/>
+        <FILE id="Mu2Oc7" name="new_preset_dialog.h" compile="0" resource="0"
+              file="Source/gui/new_preset_dialog.h"/>
+      </GROUP>
+      <FILE id="uG4Xyl" name="presets.cpp" compile="1" resource="0" file="Source/presets.cpp"/>
+      <FILE id="pXXPS8" name="presets.h" compile="0" resource="0" file="Source/presets.h"/>
       <GROUP id="{F3E0D793-1346-EF5B-FBB9-CF22BEE78DEC}" name="JsonCpp">
         <GROUP id="{68691749-F265-B79D-4834-C39A124E69AE}" name="json">
           <FILE id="mbLdlH" name="json-forwards.h" compile="0" resource="0" file="Source/JsonCpp/json/json-forwards.h"/>
@@ -30,11 +43,6 @@
         <FILE id="o91lfn" name="yin.cpp" compile="1" resource="0" file="./Source/pitch/yin.cpp"/>
         <FILE id="ycyEyF" name="yin.h" compile="0" resource="0" file="./Source/pitch/yin.h"/>
       </GROUP>
-      <FILE id="TYBrN5" name="main_view.h" compile="0" resource="0" file="Source/main_view.h"/>
-      <FILE id="nzsH7v" name="main_view.cpp" compile="1" resource="0" file="Source/main_view.cpp"/>
-      <FILE id="ZwCUAZ" name="lockable_keys.h" compile="0" resource="0" file="./Source/lockable_keys.h"/>
-      <FILE id="bRiTQ4" name="lockable_keys.cpp" compile="1" resource="0"
-            file="./Source/lockable_keys.cpp"/>
       <FILE id="O45mgK" name="app.h" compile="0" resource="0" file="./Source/app.h"/>
       <FILE id="Buusbf" name="app.cpp" compile="1" resource="0" file="./Source/app.cpp"/>
       <FILE id="j0Sc1t" name="logs.cpp" compile="1" resource="0" file="./Source/logs.cpp"/>
