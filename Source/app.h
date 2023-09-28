@@ -1,12 +1,4 @@
-/* plugin_editor.h */
-
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-//
-// This file declares the `Piano960Editor` class, which is
-// responsible for laying out and rendering the plugin's
-// user interface.
-//
-// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+/*** Piano960 | app.h ***/
 
 #pragma once
 
