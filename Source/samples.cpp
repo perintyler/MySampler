@@ -3,21 +3,27 @@
 #include <cmath>
 #include <string>
 #include <random>
+#include <algorithm>
 #include <assert.h>
+
+#include <juce_audio_formats/juce_audio_formats.h>
 
 #include "samples.h"
 #include "logs.h"
 #include "paths.h"
 #include "config.h"
+#include "presets.h"
+// #include "sample_categories.h"
 #include "pitch_detection/pitch.h"
-
-#include <juce_audio_formats/juce_audio_formats.h>
 
 #ifdef SAMPLES_DIRECTORY
   const std::string PATH_TO_SAMPLES_DIRECTORY { SAMPLES_DIRECTORY };
 #else
   const std::string PATH_TO_SAMPLES_DIRECTORY { "/usr/local/include/Piano960/samples" };
 #endif
+
+// ------------------------------ START OF ANONYMOUS NAMESPACE ------------------------------
+namespace { 
 
 static std::random_device randomDevice;
 static std::mt19937 numberGenerator(randomDevice()); // Mersenne Twister
@@ -28,23 +34,36 @@ using SampleReader = std::unique_ptr<juce::AudioFormatReader>;
 /** Randomly selects a file from a nested directory of sample-packs
  **  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
  */
-juce::String getPathToRandomSample()
+juce::String getPathToRandomSample() // std::set<SampleCategory> excluded)
 {
     std::string path;
     int numFilesTraversed = 1;
     std::filesystem::recursive_directory_iterator fileIterator(PATH_TO_SAMPLES_DIRECTORY);
     
-    for (const std::filesystem::directory_entry &entry: fileIterator) {
-        if (!std::filesystem::is_directory(entry)) {
-            if (uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed)) {
-               path = entry.path().string();
+    for (const std::filesystem::directory_entry &entry: fileIterator) 
+    {
+        if (!std::filesystem::is_directory(entry)) 
+        {
+            // std::string nameOfParentDirectory = entry.path().parent_path().filename().string();
+            // SampleCategory category = getSampleCategory(nameOfParentDirectory);
+            // bool isValidCategory = excluded.empty() || excluded.find(category) != excluded.end();
+            bool isValidCategory = true;
+
+            if (isValidCategory && uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed)) {
+                path = entry.path().string();
             }
+
             numFilesTraversed++;
         }
     }
 
     return juce::String { path };
 }
+
+// juce::String getPathToRandomSample()
+// {
+//     return getPathToRandomSample({});
+// }
 
 bool validateSample(juce::File& sample, juce::String pathToFile)
 {
@@ -59,7 +78,21 @@ bool validateSample(juce::File& sample, juce::String pathToFile)
     return true;
 }
 
-// --------------------------------
+} // ---------------------------- END OF ANONYMOUS NAMESPACE ----------------------------
+
+void Sample::pretty_print() const
+{
+    std::cout << "<Sample"
+              << " name="     << name
+              << " filepath=" << filepath.string()
+              << " rootNote=" << std::to_string(rootNote) 
+              << ">"          << std::endl;
+}
+
+bool SampleSet::has(Note key) const
+{
+    return find(key) != end();
+}
 
 const Sample& SampleSet::get(Note note) const 
 {
@@ -78,10 +111,54 @@ void SampleSet::set(Note key, std::filesystem::path filepath, Note rootNote)
     insert_or_assign(key, Sample{sampleName, filepath, rootNote});
 }
 
-std::vector<std::pair<Note, const Sample&>> SampleSet::asVector() const
+std::vector<NoteAndSample> SampleSet::asVector() const
 {
-    return std::vector<std::pair<Note, const Sample&>>(begin(), end());
+    return std::vector<NoteAndSample>(begin(), end());
 }
+
+SampleSet SampleSet::filter(SampleFilterFunction isSampleIncluded) const
+{
+    SampleSet filtered;
+    
+    for (auto iterator = begin(); iterator != end(); iterator++) {
+        Note note = iterator->first;
+        const Sample& sample = iterator->second;
+
+        if (isSampleIncluded(note, sample)) {
+            filtered.set(note, sample.filepath, sample.rootNote);
+        }
+    }
+
+    return filtered;
+}
+
+void SampleSet::filterInPlace(SampleFilterFunction isSampleIncluded)
+{
+    for (auto iterator = begin(); iterator != end();) {
+        if (!isSampleIncluded(iterator->first, iterator->second)) {
+            erase(iterator++);
+        } else {
+            ++iterator;
+        }
+    }
+}
+
+void SampleSet::pretty_print() const
+{
+    std::cout << "\n\n";
+    std::cout << " _________________________________________________" << std::endl;
+    std::cout << "| SampleSet" << std::endl;
+    std::cout << "| ---------" << std::endl;
+
+    for (auto iterator = begin(); iterator != end(); iterator++) {
+        std::cout << " | - " << std::to_string(iterator->first) << ": ";
+        iterator->second.pretty_print();
+    }
+
+    std::cout << "__________________________________________________";
+    std::cout << "\n\n";
+}
+
 
 RandomSampler::RandomSampler(Note firstNote, Note lastNote)
     : synthesiser()
@@ -134,14 +211,18 @@ const SampleSet& RandomSampler::getAllSamples() const
 
 const SampleSet RandomSampler::getLockedSamples() const
 {
-    SampleSet lockedSamples;
+    return samples.filter([this](Note note, const Sample&) {
+        return isKeyLocked(note);
+    });
+}
 
-    for (const auto& [note, sample] : samples.asVector()) {
-        if (isKeyLocked(note))
-            lockedSamples.set(note, sample.filepath, sample.rootNote);
+void RandomSampler::setSamples(const SampleSet& newSamples)
+{
+    samples.clear();
+
+    for (const auto& [note, sample] : newSamples) {
+        samples.set(note, sample.filepath, sample.rootNote);
     }
-
-    return lockedSamples;
 }
 
 void RandomSampler::randomize(bool pitch_shift /* = true */) 

@@ -4,28 +4,30 @@
 
 #include <string>
 
-enum SampleCategory: int {
-    Piano = 0,
-    Cello,
-    Trombone,
-    Organ,
-    Woodwind,
-    Trumpet,
-    Glockenspiel,
+enum class SampleCategory
+{
+    NONE = 0,
+    PIANO,
+    CELLO,
+    TROMBONE,
+    ORGAN,
+    WOODWIND,
+    TRUMPET,
+    GLOCKENSPIEL,
     SFX,
-    Guitar,
-    Pluck,
-    World,
-    Brass,
-    Bass,
-    Vocal,
-    Pad,
-    Synth,
-    Bell,
-    Voilin,
-    Arp,
-    Flute,
-    Keyboard
+    GUITAR,
+    PLUCK,
+    WORLD,
+    BRASS,
+    BASS,
+    VOCAL,
+    PAD,
+    SYNTH,
+    BELL,
+    VOILIN,
+    ARP,
+    FLUTE,
+    KEYBOARD
 };
 
 std::string sampleCategoryToString(SampleCategory);
