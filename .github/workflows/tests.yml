@@ -23,6 +23,10 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: make unit-tests install
 
+    - name: Validate Presets Files
+      working-directory: ${{github.workspace}}/Scripts
+      run: python3 ./validate_presets.py
+
     - name: Run Unit-Tests
       working-directory: ${{github.workspace}}/build
       run: ./Tests/unit-tests
