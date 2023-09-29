@@ -56,6 +56,7 @@ e   enables GPU for tensorflow operations
 g   compile with GCC
 f   only run fast tests (i.e. no pitch detection tests)
 l   turns on the logger, which writes verbose messages to a logfile
+u   can be used to pass arguments into unit test build
 ```
 
 ### Building with Ubuntu/Debian-like Distributions
