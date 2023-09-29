@@ -30,7 +30,7 @@ TEST_CASE("UI Test #2: main view", "[ui][main_view]")
     const juce::MessageManagerLock mml;
 
     juce::MidiKeyboardState keyboardState;
-    MainView view(keyboardState, [](){}, [](std::string){return true;}, [](Note){});
+    MainView view(keyboardState, [](){}, [](std::string){return true;}, [](std::string){}, [](Note){});
 
     SECTION("sub-components are created and visible") 
     {
