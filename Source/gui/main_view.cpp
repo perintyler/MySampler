@@ -1,6 +1,7 @@
 /*** Piano960 | gui/main_view.cpp ***/
 
 #include <juce_gui_basics/juce_gui_basics.h>
+
 #include "main_view.h"
 #include "new_preset_dialog.h"
 #include "presets_dropdown_menu.h"
@@ -20,11 +21,12 @@ const juce::String SAVE_BUTTON_LABEL { "save" };
 MainView::MainView(juce::MidiKeyboardState&  keyboardState,
                    std::function<void()>     randomizeSamples, 
                    SavePresetCallback        createNewPreset,
+                   PresetSelectedCallback    selectPreset,
                    OnKeyLockStateChange      onLockButtonClicked) 
   : randomizeButton    (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
   , saveButton         (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
   , keyboard           (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
-  , presetDropdownMenu (std::make_unique<PresetsDropdownMenu>(createNewPreset))
+  , presetDropdownMenu (std::make_unique<PresetsDropdownMenu>(selectPreset))
 {
     randomizeButton->onClick = randomizeSamples;
 
@@ -88,9 +90,6 @@ void MainView::resized()
     int saveButtonYCoord = randomizeButtonYCoord;
     int saveButtonHeight = randomizeButtonHeight;
     int saveButtonWidth = 0.5*keyboardWidth - 5;
-
-    std::cout << "randomize: " << randomizeButtonXCoord << "," << randomizeButtonYCoord << std::endl;
-    std::cout << "save: " << saveButtonXCoord << "," << saveButtonYCoord << std::endl;
 
     keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
     presetDropdownMenu->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
