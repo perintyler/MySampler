@@ -1,11 +1,13 @@
 /*** Piano960 | sample_categories.cpp ***/
 
+#include <vector>
 #include <assert.h>
+#include <algorithm>
 
 #include "sample_categories.h"
 
-const std::vector<std::string> CATEGORY_STRINGS
-{
+const std::vector<std::string> CATEGORY_STRINGS {
+    "None",
     "Piano",
     "Cello",
     "Trombone",
@@ -31,13 +33,17 @@ const std::vector<std::string> CATEGORY_STRINGS
 
 std::string sampleCategoryToString(SampleCategory category)
 {
-    return CATEGORY_STRINGS.at(category);
+    assert(category >= SampleCategory::NONE && category <= SampleCategory::KEYBOARD);
+    return CATEGORY_STRINGS.at(static_cast<int>(category));
 }
 
-SampleCategory getSampleCategory(std::string name)
+SampleCategory getSampleCategory(std::string categoryAsString)
 {
-    auto iterator = CATEGORY_STRINGS.find(CATEGORY_STRINGS.start(), CATEGORY_STRINGS.end(), name);
-    assert(iterator != CATEGORY_STRINGS.end());
-    int categoryIndex = iterator - CATEGORY_STRINGS.begin();
-    return static_cast<SampleCategory>(categoryIndex);
+    auto iterator = std::find(CATEGORY_STRINGS.begin(), CATEGORY_STRINGS.end(), categoryAsString);
+    if (iterator == CATEGORY_STRINGS.end()) {
+        return SampleCategory::NONE;
+    } else {
+        int categoryIndex = iterator - CATEGORY_STRINGS.begin();
+        return static_cast<SampleCategory>(categoryIndex);
+    }
 }
