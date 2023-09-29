@@ -10,6 +10,8 @@
 #include <memory>
 #include <map>
 #include <filesystem>
+#include <string>
+
 #include <juce_audio_devices/juce_audio_devices.h>
 
 #include "pitch_detection/notes.h"
@@ -23,26 +25,45 @@ struct Sample
   std::filesystem::path filepath;
   Note rootNote;
 
-  int id() const { return static_cast<int>(std::filesystem::hash_value(filepath)); }
+  void pretty_print() const;
 };
+
+using NoteAndSample = std::pair<Note, const Sample&>;
+
+using SampleFilterFunction = std::function<bool(Note, const Sample&)>;
 
 /***
  ** A collection of audio files used by a `RandomSampler`. Each sample corresponds 
  ** to a midi note.
  ***/
-class SampleSet: private std::unordered_map<Note, Sample>
+class SampleSet: protected std::map<Note, Sample>
 {
 public:
 
-  SampleSet(): std::unordered_map<Note, Sample>() {}
+  SampleSet(): std::map<Note, Sample>() {}
 
   const Sample& get(Note) const;
+
+  bool has(Note) const;
 
   void set(Note key, std::filesystem::path, Note rootNote);
 
   int length() const;
 
-  std::vector<std::pair<Note, const Sample&>> asVector() const;
+  SampleSet filter(SampleFilterFunction) const;
+
+  void filterInPlace(SampleFilterFunction);
+
+  std::vector<NoteAndSample> asVector() const;
+
+  using std::map<Note, Sample>::begin;
+  using std::map<Note, Sample>::end;
+  using std::map<Note, Sample>::empty;
+  using std::map<Note, Sample>::clear;
+  using std::map<Note, Sample>::value_type;
+  // using std::map<Note, Sample>::size;
+
+  void pretty_print() const;
 };
 
 /***
@@ -76,6 +97,8 @@ public:
     const SampleSet& getAllSamples() const;
 
     const SampleSet getLockedSamples() const;
+
+    void setSamples(const SampleSet&);
 
 private:
     Note firstNote;
