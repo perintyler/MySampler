@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <algorithm>
 
 #include "JsonCpp/json/json.h"
 
@@ -21,24 +23,15 @@
   #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
 #endif
 
-const std::vector<std::string> DEFAULT_PRESET_NAMES {"test-preset-1", "test-preset-2", "test-preset-3"};
-
-#ifdef TESTMODE
-    const std::vector<std::string> PRESET_TYPES {"default-presets"}; // only load default presets when testing
-#else
-    const std::vector<std::string> PRESET_TYPES {"default-presets", "custom-presets"};
-#endif
-
 /**
  * load the installed presets file into the `__presets__` map right away
  **/
-static std::map<std::string, Preset> __presets__ = []
-{
-    std::map<std::string, Preset> presets;
+static std::map<std::string, SampleSet> __presets__ = ([]{
+    std::map<std::string, SampleSet> presets;
 
     // if the presets file doesn't exist (which means the plugin wasn't 
     // installed correctly), just return the empty presets map
-    if (!std::filesystem::exists(PATH_TO_PRESETS_FILE)) {
+    if (!std::filesystem::exists(std::string{PATH_TO_PRESETS_FILE})) {
         std::cerr << "presets file does not exist: " << PATH_TO_PRESETS_FILE << std::endl;
         return presets;
     }
@@ -49,51 +42,44 @@ static std::map<std::string, Preset> __presets__ = []
     reader.parse(file, presetsFileContents);
 
     try {
-        for (const std::string& presetType : PRESET_TYPES) {
-            for (auto const& presetName : presetsFileContents[presetType].getMemberNames()) {
+        for (const std::string& presetName : presetsFileContents.getMemberNames()) {
+            
+            SampleSet samples;
+            Json::Value presetJson = presetsFileContents[presetName];
 
-                Json::Value presetJson = presetsFileContents[presetType][presetName];
-                SampleSet samples;
-
-                for (auto const& sampleJson : presetJson) {
-                    samples.set(
-                        (Note) sampleJson["assignedKey"].asInt(), 
-                        sampleJson["pathToSample"].asString(),
-                        (Note) sampleJson["detectedNote"].asInt()
-                    );
-                }
-
-                presets.insert({ presetName, Preset{presetName, samples} });
+            for (Json::Value::ArrayIndex index = 0; index < presetJson.size(); index++) {
+                Json::Value sampleJson = presetsFileContents[presetName][index];
+                samples.set(
+                    sampleJson["assignedKey"].asInt(), 
+                    sampleJson["pathToSample"].asString(),
+                    sampleJson["detectedNote"].asInt()
+                );
             }
+
+            presets.insert({ presetName, samples });
         }
-    } catch(Json::LogicError) {
-        std::cerr << "presets file is invalid and can't be parsed: " << PATH_TO_PRESETS_FILE << std::endl;
+    } catch(Json::LogicError error) {
+        std::cerr << "presets file is invalid and can't be parsed: " << PATH_TO_PRESETS_FILE 
+                  << " (" << error.what() << ")." << std::endl;
     }
 
     return presets;
-}();
-
-static bool isDefaultPreset(std::string presetName)
-{
-    return std::find(DEFAULT_PRESET_NAMES.begin(), DEFAULT_PRESET_NAMES.end(), presetName) 
-        != DEFAULT_PRESET_NAMES.end();
-}
+})();
 
 static bool presetExists(std::string presetName)
 {
-  return __presets__.count(presetName);
+  return __presets__.count(presetName) != 0;
 }
 
 static void overwritePresetsFile()
 {
-    Json::Value defaultPresetsJson;
-    Json::Value customPresetsJson;
+    Json::Value presetsFileContents;
 
     for (const std::string& presetName : getPresetNames()) {
 
         Json::Value jsonSampleArray;
 
-        for (const auto& [note, sample] : getPreset(presetName).samples.asVector())
+        for (const auto& [note, sample] : getSamplesForPreset(presetName))
         {
             Json::Value jsonSample;
             jsonSample["pathToSample"] = sample.filepath.string();
@@ -101,43 +87,47 @@ static void overwritePresetsFile()
             jsonSample["detectedNote"] = static_cast<int>(sample.rootNote);
             jsonSampleArray.append(jsonSample);
         }
-
-        if (isDefaultPreset(presetName))
-            defaultPresetsJson[presetName] = jsonSampleArray;
-        else
-            customPresetsJson[presetName] = jsonSampleArray;
+        std::cout << jsonSampleArray << std::endl;
+        presetsFileContents[presetName] = jsonSampleArray;
     }
-
-    Json::Value presetFileContents;
-    presetFileContents["default-presets"] = defaultPresetsJson;
-    presetFileContents["custom-presets"] = customPresetsJson;
 
     std::ofstream presetsFile(std::string { PATH_TO_PRESETS_FILE });
 
-    if (!presetsFile.is_open()) {
-        std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
-    } else {
-        Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
-        presetsFile << Json::writeString(presetFileWriter, presetFileContents) << std::endl;
-        presetsFile.close();
-    }
+    // if (!presetsFile.is_open()) {
+    //     std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
+    // } else {
+    //     Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
+    //     presetsFile << Json::writeString(presetFileWriter, presetsFileContents) << std::endl;
+    //     presetsFile.close();
+    // }
 }
 
 std::vector<std::string> getPresetNames()
 {
     std::vector<std::string> presetNames;
-    presetNames.reserve(__presets__.size());
 
-    for (auto const& preset_pair : __presets__)
-        presetNames.push_back(preset_pair.first);
+    for (const auto& [name, preset]: __presets__) {
+        presetNames.push_back(name);
+    }
 
     return presetNames;
 }
 
-Preset& getPreset(std::string presetName)
+SampleSet getSamplesForPreset(std::string presetName)
 {
-    assert(presetExists(presetName));
-    return __presets__.at(presetName);
+    // this preset exists check shouldn't be neccessary. get rid of it?
+    if (!presetExists(presetName)) { 
+        std::cerr << "preset does not exist: " << presetName;
+        if (presetExists("default-preset-1")) {
+            std::cerr << " (using 'default-preset-1' set instead)." << std::endl;
+            return getSamplesForPreset("default-preset-1");
+        } else {
+            std::cerr << " (using empty sample set instead).";
+            return SampleSet {};
+        }
+    }
+
+    return __presets__[presetName];
 }
 
 void savePreset(std::string presetName, const SampleSet& samples) 
@@ -148,19 +138,24 @@ void savePreset(std::string presetName, const SampleSet& samples)
     for (int numDuplicates = 0; presetExists(uniqueName); numDuplicates++)
       uniqueName = presetName + std::to_string(numDuplicates);
 
-    __presets__.insert({uniqueName, Preset{uniqueName, samples}});
+    __presets__.insert({uniqueName, samples});
 
     overwritePresetsFile();
 }
 
 void deletePreset(std::string presetName)
 {
-    if (isDefaultPreset(presetName))
-        std::cerr << "tried to delete default preset: " << presetName << std::endl;
-    else if (!presetExists(presetName))
+    if (!presetExists(presetName))
         std::cerr << "tried to delete a preset that doesn't exist: " << presetName << std::endl;
     else {
         __presets__.erase(presetName);
         overwritePresetsFile();
     }
+}
+
+void pretty_print_presets()
+{
+    // for (const std::string& presetName : getPresetNames()) {
+    //     std::cout << presetName << std::endl;
+    // }
 }

@@ -9,7 +9,7 @@
  * {
  *    "my first preset": [
  *      {
-*         "assignedKey": 23,
+ *        "assignedKey": 23,
  *        "pathToSample": "path/to/sample/for/key/with/midi/number/23.wav",
  *        "detectedNote": 42
  *      },
@@ -23,18 +23,17 @@
 
 #pragma once
 
-#include "samples.h"
+#include <vector>
+#include <string>
 
-struct Preset 
-{
-    std::string name;
-    const SampleSet& samples;
-};
+#include "samples.h"
 
 std::vector<std::string> getPresetNames();
 
-Preset& getPreset(std::string presetName);
+SampleSet getSamplesForPreset(std::string presetName); // this should return a 'const Prest&'
 
 void savePreset(std::string presetName, const SampleSet&);
 
 void deletePreset(std::string presetName);
+
+void pretty_print_presets();

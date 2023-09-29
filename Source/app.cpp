@@ -38,9 +38,15 @@ App::App(AudioProcessor& audioProcessor)
                 return true;
             }
         },
+
+        // called when a preset is selected from the presets dropdown menu
+        [&processor=processor](std::string presetName)
+        {
+            processor.sampler.setSamples(getSamplesForPreset(presetName));
+        },
     
         // called when the lock button on a key is clicked/unclicked (i.e. locked/unlocked)
-        [&processor = processor](Note note) {
+        [&processor=processor](Note note) {
             if (processor.sampler.isKeyLocked(note)) {
                 processor.sampler.unlockKey(note);
             } else {

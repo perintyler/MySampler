@@ -17,6 +17,7 @@ public:
         juce::MidiKeyboardState&  keyboardState,
         std::function<void()>     randomizeSamples, 
         SavePresetCallback        createNewPreset,
+        PresetSelectedCallback    selectPreset,
         OnKeyLockStateChange      onLockButtonClicked);
     
     ~MainView() override = default;

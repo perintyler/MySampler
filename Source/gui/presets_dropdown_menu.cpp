@@ -3,9 +3,13 @@
 #include <assert.h>
 
 #include "presets_dropdown_menu.h"
+#include "../presets.h"
 
-static int getDropdownItemId (int presetIndex)    { return presetIndex    + 1; }
-static int getPresetIndex    (int dropdownItemId) { return dropdownItemId - 1; }
+namespace
+{
+    int getDropdownItemId (int presetIndex)    { return presetIndex    + 1; }
+    int getPresetIndex    (int dropdownItemId) { return dropdownItemId - 1; }
+}
 
 PresetsDropdownMenu::Listener::Listener(PresetSelectedCallback presetSelectedCallback)
   : juce::ComboBox::Listener()

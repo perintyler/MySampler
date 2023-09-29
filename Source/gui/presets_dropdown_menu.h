@@ -8,8 +8,6 @@
 #include <string>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../presets.h"
-
 using PresetSelectedCallback = std::function<void(std::string)>;
 
 /** TODO
