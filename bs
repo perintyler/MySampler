@@ -38,6 +38,8 @@ LIST_TESTS=false;
 
 USE_LOG=false;
 
+CATCH2_ARGS="";
+
 echo_help_message() 
 {
     echo "options:";
@@ -53,6 +55,7 @@ echo_help_message()
     echo "g   compile with GCC";
     echo "f   only run fast tests (i.e. no pitch detection tests)";
     echo "l   turns on the logger, which writes verbose messages to a logfile";
+    echo "u   can be used to pass arguments into unit test build";
 }
 
 pushd_silently() { command pushd "$@" > /dev/null; }
@@ -61,6 +64,13 @@ popd_silently()  { command popd "$@" > /dev/null; }
 echo_stdin_message() { echo; echo "[STDIN]: $@"; echo; }
 echo_build_message() { echo; echo "[BUILD MESSAGE]: $@"; echo; }
 exit_with_error()    { echo; echo "[ERROR]: $@"; echo; exit; }
+
+verbose_print() 
+{
+    if [ "$VERBOSE" = true ]; then 
+        echo_stdin_message "$@"; 
+    fi
+}
 
 create_piano960_build_directory()
 {
@@ -142,7 +152,7 @@ make_piano960()
 make_parameters="Piano960Plugin" # this gets passed to the 'make' command
 function add_make_parameter() { make_parameters="${make_parameters} $@"; }
 
-while getopts "hvscit23degatfal" option; do
+while getopts "hvscit23degatfalu:" option; do
    case $option in
       h) echo_help_message; exit;;                          # -h : display help message
       v) VERBOSE=true;;                                     # -v : turn on verbose mode
@@ -158,6 +168,7 @@ while getopts "hvscit23degatfal" option; do
       a) ABORT_AFTER_FIRST_TEST_FAILURE=true;;
       f) ONLY_RUN_FAST_TESTS=true;;
       l) USE_LOG=true;;
+      u) CATCH2_ARGS=${OPTARG};;
    esac
 done
 
@@ -184,25 +195,33 @@ make_piano960 $make_parameters;
 
 if [ "$RUN_TESTS" = true ]; then
     # if -t option was set, run the newly built unit tests 
-    testArgs="";
+    testQuery=$CATCH2_ARGS;
+
 
     if [ "$ONLY_RUN_FAST_TESTS" = true ]; then
-        testArgs="$testArgs ~[slow]";
+        excludeSlowTestsQuery=~[slow];
+        testQuery="$CATCH2_ARGS$excludeSlowTestsQuery";
     fi
+
+    testArgs=$testQuery;
 
     if [ "$ABORT_AFTER_FIRST_TEST_FAILURE" = true ]; then
         testArgs="$testArgs --abort";
     fi
 
-    if [ "$VERBOSE" = true ]; then
-        testArgs="$testArgs -?";
-    fi
+    # if [ "$VERBOSE" = true ]; then
+    #     testArgs="$testArgs -?";
+    # fi
 
     if [ "$LIST_TESTS" = true ]; then
         testArgs="$testArgs --list-tests";
     fi
 
-    $PIANO960_BUILD_DIRECTORY/Tests/unit-tests $testArgs;
+    unitTestExecutable=$PIANO960_BUILD_DIRECTORY/Tests/unit-tests;
+
+    verbose_print "$unitTestExecutable $testArgs";
+
+    $unitTestExecutable $testArgs
 fi
 
 echo_build_message "Successfully built Piano960 to" $PIANO960_BUILD_DIRECTORY;
