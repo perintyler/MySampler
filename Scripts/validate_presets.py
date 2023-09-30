@@ -4,9 +4,11 @@ import os
 import json
 import pathlib
 
-PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent;
+PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent.resolve().absolute();
 DEFAULT_PRESETS_FILE = PATH_TO_PIANO960_REPO.joinpath('presets.json').absolute()
-INSTALLED_PRESETS_FILE = os.path.join(os.path.abspath(os.sep), 'usr', 'local', 'include', 'Piano960', 'presets.json')
+INSTALLED_PRESETS_FILE = pathlib.Path(os.path.abspath(os.sep)).joinpath(
+  'usr', 'local', 'include', 'Piano960', 'presets.json'
+).absolute()
 
 class InvalidPresetsFile(Exception): pass
 
@@ -44,7 +46,7 @@ def validate_presets_file(filepath):
         path = sample["pathToSample"]
         assert os.path.exists(path)
         assert path.endswith('.mp3') or path.endswith('.wav')
-  except(exception):
+  except Exception as exception:
     raise InvalidPresetsFile(f'Invalid presets file: {filepath} | {exception}')
 
 if __name__ == '__main__':
