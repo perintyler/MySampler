@@ -47,6 +47,14 @@ install(
   DESTINATION ${PIANO960_INSTALLATION_DIR}
 )
 
+set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
+message("| installing pitch detection cachefile to ${PITCH_DETECTION_CACHE_FILE}")
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/pitch_detection_cache.json
+  DESTINATION ${PIANO960_INSTALLATION_DIR}
+)
+
 # ============= Define Pre-Compiler Variables ===============
 
 
@@ -64,19 +72,6 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
-
-
-# ============= Setup Pitch Detection Cache ===============
-
-
-set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
-
-if(NOT EXISTS "${PITCH_DETECTION_CACHE_FILE}")
-    message("creating empty pitch detection cache file: ${PITCH_DETECTION_CACHE_FILE}")
-    file(TOUCH "${PITCH_DETECTION_CACHE_FILE}")
-    file(WRITE "${PITCH_DETECTION_CACHE_FILE}" "{}")
-endif()
-
 
 # =============== Build JUCE framework =================
 
