@@ -4,6 +4,10 @@
   #define TESTMODE
 #endif
 
+#ifndef NO_LOG
+  #define NO_LOG
+#endif
+
 int main(int argc, char* argv[])
 {
     Catch::Session session;
