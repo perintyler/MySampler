@@ -16,35 +16,36 @@ endif()
 
 # ================== Installation ====================
 
+set(PIANO960_INSTALLATION_PATH "include/${PROJECT_NAME}")
 
-set(PIANO960_INSTALLATION_DIR "include/${PROJECT_NAME}")
+set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/${PIANO960_INSTALLATION_PATH}")
 
 message("| installing Piano960 samples to ${PIANO960_INSTALLATION_DIR}/samples")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
 message("| installing CREPE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/crepe-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
 message("| installing SPICE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/spice-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
 message("| installing presets to ${PIANO960_INSTALLATION_DIR}/presets.json")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/presets.json
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
 set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
@@ -52,7 +53,7 @@ message("| installing pitch detection cachefile to ${PITCH_DETECTION_CACHE_FILE}
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/pitch_detection_cache.json
-  DESTINATION include/${PROJECT_NAME}
+  DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
 # ============= Define Pre-Compiler Variables ===============
@@ -68,7 +69,6 @@ endif()
 
 
 # ================== Configuration Files ====================
-
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
