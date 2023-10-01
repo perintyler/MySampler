@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Plugin & Unit-Tests and Install Samples
       working-directory: ${{github.workspace}}/build
-      run: make unit-tests install
+      run: sudo make unit-tests install
 
     - name: Validate Presets Files
       working-directory: ${{github.workspace}}
