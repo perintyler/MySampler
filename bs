@@ -47,12 +47,14 @@ CATCH2_ARGS="";
 MAKE_PARAMETERS="Piano960Plugin";
 
 ###########################################################################################
+# stdout helper functions
 ###########################################################################################
 
 print()
 {
     if [ "$SILENT" = false ]; then
-        echo "    <> [BUILD:INFO] | $@";
+        echo " # [BUILD::INFO] | $@"; 
+        echo;
     fi
 }
 
@@ -66,16 +68,47 @@ verbose_print()
 verbose_print_command()
 {
     if [ "$VERBOSE" = true ]; then
-        echo "    <> [BUILD:STDIN] | $@";
+        echo " # [BUILD::STDIN] | $@"; echo;
+    fi
+}
+
+print_n_times()
+{
+    for i in $(seq $1); do echo -n $2; done
+}
+
+print_divider()
+{
+    print_n_times 50 "<>"; echo;
+}
+
+print_header_message()
+{
+    header_message="$@";
+    message_length=${#header_message};
+    line_length=100;
+    indent=$((($line_length-$message_length-2)/2));
+
+    if [ "$SILENT" = false ]; then
+        echo;
+        # print_n_times $line_length "-"; echo;
+        echo -n "|";
+        print_n_times $indent "-";
+        echo -n " $header_message ";
+        print_n_times $indent "-"; echo "|";
+        # print_n_times $line_length "-"; echo;
+        echo;
     fi
 }
 
 exit_with_error_message() 
-{ 
-    echo; 
-    echo "<<<ERROR>>> | $@"; 
-    echo; 
-    exit;
+{
+    if [ "$SILENT" = false ]; then
+        echo; 
+        echo " # [BUILD::ERROR] | $@";
+        echo; 
+        exit;
+    fi;
 }
 
 print_help_message() 
@@ -95,6 +128,10 @@ print_help_message()
     echo "l   turns on the logger, which writes verbose messages to a logfile";
     echo "u   can be used to pass arguments into unit test build";
 }
+
+###########################################################################################
+# build functions
+###########################################################################################
 
 cmake_piano960() 
 {
@@ -134,13 +171,11 @@ cmake_piano960()
 
 make_piano960()
 {
-    make_command_arguments="$@";
-
     if [ "$SILENT" = true ]; then
-        make $make_command_arguments > /dev/null;
+        make $MAKE_PARAMETERS > /dev/null;
     else
-        verbose_print_command "make $make_command_arguments";
-        make $make_command_arguments;
+        verbose_print_command "make $MAKE_PARAMETERS";
+        make $MAKE_PARAMETERS;
     fi
 
     if [ $? -ne 0 ]; then
@@ -149,13 +184,13 @@ make_piano960()
 }
 
 ###########################################################################################
+# build setps
 ###########################################################################################
 
-# 1) --- parse cli options ---
+# 1) ================== parse cli options ==================
 
-while getopts "hvscit23pegatfalu:x" option; do
-   case $option in
-      h) print_help_message; exit;;
+while getopts "vscit23pegatfalu:xbh" option; do
+    case $option in
       v) VERBOSE=true;;
       s) SILENT=true;;
       c) CLEAN_BUILD=true;;
@@ -170,44 +205,67 @@ while getopts "hvscit23pegatfalu:x" option; do
       f) ONLY_RUN_FAST_TESTS=true;;
       l) USE_LOG=true;;
       u) CATCH2_ARGS=${OPTARG};;
-   esac
+      b) bash $PIANO960_REPO/Scripts/clear_terminal.sh;;
+      h) print_help_message; exit;;
+    esac
 done
 
-# 2) --- setup build directory ---
+if [ $? -ne 0 ]; then
+    exit_with_error_message "Invalid CLI Arguments: $?";
+elif [ "$PRODUCTION" = true ]; then
+    BUILD_DIRECTORY=$PRODUCTION_BUILD_DIRECTORY;
+    BUILD_TYPE="Production";
+else
+    BUILD_DIRECTORY=$DEBUG_BUILD_DIRECTORY;
+    BUILD_TYPE="Debug";
+fi
 
-if [ ! -d "$ALL_BUILDS_DIRECTORY" ]; then 
+# 2) ================== print header message ==================
+
+echo;
+print_n_times 105 "="; echo;
+echo "|<><><><><><><><><><><><><><><><><><><><><><> Piano960 <><><><><><><><><><><><><><><><><><><><><><><><><> "
+# print_n_times 100 "-"; echo;
+echo "| ";
+echo "| - Build Type: '$BUILD_TYPE'";
+echo "| "
+echo "| - Output Directory: '$BUILD_DIRECTORY'";
+echo "| ";
+echo -n "|"; print_n_times 52 "<>"; echo;
+print_n_times 105 "="; echo;
+echo;
+
+# 3) ================== setup build directory ==================
+
+if [ ! -d "$ALL_BUILDS_DIRECTORY" ]; then
+    print "Creating Parent Directory For All Builds: $ALL_BUILDS_DIRECTORY"
     verbose_print_command "mkdir $ALL_BUILDS_DIRECTORY";
     mkdir $ALL_BUILDS_DIRECTORY;
 fi
 
-if [ "$PRODUCTION" = true ]; then
-    BUILD_DIRECTORY=$PRODUCTION_BUILD_DIRECTORY;
-else
-    BUILD_DIRECTORY=$DEBUG_BUILD_DIRECTORY;
-fi
-
 if [ "$CLEAN_BUILD" = true ]; then
+    print "Deleting Existing Build Directory: $BUILD_DIRECTORY"
     verbose_print_command "rm -rf $BUILD_DIRECTORY";
     rm -rf $BUILD_DIRECTORY;
 fi
 
 if [ ! -d "$BUILD_DIRECTORY" ]; then
+    print "Creating Build Directory: $BUILD_DIRECTORY"
     verbose_print_command "mkdir $BUILD_DIRECTORY";
     mkdir $BUILD_DIRECTORY;
 fi
 
-# 3) --- build the plugin ---
+# 4) ================== build the plugin ==================
+
+print_header_message "Configuring Build Environment"
 
 working_directory=$(pwd);
-
 verbose_print_command "cd $BUILD_DIRECTORY";
 cd $BUILD_DIRECTORY;
-
 cmake_piano960;
-make_piano960 $make_parameters;
 
-verbose_print_command "cd $working_directory";
-# cd $working_directory;
+print_header_message "Building Plugin Executable"
+make_piano960 $make_parameters;
 
 if [ $? -eq 0 ]; then
     print "Successfully built Piano960 to $BUILD_DIRECTORY";
@@ -216,9 +274,14 @@ else
     exit;
 fi
 
-# 3) --- run the unit tests (if '-t' cli option was set) ---
+verbose_print_command "cd $working_directory";
+cd $working_directory;
+
+# 5) ================== run the unit tests (if '-t' cli option was set) ==================
 
 if [ "$RUN_TESTS" = true ]; then
+
+    print_header_message "Running Unit Test Build"
 
     testQuery=$CATCH2_ARGS;
 
