@@ -4,7 +4,7 @@ import os
 import json
 import pathlib
 
-PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent.resolve();
+PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent.absolute();
 DEFAULT_PRESETS_FILE = PATH_TO_PIANO960_REPO.absolute().joinpath('presets.json').absolute()
 INSTALLED_PRESETS_FILE = pathlib.Path(os.path.abspath(os.sep)).joinpath(
   'usr', 'local', 'include', 'Piano960', 'presets.json'
