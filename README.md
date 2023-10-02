@@ -1,10 +1,10 @@
-# Piano960
+# MySampler
 
-![Build & Test](https://github.com/perintyler/Piano960/actions/workflows/tests.yml/badge.svg)
+![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/tests.yml/badge.svg)
 
-Piano960 is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
+MySampler is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
 
-![plugin demo GIF](Assets/readme/demo.gif "Piano960 Plugin Demo")
+![plugin demo GIF](Assets/readme/demo.gif "MySampler Plugin Demo")
 
 ---
 
@@ -34,32 +34,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 make install
 ```
 
-To quickly build and install Piano960, use the `build.sh` convencience script with an `-i` option. (you might have to change the file permision: `chmod +x ./bs` ).
-
-```bash
-bs -i
-```
-
-#### Build Script Options
-
-```shell
-options:
-v   output excessive debug info to stdout
-s   supress cmake output
-t   build and run unit tests
-i   locally install samples, pitch detection models, and presets
-c   Clean any existing and build the plugin from scratch
-2   use spice model for pitch detection
-3   use crepe model for pitch detection
-d   sets the CMAKE build type to Debug
-e   enables GPU for tensorflow operations
-g   compile with GCC
-f   only run fast tests (i.e. no pitch detection tests)
-l   turns on the logger, which writes verbose messages to a logfile
-u   can be used to pass arguments into unit test build
-```
-
-### Building with Ubuntu/Debian-like Distributions
+Or, to quickly build and install MySampler, use the `build.sh` convencience script with an `-i` option. (you might have to change the file permision: `chmod +x ./bs` ).
 
 For Ubuntu/Debian-like distributions, the JUCE framework has couple of dependencies that must be installed.
 
@@ -72,36 +47,78 @@ Install the dependencies with `apt-get`:
 apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
 ```
 
-## Unit Testing
+#### Using the Build Script
 
-Use `build.sh` with a `-t` option to build and run the unit tests.
+- `v`: Print out verbose information
+- `s`: Supress cmake output
+- `b`: Configure build environment (re-runs the 'cmake' command)
+- `t`: Build and run the unit tests executable
+- `i`: Install the plugin (samples / presets / pitch detection models)
+- `c`: Clean any existing CMake files and build the plugin from scratch
+- `2`: Use SPICE model for pitch detection
+- `3`: Use CREPE model for pitch detection
+- `p`: Sets the CMake build type to 'Production' (default is 'Debug')
+- `e`: Enables GPU for tensorflow operations (applicable for SPICE/CREPE pitch detection models)
+- `g`: Compile with GCC (default is Clang)
+- `f`: Only run fast tests (i.e. no pitch detection tests)
+- `l`: Use the debug log, which writes verbose messages to a local logfile
+- `u`: Can be used to pass Catch2 CLI arguments into the unit test executable
+- `n`: Clear terminal window and scrollback before building
+- `h`: Print out a build script help message
+
+#### Unit Testing
+
+Use the build script with a `-t` option to build and run the Unit Tests executable.
 
 ```bash
-Piano960 % ./bs -t
-[ 78%] Built target Catch2
-[ 95%] Built target Piano960Plugin
-[ 96%] Building CXX object Tests/CMakeFiles/unit-tests.dir/pitch_detection_tests.cpp.o
-[ 97%] Building CXX object Tests/CMakeFiles/unit-tests.dir/processor_test.cpp.o
-[ 98%] Linking CXX executable unit-tests
+% ./bs -t
+
+=====================================================================================================
+|<><><><><><><><><><><><><><><><><><><><><><> My Sampler <><><><><><><><><><><><><><><><><><><><><><>
+| 
+| - Build Type: Debug
+| 
+| - Compiler: Clang
+| 
+| - Build Targets: Source, Tests
+| 
+| - Build Directory: /Users/tylerperin/garage/MySampler/Builds/debug-build
+| 
+| - Pitch Detection Algorithm: YIN
+| 
+|<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+=====================================================================================================
+
+|---------------------------------- Building Plugin Executable(s) ----------------------------------|
+
+[ 16%] Built target MySamplerPluginBinaryData
+[100%] Built target MySamplerPlugin
+[ 64%] Built target Catch2
+[ 69%] Built target MySamplerPluginBinaryData
+[ 92%] Built target MySamplerPlugin
 [100%] Built target unit-tests
-JUCE v7.0.3
-Randomness seeded to: 2100061589
-Using YIN pitch detection algorithm.
+
+
+|---------------------------------------- Running Unit Tests ----------------------------------------|
+
+Randomness seeded to: 2180487896
+
 ===============================================================================
-All tests passed (77 assertions in 32 test cases)
+All tests passed (287 assertions in 47 test cases)
+
 ```
 
 >>> The pitch detection tests are relatively slow, but you can use a `-tf` option to exclude the slow tests.
 
 ## Xcode Integration
 
-To integrate and build the plugin with Xcode, use [Projucer](https://docs.juce.com/master/tutorial_new_projucer_project.html) along with the `Piano960.jucer` file, which can be found in the `Config` directory.
+To integrate and build the plugin with Xcode, use [Projucer](https://docs.juce.com/master/tutorial_new_projucer_project.html) along with the `MySampler.jucer` file, which can be found in the `Config` directory.
 
 This is completely optional, and unit testing is not supported by this build process. 
 
 ## Samples
 
-Samples are randomly compiled from [Piano960-Sample-Sets](https://github.com/perintyler/Piano960-Sample-Packs/tree/3cd9a87cd744546126fbd789f81a77e3cdff23df) to the [`Resources`](https://github.com/perintyler/Piano960/tree/main/Resources) directory via the [`compile_samples.py` script](https://github.com/perintyler/Piano960/blob/main/Scripts/compile_samples.py). Any set of samples and sample packs can be used by using the script's `--sample-packs` argument.
+Samples are randomly compiled from [MySampler-Sample-Sets](https://github.com/perintyler/MySampler-Sample-Packs/tree/3cd9a87cd744546126fbd789f81a77e3cdff23df) to the [`Resources`](https://github.com/perintyler/MySampler/tree/main/Resources) directory via the [`compile_samples.py` script](https://github.com/perintyler/MySampler/blob/main/Scripts/compile_samples.py). Any set of samples and sample packs can be used by using the script's `--sample-packs` argument.
 
 ```bash
 python3 Scripts/compile_samples.py --sample-packs path/to/my/samples
@@ -146,4 +163,4 @@ NOTE: WIP
 
 ## Presets
 
-Presets allow users to quickly load keyboard configurations from a previously curated sample set. Piano960 provides default presets that are bundled with the plugin by default, but users can also save their own presets to be re-loaded later on. Presets are saved in a JSON file installed to the `include` directory, so they will persist across plugin uses.  
+Presets allow users to quickly load keyboard configurations from a previously curated sample set. MySampler provides default presets that are bundled with the plugin by default, but users can also save their own presets to be re-loaded later on. Presets are saved in a JSON file installed to the `include` directory, so they will persist across plugin uses.  
