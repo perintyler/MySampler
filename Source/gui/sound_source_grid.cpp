@@ -1,12 +1,12 @@
-/*** Piano960 | gui/sample_category_grid.cpp ***/
+/*** Piano960 | gui/sound_source_grid.cpp ***/
 
-#include "sample_category_grid.h"
+#include "sound_source_grid.h"
 
-SampleCategoryGrid::SampleCategoryGrid()
+SoundSourceGrid::SoundSourceGrid()
 {
-    for (SampleCategory category = FIRST_CATEGORY
+    for (SoundSource category = FIRST_CATEGORY
        ; category <= LAST_CATEGORY
-       ; category = getNextSampleCategory(category)
+       ; category = getNextSoundSource(category)
     ){
         selected[category] = true;
 
@@ -24,7 +24,7 @@ SampleCategoryGrid::SampleCategoryGrid()
     }
 }
 
-SampleCategoryGrid::~SampleCategoryGrid()
+SoundSourceGrid::~SoundSourceGrid()
 {
     for (auto& button: buttons) {
         button.deleteAndZero();
@@ -33,7 +33,7 @@ SampleCategoryGrid::~SampleCategoryGrid()
     buttons.clear();
 }
 
-void SampleCategoryGrid::resized()
+void SoundSourceGrid::resized()
 {
     juce::FlexBox flexbox;
 
@@ -50,9 +50,9 @@ void SampleCategoryGrid::resized()
     flexbox.performLayout(getLocalBounds());
 }
 
-std::set<SampleCategory> SampleCategoryGrid::getSelectedCategories() const
+std::set<SoundSource> SoundSourceGrid::getSelectedCategories() const
 {
-    std::set<SampleCategory> selectedCategories;
+    std::set<SoundSource> selectedCategories;
 
     for (const auto& [category, isSelected] : selected) {
         if (isSelected) {

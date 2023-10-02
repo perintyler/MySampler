@@ -82,5 +82,9 @@ TEST_CASE("UI Test #6: presets dropdown menu", "[ui][presets_dropdown_menu][user
     REQUIRE(dropdown.getNumItems() == 3);
 }
 
+TEST_CASE("UI Test #7: sound source grid", "[ui][main_view][category_grid]")
+{}
+
+
 
 

@@ -13,7 +13,7 @@
 #include "paths.h"
 #include "config.h"
 #include "presets.h"
-// #include "sample_categories.h"
+#include "sound_source.h"
 #include "pitch_detection/pitch.h"
 
 #ifdef SAMPLES_DIRECTORY
@@ -34,7 +34,7 @@ using SampleReader = std::unique_ptr<juce::AudioFormatReader>;
 /** Randomly selects a file from a nested directory of sample-packs
  **  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
  */
-juce::String getPathToRandomSample() // std::set<SampleCategory> excluded)
+juce::String getPathToRandomSample(std::set<SoundSource> categories)
 {
     std::string path;
     int numFilesTraversed = 1;
@@ -44,12 +44,12 @@ juce::String getPathToRandomSample() // std::set<SampleCategory> excluded)
     {
         if (!std::filesystem::is_directory(entry)) 
         {
-            // std::string nameOfParentDirectory = entry.path().parent_path().filename().string();
-            // SampleCategory category = getSampleCategory(nameOfParentDirectory);
-            // bool isValidCategory = excluded.empty() || excluded.find(category) != excluded.end();
-            bool isValidCategory = true;
+            std::string nameOfParentDirectory = entry.path().parent_path().filename().string();
+            SoundSource category = getSoundSource(nameOfParentDirectory);
 
-            if (isValidCategory && uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed)) {
+            if ((categories.find(category) != categories.end())
+              && (uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed))
+            ) {
                 path = entry.path().string();
             }
 
@@ -242,7 +242,7 @@ void RandomSampler::randomize(bool pitch_shift /* = true */)
             bool foundValidSample = false;
 
             while (!foundValidSample) {
-                pathToFile = getPathToRandomSample();
+                pathToFile = getPathToRandomSample(getAllCategories());
                 sampleName = pathToFile.toStdString();
                 juce::File randomSample(pathToFile);
                 

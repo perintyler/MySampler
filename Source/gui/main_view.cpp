@@ -27,6 +27,7 @@ MainView::MainView(juce::MidiKeyboardState&  keyboardState,
   , saveButton         (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
   , keyboard           (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
   , presetDropdownMenu (std::make_unique<PresetsDropdownMenu>(selectPreset))
+  , categoryGrid       (std::make_unique<SoundSourceGrid>())
 {
     randomizeButton->onClick = randomizeSamples;
 
@@ -38,6 +39,7 @@ MainView::MainView(juce::MidiKeyboardState&  keyboardState,
     addAndMakeVisible(randomizeButton.get());
     addAndMakeVisible(keyboard.get());
     addAndMakeVisible(presetDropdownMenu.get());
+    addAndMakeVisible(categoryGrid.get());
 
     // component IDs are only used for testing
     setComponentID("app");
@@ -91,10 +93,16 @@ void MainView::resized()
     int saveButtonHeight = randomizeButtonHeight;
     int saveButtonWidth = 0.5*keyboardWidth - 5;
 
+    int categoryGridHeight = 40;
+    int categoryGridWidth = getLocalBounds().getWidth();
+    int categoryGridXCoord = HORIZONTAL_MARGIN_SIZE;
+    int categoryGridYCoord = saveButtonYCoord+saveButtonHeight+5;
+
     keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
     presetDropdownMenu->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
     randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
     saveButton->setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
+    categoryGrid->setBounds(categoryGridXCoord, categoryGridYCoord, categoryGridWidth, categoryGridHeight);
 }
 
 void MainView::timerCallback()

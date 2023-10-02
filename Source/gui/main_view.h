@@ -9,6 +9,7 @@
 #include "lockable_keys.h"
 #include "new_preset_dialog.h"
 #include "presets_dropdown_menu.h"
+#include "sound_source_grid.h"
 
 class MainView : public juce::Component, private juce::Timer {
 public:
@@ -32,16 +33,15 @@ private:
 
     void timerCallback() override;
 
-    /** TODO
-     **   I don't think these members need to be unique_ptr.
-     **/
     std::unique_ptr<juce::TextButton> randomizeButton;
     
-    std::unique_ptr<juce::TextButton> saveButton;
+    std::unique_ptr<juce::TextButton> saveButton; // rename to savePresetButton
 
     std::unique_ptr<LockableKeys> keyboard;
 
     std::unique_ptr<PresetsDropdownMenu> presetDropdownMenu;
+
+    std::unique_ptr<SoundSourceGrid> categoryGrid;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainView)
 };
