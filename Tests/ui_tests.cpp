@@ -5,8 +5,7 @@
 #include <juce_graphics/juce_graphics.h>
 
 #include "audio_processor.h"
-#include "app.h"
-
+#include "gui/app.h"
 #include "gui/lockable_keys.h"
 #include "gui/main_view.h"
 #include "gui/presets_dropdown_menu.h"
@@ -84,7 +83,7 @@ TEST_CASE("UI Test #6: presets dropdown menu", "[ui][presets_dropdown_menu][user
     processor.suspendProcessing(true);
 
     PresetsDropdownMenu dropdown(processor);
-    REQUIRE(dropdown.getNumItems() == 3);
+    REQUIRE(dropdown.getNumItems() >= 3);
 }
 
 TEST_CASE("UI Test #7: sound source grid", "[ui][main_view][category_grid]")

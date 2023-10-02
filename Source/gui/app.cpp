@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "app.h"
-#include "presets.h"
+#include "../presets.h"
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 

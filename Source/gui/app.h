@@ -8,8 +8,8 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-#include "audio_processor.h"
-#include "gui/main_view.h"
+#include "../audio_processor.h"
+#include "main_view.h"
 
 class App: public juce::AudioProcessorEditor {
 public:
