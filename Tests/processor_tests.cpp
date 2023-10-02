@@ -3,9 +3,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "audio_processor.h"
-#include "config.h"
-#include "samples.h"
-#include "pitch_detection/pitch_detection.h"
 
 TEST_CASE("Processor Test #1: Name", "[processor]")
 {
