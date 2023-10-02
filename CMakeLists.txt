@@ -20,28 +20,28 @@ set(PIANO960_INSTALLATION_PATH "include/${PROJECT_NAME}")
 
 set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/${PIANO960_INSTALLATION_PATH}")
 
-message("| installing Piano960 samples to ${PIANO960_INSTALLATION_DIR}/samples")
+message("| Piano960  will be installedsamples to ${PIANO960_INSTALLATION_DIR}/samples")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
   DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
-message("| installing CREPE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/crepe-models")
+message("| CREPE pitch detection model will be installed to ${PIANO960_INSTALLATION_DIR}/Models/crepe-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
   DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
-message("| installing SPICE pitch detection model to ${PIANO960_INSTALLATION_DIR}/Models/spice-models")
+message("| SPICE pitch detection model will be installed to ${PIANO960_INSTALLATION_DIR}/Models/spice-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
   DESTINATION ${PIANO960_INSTALLATION_PATH}
 )
 
-message("| installing presets to ${PIANO960_INSTALLATION_DIR}/presets.json")
+message("| presets will be installed to ${PIANO960_INSTALLATION_DIR}/presets.json")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/presets.json
@@ -49,7 +49,7 @@ install(
 )
 
 set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
-message("| installing pitch detection cachefile to ${PITCH_DETECTION_CACHE_FILE}")
+message("| pitch detection cachefile will be installed to ${PITCH_DETECTION_CACHE_FILE}")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/pitch_detection_cache.json
