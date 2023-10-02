@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 
-#include "samples.h"
+#include "sample_set.h"
 
 std::vector<std::string> getPresetNames();
 

@@ -8,7 +8,7 @@
 
 #include "pitch_detection/pitch_detection.h"
 #include "presets.h"
-#include "samples.h"
+#include "sample_set.h"
 
 TEST_CASE("SampleSet Test #1: length", "[samples][sample_set]")
 {

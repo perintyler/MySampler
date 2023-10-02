@@ -17,14 +17,8 @@
   pluginFormats="buildAU,buildStandalone,buildVST3"
   defines="YIN_ALGO=1"
 >
-    <MAINGROUP 
-      id="gfHjMe" 
-      name="Piano960"
-    >
-        <GROUP 
-          id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" 
-          name="Source"
-        >
+    <MAINGROUP id="gfHjMe" name="Piano960">
+        <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="Source">
             <FILE 
               id="OKUrBa" 
               name="sound_source.cpp" 
@@ -40,6 +34,41 @@
               file="Source/sound_source.h"
             />
             <FILE 
+              id="T0cPEF" 
+              name="sample_set.h" 
+              compile="0" 
+              resource="0" 
+              file="Source/sample_set.h"
+            />
+            <FILE 
+              id="PGNQ6l" 
+              name="sampler.h" 
+              compile="0" 
+              resource="0" 
+              file="Source/sampler.h"
+            />
+            <FILE 
+              id="ISO7wU" 
+              name="sample_set.cpp" 
+              compile="1" 
+              resource="0" 
+              file="Source/sample_set.cpp"
+            />
+            <FILE 
+              id="ikkcuG" 
+              name="sampler.cpp" 
+              compile="1" 
+              resource="0" 
+              file="Source/sampler.cpp"
+            />
+            <FILE 
+              id="YepfMc" 
+              name="sample.h" 
+              compile="0" 
+              resource="0" 
+              file="Source/sample.h"
+            />
+            <FILE 
               id="IoCkXB" 
               name="notes.cpp" 
               compile="1" 
@@ -53,10 +82,7 @@
               resource="0" 
               file="Source/notes.h"
             />
-            <GROUP 
-              id="{DC6478D8-1F28-322B-7A3E-AB9199687021}" 
-              name="gui"
-            >
+            <GROUP id="{DC6478D8-1F28-322B-7A3E-AB9199687021}" name="gui">
                 <FILE 
                   id="O45mgK" 
                   name="app.h" 
@@ -156,14 +182,8 @@
               resource="0" 
               file="Source/presets.h"
             />
-            <GROUP 
-              id="{F3E0D793-1346-EF5B-FBB9-CF22BEE78DEC}" 
-              name="JsonCpp"
-            >
-                <GROUP 
-                  id="{68691749-F265-B79D-4834-C39A124E69AE}" 
-                  name="json"
-                >
+            <GROUP id="{F3E0D793-1346-EF5B-FBB9-CF22BEE78DEC}" name="JsonCpp">
+                <GROUP id="{68691749-F265-B79D-4834-C39A124E69AE}" name="json">
                     <FILE 
                       id="mbLdlH" 
                       name="json-forwards.h" 
@@ -186,10 +206,7 @@
                   file="Source/JsonCpp/jsoncpp.cpp"
                 />
             </GROUP>
-            <GROUP 
-              id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" 
-              name="pitch_detection"
-            >
+            <GROUP id="{E4037684-1D2E-C82B-BC77-8A1058DD704E}" name="pitch_detection">
                 <FILE 
                   id="jqZagE" 
                   name="crepe.cpp" 
@@ -295,20 +312,6 @@
               compile="0" 
               resource="0" 
               file="Libraries/AudioFFT/AudioFFT.h"
-            />
-            <FILE 
-              id="iiM5iF" 
-              name="samples.cpp" 
-              compile="1" 
-              resource="0" 
-              file="Source/samples.cpp"
-            />
-            <FILE 
-              id="YybXYt" 
-              name="samples.h" 
-              compile="0" 
-              resource="0" 
-              file="Source/samples.h"
             />
             <FILE 
               id="gCYTnU" 

@@ -1,4 +1,4 @@
-/* Piano960 | plugin_processor.h */
+/*** Piano960 | Source/plugin_processor.h ***/
 
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 //
@@ -18,9 +18,7 @@
 #include "logs.h"
 #include "config.h"
 #include "presets.h"
-#include "samples.h"
-#include "pitch_detection/pitch_detection.h"
-
+#include "sampler.h"
 
 class AudioProcessor: public juce::AudioProcessor 
 {

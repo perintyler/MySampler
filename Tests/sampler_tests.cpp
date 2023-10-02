@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "samples.h"
+#include "sampler.h"
 #include "notes.h"
 
 TEST_CASE("RandomSampler Test #1: keys start off as unlocked", "[samples][sampler]")
