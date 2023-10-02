@@ -108,7 +108,7 @@ All tests passed (287 assertions in 47 test cases)
 
 ```
 
->>> The pitch detection tests are relatively slow, but you can use a `-tf` option to exclude the slow tests.
+> The pitch detection tests are relatively slow, but you can use a `-tf` option to exclude the slow tests.
 
 ## Xcode Integration
 
@@ -143,7 +143,7 @@ This codebase currently supports 3 different pitch detection algorithm. The desi
 
 NOTE: Each algorithm currently exists as different builds because Tensorflow is a giant build dependency. The branching builds will be consolidated when pitch detection is ironed out.
 
->>> use the build script (`bs`) and a `-g` to enable GPU usage, which will make `crepe` and `spice` faster
+> use the build script (`bs`) and a `-g` to enable GPU usage, which will make `crepe` and `spice` faster
 
 ### [YIN Algorithm](http://audition.ens.fr/adc/pdf/2002_JASA_YIN.pdf) 
 
