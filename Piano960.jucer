@@ -39,6 +39,20 @@
               resource="0"
               file="Source/sound_source.h"
             />
+            <FILE 
+              id="IoCkXB" 
+              name="notes.cpp" 
+              compile="1" 
+              resource="0" 
+              file="Source/notes.cpp"
+            />
+            <FILE 
+              id="bqbWDF" 
+              name="notes.h" 
+              compile="0" 
+              resource="0" 
+              file="Source/notes.h"
+            />
             <GROUP 
               id="{DC6478D8-1F28-322B-7A3E-AB9199687021}" 
               name="gui"
@@ -184,46 +198,32 @@
                   file="Source/pitch_detection/exceptions.h"
                 />
                 <FILE 
-                  id="IoCkXB" 
-                  name="notes.cpp" 
+                  id="BnWnLR" 
+                  name="frequency.cpp" 
                   compile="1" 
                   resource="0" 
-                  file="Source/pitch_detection/notes.cpp"
+                  file="Source/pitch_detection/frequency.cpp"
                 />
                 <FILE 
-                  id="bqbWDF" 
-                  name="notes.h" 
+                  id="mthR9a" 
+                  name="frequency.h" 
                   compile="0" 
                   resource="0" 
-                  file="Source/pitch_detection/notes.h"
+                  file="Source/pitch_detection/frequency.h"
                 />
                 <FILE 
                   id="hDwQbf" 
-                  name="pitch.cpp" 
+                  name="pitch_detection.cpp" 
                   compile="1" 
                   resource="0" 
-                  file="Source/pitch_detection/pitch.cpp"
+                  file="Source/pitch_detection/pitch_detection.cpp"
                 />
                 <FILE 
                   id="yqotOS" 
-                  name="pitch.h" 
+                  name="pitch_detection.h" 
                   compile="0" 
                   resource="0" 
-                  file="Source/pitch_detection/pitch.h"
-                />
-                <FILE 
-                  id="H0ELnb" 
-                  name="semitones.cpp" 
-                  compile="1" 
-                  resource="0" 
-                  file="Source/pitch_detection/semitones.cpp"
-                />
-                <FILE 
-                  id="ayuPio" 
-                  name="semitones.h" 
-                  compile="0" 
-                  resource="0" 
-                  file="Source/pitch_detection/semitones.h"
+                  file="Source/pitch_detection/pitch_detection.h"
                 />
                 <FILE 
                   id="ue9zVK" 
