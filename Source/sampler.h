@@ -12,7 +12,7 @@
 
 /***
  ** A synthesizer that generates a sound source for each key using a different 
- ** random sample from Piano960's installed sample set. A key's sample can be
+ ** random sample from MySampler's installed sample set. A key's sample can be
  ** locked/unlocked (using the `lockKey` and `unlockKey` functions), meaning the
  ** key's sound source won't be re-randomized every time `RandomSampler::randomize` 
  ** is called.

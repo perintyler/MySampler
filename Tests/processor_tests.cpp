@@ -1,4 +1,4 @@
-/*** Piano960 Tests | processor_tests.cpp ***/
+/*** MySampler | Tests/processor_tests.cpp ***/
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -7,7 +7,7 @@
 TEST_CASE("Processor Test #1: Name", "[processor]")
 {
     auto processor = AudioProcessor {};
-    REQUIRE(processor.getName() == juce::String {"Piano960"});
+    REQUIRE(processor.getName() == juce::String {"MySampler"});
 }
 
 TEST_CASE("Processor Test #2: HasEditor", "[processor]")

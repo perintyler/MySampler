@@ -1,4 +1,4 @@
-/* logs.cpp */
+/*** MySampler | Source/logs.cpp ***/
 
 #include "logs.h"
 
@@ -23,8 +23,8 @@ public:
 };
 
 #ifndef NO_LOG
-static NonDebugLogger goodSampleLogger("/var/log/Piano960/good-samples.txt");
-static NonDebugLogger badSampleLogger("/var/log/Piano960/bad-samples.txt");
+static NonDebugLogger goodSampleLogger("/var/log/MySampler/good-samples.txt");
+static NonDebugLogger badSampleLogger("/var/log/MySampler/bad-samples.txt");
 #endif
 
 void logs::newGoodSample(const juce::String& sampleName)

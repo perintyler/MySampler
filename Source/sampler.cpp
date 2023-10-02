@@ -19,7 +19,7 @@
 #ifdef SAMPLES_DIRECTORY
   const std::string PATH_TO_SAMPLES_DIRECTORY { SAMPLES_DIRECTORY };
 #else
-  const std::string PATH_TO_SAMPLES_DIRECTORY { "/usr/local/include/Piano960/samples" };
+  const std::string PATH_TO_SAMPLES_DIRECTORY { "/usr/local/include/MySampler/samples" };
 #endif
 
 // ------------------------------------------------------------------------------------------

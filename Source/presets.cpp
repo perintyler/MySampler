@@ -1,4 +1,4 @@
-/*** Piano960 | presets.cpp ***/
+/*** MySampler | Source/presets.cpp ***/
 
 #include <assert.h>
 #include <iostream>
@@ -20,7 +20,7 @@
 //
 
 #ifndef PATH_TO_PRESETS_FILE
-  #define PATH_TO_PRESETS_FILE "/usr/local/include/Piano960/presets.json"
+  #define PATH_TO_PRESETS_FILE "/usr/local/include/MySampler/presets.json"
 #endif
 
 /**

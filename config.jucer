@@ -2,7 +2,7 @@
 
 <JUCERPROJECT 
   id="iT4mh4" 
-  name="Piano960" 
+  name="MySampler" 
   projectType="audioplug" 
   useAppConfig="0"
   addUsingNamespaceToJuceHeader="0" 
@@ -17,7 +17,7 @@
   pluginFormats="buildAU,buildStandalone,buildVST3"
   defines="YIN_ALGO=1"
 >
-    <MAINGROUP id="gfHjMe" name="Piano960">
+    <MAINGROUP id="gfHjMe" name="MySampler">
         <GROUP id="{FD1D8A8F-A721-4B80-3905-3E859BBF80B0}" name="Source">
             <FILE 
               id="OKUrBa" 
@@ -373,7 +373,7 @@
               <CONFIGURATION 
                 isDebug="0" 
                 name="Release" 
-                targetName="Piano960"
+                targetName="MySampler"
               />
             </CONFIGURATIONS>
             <MODULEPATHS>

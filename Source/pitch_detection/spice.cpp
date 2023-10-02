@@ -1,4 +1,4 @@
-/* pitch_detection_v2.cpp */
+/*** MySampler | Source/pitch_detection/spice.cpp ***/
 
 /** Notes
  * 
@@ -32,7 +32,7 @@
 #ifdef PATH_TO_CREPE_MODEL
   const std::string SPICE_TFLITE_FILE { PATH_TO_SPICE_MODEL };
 #else
-  const std::string SPICE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/spice.tflite" };
+  const std::string SPICE_TFLITE_FILE { "/usr/local/include/MySampler/crepe-models/spice.tflite" };
 #endif
 
 const bool VERBOSE = false;

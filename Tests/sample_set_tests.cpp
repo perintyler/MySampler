@@ -1,4 +1,4 @@
-/*** Piano960 Tests | sample_set_tests.cpp ***/
+/*** MySampler | Tests/sample_set_tests.cpp ***/
 
 #include <vector>
 #include <string>
@@ -39,10 +39,10 @@ TEST_CASE("SampleSet Test #3: get", "[samples][sample_set]")
 {
     auto samples = getSamplesForPreset("default-preset-1");
 
-    REQUIRE(samples.get(42).filepath.string() == "/usr/local/include/Piano960/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav");
+    REQUIRE(samples.get(42).filepath.string() == "/usr/local/include/MySampler/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav");
     REQUIRE(samples.get(42).rootNote == 60);
 
-    REQUIRE(samples.get(52).filepath.string() == "/usr/local/include/Piano960/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav");
+    REQUIRE(samples.get(52).filepath.string() == "/usr/local/include/MySampler/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav");
     REQUIRE(samples.get(52).rootNote == 65);
 }
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Piano960 C CXX)
+project(MySampler C CXX)
 
 
 # ============= Define Compiler Flags ===============
@@ -16,44 +16,44 @@ endif()
 
 # ================== Installation ====================
 
-set(PIANO960_INSTALLATION_PATH "include/${PROJECT_NAME}")
+set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
 
-set(PIANO960_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/${PIANO960_INSTALLATION_PATH}")
+set(MYSAMPLER_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/${MYSAMPLER_INSTALLATION_PATH}")
 
-message("| Piano960  will be installedsamples to ${PIANO960_INSTALLATION_DIR}/samples")
+message("| MySampler  will be installedsamples to ${MYSAMPLER_INSTALLATION_DIR}/samples")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
-  DESTINATION ${PIANO960_INSTALLATION_PATH}
+  DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-message("| CREPE pitch detection model will be installed to ${PIANO960_INSTALLATION_DIR}/Models/crepe-models")
+message("| CREPE pitch detection model will be installed to ${MYSAMPLER_INSTALLATION_DIR}/Models/crepe-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/crepe-models
-  DESTINATION ${PIANO960_INSTALLATION_PATH}
+  DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-message("| SPICE pitch detection model will be installed to ${PIANO960_INSTALLATION_DIR}/Models/spice-models")
+message("| SPICE pitch detection model will be installed to ${MYSAMPLER_INSTALLATION_DIR}/Models/spice-models")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Models/spice-models
-  DESTINATION ${PIANO960_INSTALLATION_PATH}
+  DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-message("| presets will be installed to ${PIANO960_INSTALLATION_DIR}/presets.json")
+message("| presets will be installed to ${MYSAMPLER_INSTALLATION_DIR}/presets.json")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/presets.json
-  DESTINATION ${PIANO960_INSTALLATION_PATH}
+  DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-set(PITCH_DETECTION_CACHE_FILE "${PIANO960_INSTALLATION_DIR}/pitch_detection_cache.json")
+set(PITCH_DETECTION_CACHE_FILE "${MYSAMPLER_INSTALLATION_DIR}/pitch_detection_cache.json")
 message("| pitch detection cachefile will be installed to ${PITCH_DETECTION_CACHE_FILE}")
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/pitch_detection_cache.json
-  DESTINATION ${PIANO960_INSTALLATION_PATH}
+  DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
 # ============= Define Pre-Compiler Variables ===============

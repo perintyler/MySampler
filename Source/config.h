@@ -1,4 +1,4 @@
-/*** Piano960 | confih.h ***/
+/*** MySampler | confih.h ***/
 
 #pragma once
 
@@ -7,7 +7,7 @@
 
 // #define NO_LOG // uncomment this line out to turn off logging
 
-const std::string PLUGIN_NAME { "Piano960" };
+const std::string PLUGIN_NAME { "MySampler" };
 
 const Note FIRST_MIDI_NOTE = C2;
 

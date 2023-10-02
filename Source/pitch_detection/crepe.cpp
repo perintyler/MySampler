@@ -1,4 +1,4 @@
-/*** Piano960 | pitch_detection/crepe.cpp ***/
+/*** MySampler | Source/pitch_detection/crepe.cpp ***/
 
 /***************************************************************************************************************
 
@@ -105,7 +105,7 @@ using Buffer = juce::AudioBuffer<float>;
 #ifdef PATH_TO_CREPE_MODEL
   const std::string CREPE_TFLITE_FILE { PATH_TO_CREPE_MODEL };
 #else
-  const std::string CREPE_TFLITE_FILE { "/usr/local/include/Piano960/crepe-models/model-full.tflite" };
+  const std::string CREPE_TFLITE_FILE { "/usr/local/include/MySampler/crepe-models/model-full.tflite" };
 #endif
 
 const int DOWNSAMPLING_METHOD = SRC_SINC_MEDIUM_QUALITY;
