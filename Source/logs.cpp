@@ -2,6 +2,10 @@
 
 #include "logs.h"
 
+#if defined(TESTMODE) && !defined(NO_LOG)
+  #define NO_LOG
+#endif
+
 /** A `NonDebugLogger`  is just like a `juce::FileLogger`, except log messages don't
  ** get written to the debug stream (i.e. stdout)
  **/
