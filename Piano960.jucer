@@ -58,6 +58,20 @@
               name="gui"
             >
                 <FILE 
+                  id="O45mgK" 
+                  name="app.h" 
+                  compile="0" 
+                  resource="0" 
+                  file="Source/gui/app.h"
+                />
+                <FILE 
+                  id="Buusbf" 
+                  name="app.cpp" 
+                  compile="1" 
+                  resource="0" 
+                  file="Source/gui/app.cpp"
+                />
+                <FILE 
                   id="YlbfgN" 
                   name="lockable_keys.cpp" 
                   compile="1" 
@@ -254,20 +268,6 @@
                   file="Source/pitch_detection/yin.h"
                 />
             </GROUP>
-            <FILE 
-              id="O45mgK" 
-              name="app.h" 
-              compile="0" 
-              resource="0" 
-              file="Source/app.h"
-            />
-            <FILE 
-              id="Buusbf" 
-              name="app.cpp" 
-              compile="1" 
-              resource="0" 
-              file="Source/app.cpp"
-            />
             <FILE 
               id="j0Sc1t" 
               name="logs.cpp" 
