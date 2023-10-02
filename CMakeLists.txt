@@ -20,7 +20,7 @@ set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
 
 set(MYSAMPLER_INSTALLATION_DIR "${CMAKE_INSTALL_PREFIX}/${MYSAMPLER_INSTALLATION_PATH}")
 
-message("| MySampler  will be installedsamples to ${MYSAMPLER_INSTALLATION_DIR}/samples")
+message("| samples will be installed to ${MYSAMPLER_INSTALLATION_DIR}/samples")
 
 install(
   DIRECTORY   ${CMAKE_CURRENT_SOURCE_DIR}/Assets/samples
