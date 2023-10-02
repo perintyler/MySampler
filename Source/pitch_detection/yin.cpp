@@ -4,8 +4,8 @@
 
 #include "yin.h"
 #include "exceptions.h"
-#include "notes.h"
-#include "semitones.h"
+#include "frequency.h"
+#include "../notes.h"
 
 float getPositionOfQuadraticPeak(const float* buffer, unsigned int startIndex, int bufferSize)
 {

@@ -19,7 +19,7 @@
 #include "config.h"
 #include "presets.h"
 #include "samples.h"
-#include "pitch_detection/pitch.h"
+#include "pitch_detection/pitch_detection.h"
 
 
 class AudioProcessor: public juce::AudioProcessor 

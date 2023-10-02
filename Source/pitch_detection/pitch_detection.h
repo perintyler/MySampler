@@ -1,13 +1,12 @@
-/*** pitch_detection/pitch.h ***/
+/*** pitch_detection/pitch_detection.h ***/
 
 #pragma once
 
 #include <string>
 #include <juce_audio_formats/juce_audio_formats.h>
 
+#include "frequency.h"
 #include "exceptions.h"
-#include "notes.h"
-#include "semitones.h"
 
 void loadPitchDetectionModel();
 

@@ -14,7 +14,7 @@
 
 #include <juce_audio_devices/juce_audio_devices.h>
 
-#include "pitch_detection/notes.h"
+#include "notes.h"
 
 /***
  ** A locally installed audio file

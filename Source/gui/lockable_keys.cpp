@@ -4,7 +4,7 @@
 
 #include "lockable_keys.h"
 #include "BinaryData.h"
-#include "../pitch_detection/notes.h"
+#include "../notes.h"
 #include "../logs.h"
 
 static const juce::MidiKeyboardComponent::Orientation DEFAULT_ORIENTATION 
@@ -90,20 +90,17 @@ void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, Note note)
 void LockableKeys::layoutLockButton(ImageButtonPointer& lockButton, Note note)
 {
     const juce::Rectangle keyBounds = getRectangleForKey(note);
-    const bool isBlackKey = isBlackNote(note);
+    bool keyIsBlack = isBlackKey(note);
 
-    const float keyXCoord = keyBounds.getX();
-    const float keyYCoord = keyBounds.getY();
-    const float keyWidth = isBlackKey ? getBlackNoteWidth() : keyBounds.getWidth();
-    const float keyHeight = isBlackKey ? getBlackNoteLength() : keyBounds.getHeight();
+    float keyXCoord = keyBounds.getX();
+    float keyYCoord = keyBounds.getY();
+    float keyWidth  = keyIsBlack ? getBlackNoteWidth() : keyBounds.getWidth();
+    float keyHeight = keyIsBlack ? getBlackNoteLength() : keyBounds.getHeight();
+    float buttonSize = 0.25*keyWidth;
+    float xCoord = keyXCoord + 0.5*(keyWidth-buttonSize) - LOCK_BUTTON_OFFSET;
+    float yCoord = keyIsBlack ? keyYCoord + 0.12*getBlackNoteLength()
+                              : getBlackNoteLength() + 0.5*(keyHeight-getBlackNoteLength()) - 0.5*buttonSize;
 
-    const float buttonSize = 0.25*keyWidth;
-    const float xCoord = keyXCoord + 0.5*(keyWidth-buttonSize) - LOCK_BUTTON_OFFSET;
-    const float yCoord = 
-          isBlackKey
-        ? keyYCoord + 0.12*getBlackNoteLength()
-        : getBlackNoteLength() + 0.5*(keyHeight-getBlackNoteLength()) - 0.5*buttonSize;
-        
     lockButton->setSize(buttonSize, buttonSize);
     lockButton->setCentrePosition(xCoord, yCoord);
 }

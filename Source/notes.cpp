@@ -1,25 +1,26 @@
-/*** pitch_detection/semitones.cpp ***/
+/*** Piano960 | pitch_detection/notes.cpp ***/
 
-#include <assert.h>
-
-#include "semitones.h"
 #include "notes.h"
 
 const int NUM_SEMITONES = 12;
 
 const std::string SEMITONE_STRINGS[] = { "C", "D#", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
 
-Semitone getSemitone(float frequency)
-{
-    int semitoneNumber = matchNoteToFrequency(frequency) % OCTAVE_SIZE;
-    assert(0 <= semitoneNumber);
-    assert(semitoneNumber < OCTAVE_SIZE);
-    return Semitone(semitoneNumber);
-}
+const Semitone BLACK_KEYS[5] { Db, Eb, Gb, Ab, Bb };
 
 Semitone getSemitone(Note note)
 {
     return Semitone((note - C0) % NUM_SEMITONES);
+}
+
+bool isBlackKey(Semitone semitone)
+{
+    return std::find(std::begin(BLACK_KEYS), std::end(BLACK_KEYS), semitone) != std::end(BLACK_KEYS);
+}
+
+bool isBlackKey(Note note)
+{
+    return isBlackKey(getSemitone(note));
 }
 
 std::string getSemitoneString(Semitone semitone)

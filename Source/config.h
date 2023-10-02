@@ -3,7 +3,7 @@
 #pragma once
 
 #include <string>
-#include "pitch_detection/notes.h"
+#include "notes.h"
 
 // #define NO_LOG // uncomment this line out to turn off logging
 

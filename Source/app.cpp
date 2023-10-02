@@ -64,16 +64,14 @@ App::App(AudioProcessor& audioProcessor)
     processor.randomizeSamples();
 }
 
-/** Renders the UI
- **/
+/*** Renders the UI ***/
 void App::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     g.setColour(BACKGROUND_COLOR);
 }
 
-/** Lays out subcomponents
- **/
+/*** Lays out subcomponents ***/
 void App::resized()
 {
     view->setBounds(getLocalBounds());

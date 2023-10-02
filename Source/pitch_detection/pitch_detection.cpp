@@ -1,12 +1,15 @@
-/*** pitch_detection/pitch.cpp ***/
+/*** pitch_detection/pitch_detection.cpp ***/
 
 #include <iostream>
 #include <filesystem>
 #include <iostream>
 #include <fstream>
 
-#include "pitch.h"
 #include "../JsonCpp/json/json.h"
+
+#include "pitch_detection.h"
+#include "exceptions.h"
+#include "../notes.h"
 
 #if defined(CREPE_MODEL)
     #include "crepe.h"
@@ -20,7 +23,7 @@
 #endif
 
 #ifndef PITCH_DETECTION_CACHE_FILE
-    #define PITCH_DETECTION_CACHE_FILE "/usr/local/include/Piano960/pitch_detection_cache.json"
+    #define NO_PITCH_DETECTION_CACHE
 #endif
 
 // the pitch detection cache is stored as a JSON file in the installation directory
@@ -101,10 +104,11 @@ Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate, std::string sa
     if (!sampleName.empty() && __pitch_detection_cache__.count(sampleName) != 0)
         return __pitch_detection_cache__.at(sampleName);
 
-    Note detectedNote = matchNoteToFrequency(detectFrequency(buffer, sampleRate));
+    Note detectedNote = getNoteForFrequency(detectFrequency(buffer, sampleRate));
 
-    if (!sampleName.empty())
-        cache_pitch_detection(sampleName, detectedNote);
+    #ifndef NO_PITCH_DETECTION_CACHE
+      if (!sampleName.empty()) { cache_pitch_detection(sampleName, detectedNote); }
+    #endif
 
     return detectedNote;
 }

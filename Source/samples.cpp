@@ -14,7 +14,7 @@
 #include "config.h"
 #include "presets.h"
 #include "sound_source.h"
-#include "pitch_detection/pitch.h"
+#include "pitch_detection/pitch_detection.h"
 
 #ifdef SAMPLES_DIRECTORY
   const std::string PATH_TO_SAMPLES_DIRECTORY { SAMPLES_DIRECTORY };
