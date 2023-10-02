@@ -11,28 +11,30 @@ namespace
     int getPresetIndex    (int dropdownItemId) { return dropdownItemId - 1; }
 }
 
-PresetsDropdownMenu::Listener::Listener(PresetSelectedCallback presetSelectedCallback)
+PresetsDropdownMenu::Listener::Listener(PresetSelectedCallback callback)
   : juce::ComboBox::Listener()
-  , callback(presetSelectedCallback)
+  , onPresetSelected(callback)
 {}
 
-void PresetsDropdownMenu::Listener::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) 
+void PresetsDropdownMenu::Listener::comboBoxChanged(juce::ComboBox* comboBox) 
 {
-    int dropdownOptionID = comboBoxThatHasChanged->getSelectedId(); // Get the selected item ID
+    int dropdownOptionID = comboBox->getSelectedId(); // Get the selected item ID
 
-    comboBoxThatHasChanged->setText("presets");
+    comboBox->setText("presets");
 
     if (dropdownOptionID != 0) {
         std::string presetName = getPresetNames().at(getPresetIndex(dropdownOptionID));
-        callback(presetName);
+        onPresetSelected(presetName);
         juce::AlertWindow::showMessageBoxAsync(
             juce::AlertWindow::WarningIcon, "Loaded Preset",  "Successfully loaded preset '" + presetName + "'."
         );
     }
 }
 
-PresetsDropdownMenu::PresetsDropdownMenu(PresetSelectedCallback presetSelectedCallback)
-  : listener(presetSelectedCallback)
+PresetsDropdownMenu::PresetsDropdownMenu(AudioProcessor& processor)
+  : listener([&processor=processor](std::string presetName) { 
+        processor.sampler.setSamples(getSamplesForPreset(presetName));
+    })
 {
     setText("presets");
     setJustificationType(juce::Justification::centred);

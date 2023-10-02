@@ -31,6 +31,7 @@ SoundSourceGrid::~SoundSourceGrid()
     }
 
     buttons.clear();
+    selected.clear();
 }
 
 void SoundSourceGrid::resized()

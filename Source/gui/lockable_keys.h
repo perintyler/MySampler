@@ -10,15 +10,14 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 
 #include "../config.h"
+#include "../audio_processor.h"
 
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
-
-using OnKeyLockStateChange = std::function<void(Note)>;
 
 class LockableKeys: public juce::MidiKeyboardComponent
 {
 public:
-    LockableKeys(juce::MidiKeyboardState&, OnKeyLockStateChange);
+    LockableKeys(AudioProcessor&);
 
     ~LockableKeys() override;
 

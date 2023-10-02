@@ -16,7 +16,7 @@ TEST_CASE("UI Test #1: app", "[ui][app]")
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
 
-    auto processor = AudioProcessor {};
+    AudioProcessor processor {};
     processor.suspendProcessing(true);
     auto app = App { processor };
 
@@ -29,8 +29,9 @@ TEST_CASE("UI Test #2: main view", "[ui][main_view]")
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
 
-    juce::MidiKeyboardState keyboardState;
-    MainView view(keyboardState, [](){}, [](std::string){return true;}, [](std::string){}, [](Note){});
+    AudioProcessor processor {};
+    processor.suspendProcessing(true);
+    MainView view(processor);
 
     SECTION("sub-components are created and visible") 
     {
@@ -61,8 +62,9 @@ TEST_CASE("UI Test #3: lockable keys", "[ui][lockable_keys]")
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
-    juce::MidiKeyboardState state;
-    LockableKeys keyboard { state, [](Note){} };
+    AudioProcessor processor {};
+    processor.suspendProcessing(true);
+    LockableKeys keyboard(processor);
     int numKeys = LAST_MIDI_NOTE - FIRST_MIDI_NOTE;
     REQUIRE(keyboard.getNumChildComponents() > numKeys);
     // TODO: require that each lock button is on the key with the same index 
@@ -78,7 +80,10 @@ TEST_CASE("UI Test #6: presets dropdown menu", "[ui][presets_dropdown_menu][user
 {
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     const juce::MessageManagerLock mml;
-    PresetsDropdownMenu dropdown([](std::string){return true;});
+    AudioProcessor processor {};
+    processor.suspendProcessing(true);
+
+    PresetsDropdownMenu dropdown(processor);
     REQUIRE(dropdown.getNumItems() == 3);
 }
 

@@ -18,37 +18,37 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-MainView::MainView(juce::MidiKeyboardState&  keyboardState,
-                   std::function<void()>     randomizeSamples, 
-                   SavePresetCallback        createNewPreset,
-                   PresetSelectedCallback    selectPreset,
-                   OnKeyLockStateChange      onLockButtonClicked) 
-  : randomizeButton    (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
-  , saveButton         (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
-  , keyboard           (std::make_unique<LockableKeys>(keyboardState, onLockButtonClicked))
-  , presetDropdownMenu (std::make_unique<PresetsDropdownMenu>(selectPreset))
-  , categoryGrid       (std::make_unique<SoundSourceGrid>())
+MainView::MainView(AudioProcessor& processor)
+  : randomizeButton (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
+  , saveButton      (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
+  , keyboard        (std::make_unique<LockableKeys>(processor))
+  , presetsMenu     (std::make_unique<PresetsDropdownMenu>(processor))
+  , categoryGrid    (std::make_unique<SoundSourceGrid>())
 {
-    randomizeButton->onClick = randomizeSamples;
+    randomizeButton->onClick = [&processor=processor]() {
+        processor.sampler.randomize(); 
+    };
 
-    saveButton->onClick = [createNewPreset, &presetDropdownMenu=presetDropdownMenu](){ 
-        NewPresetDialog::show(createNewPreset);
+    saveButton->onClick = [&processor=processor, &presetsMenu    =presetsMenu    ](){ 
+        NewPresetDialog::show(processor, presetsMenu    );
     };
 
     addAndMakeVisible(saveButton.get());
     addAndMakeVisible(randomizeButton.get());
     addAndMakeVisible(keyboard.get());
-    addAndMakeVisible(presetDropdownMenu.get());
+    addAndMakeVisible(presetsMenu    .get());
     addAndMakeVisible(categoryGrid.get());
 
-    // component IDs are only used for testing
+    // set IDs for testing purposes
     setComponentID("app");
     keyboard->setComponentID("keyboard");
     randomizeButton->setComponentID("randomize-button");
     saveButton->setComponentID("save-button");
     
     // wait for timer, then put the MIDI keyboard into the computer keyboard's focus
-    if (AUTO_FOCUS) { startTimer(400); }
+    if (AUTO_FOCUS) { 
+        startTimer(400); 
+    }
 }
 
 /** Since the keyboard component's keys have fixed widths/lengths, a MainView component
@@ -57,11 +57,6 @@ MainView::MainView(juce::MidiKeyboardState&  keyboardState,
 float MainView::getMinimumWidth() const
 {
     return keyboard->getTotalKeyboardWidth();
-}
-
-void MainView::refresh()
-{
-    presetDropdownMenu->refresh();
 }
 
 /** Set bounds of randomize button, save button, and keyboard 
@@ -99,7 +94,7 @@ void MainView::resized()
     int categoryGridYCoord = saveButtonYCoord+saveButtonHeight+5;
 
     keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
-    presetDropdownMenu->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
+    presetsMenu    ->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
     randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
     saveButton->setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
     categoryGrid->setBounds(categoryGridXCoord, categoryGridYCoord, categoryGridWidth, categoryGridHeight);

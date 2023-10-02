@@ -6,6 +6,7 @@
 
 #include <juce_graphics/juce_graphics.h>
 
+#include "../audio_processor.h"
 #include "lockable_keys.h"
 #include "new_preset_dialog.h"
 #include "presets_dropdown_menu.h"
@@ -14,20 +15,13 @@
 class MainView : public juce::Component, private juce::Timer {
 public:
     
-    MainView(
-        juce::MidiKeyboardState&  keyboardState,
-        std::function<void()>     randomizeSamples, 
-        SavePresetCallback        createNewPreset,
-        PresetSelectedCallback    selectPreset,
-        OnKeyLockStateChange      onLockButtonClicked);
+    MainView(AudioProcessor& processor);
     
     ~MainView() override = default;
 
     void resized() override;
 
     float getMinimumWidth() const;
-
-    void refresh();
 
 private:
 
@@ -39,7 +33,7 @@ private:
 
     std::unique_ptr<LockableKeys> keyboard;
 
-    std::unique_ptr<PresetsDropdownMenu> presetDropdownMenu;
+    std::unique_ptr<PresetsDropdownMenu> presetsMenu;
 
     std::unique_ptr<SoundSourceGrid> categoryGrid;
 

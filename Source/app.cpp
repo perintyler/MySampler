@@ -17,43 +17,7 @@ const float PLUGIN_HEIGHT = 500.0;
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
     , processor (audioProcessor)
-    , view (std::make_unique<MainView>(processor.getKeyboardState(),
-    
-        // called when the randomize button is clicked
-        [&processor = processor]() 
-        { 
-            processor.sampler.randomize(); 
-        },
-    
-        // called when the user clicks the save button on the new preset dialog
-        [&processor=processor, &view=view](std::string presetName) 
-        {
-            const SampleSet lockedSamples = processor.sampler.getLockedSamples();
-    
-            if (lockedSamples.length() == 0) {
-                return false;
-            } else {
-                savePreset(presetName, processor.sampler.getLockedSamples());
-                view->refresh();
-                return true;
-            }
-        },
-
-        // called when a preset is selected from the presets dropdown menu
-        [&processor=processor](std::string presetName)
-        {
-            processor.sampler.setSamples(getSamplesForPreset(presetName));
-        },
-    
-        // called when the lock button on a key is clicked/unclicked (i.e. locked/unlocked)
-        [&processor=processor](Note note) {
-            if (processor.sampler.isKeyLocked(note)) {
-                processor.sampler.unlockKey(note);
-            } else {
-                processor.sampler.lockKey(note);
-            }
-        }
-    ))
+    , view (std::make_unique<MainView>(processor))
 {
     setSize(view->getMinimumWidth() + 2*HORIZONTAL_MARGIN_SIZE, PLUGIN_HEIGHT);
 

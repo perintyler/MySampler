@@ -8,6 +8,8 @@
 #include <string>
 #include <juce_gui_basics/juce_gui_basics.h>
 
+#include "../audio_processor.h"
+
 using PresetSelectedCallback = std::function<void(std::string)>;
 
 /** TODO
@@ -18,23 +20,23 @@ using PresetSelectedCallback = std::function<void(std::string)>;
 class PresetsDropdownMenu : public juce::ComboBox {
 public:
 
-    PresetsDropdownMenu(PresetSelectedCallback);
+    PresetsDropdownMenu(AudioProcessor&);
 
     ~PresetsDropdownMenu();
 
     void refresh(); // adds/removes any new/deleted presets
 
 private:
+    void onPresetSelected(std::string presetName);
 
     class Listener : public juce::ComboBox::Listener {
-    public:
-        Listener(PresetSelectedCallback);
-        void comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged) override;
-    private:
-        PresetSelectedCallback callback;
-        std::vector<std::string> presetNames {}; // index corresponds to combobox item ID
+        public:
+            Listener(PresetSelectedCallback);
+            void comboBoxChanged(juce::ComboBox*) override;
+        private:
+            PresetSelectedCallback onPresetSelected;
+            std::vector<std::string> presetNames {}; // index corresponds to combobox item ID
     };
-
 private:
     PresetsDropdownMenu::Listener listener;
 };

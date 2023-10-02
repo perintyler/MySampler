@@ -87,19 +87,19 @@ static void overwritePresetsFile()
             jsonSample["detectedNote"] = static_cast<int>(sample.rootNote);
             jsonSampleArray.append(jsonSample);
         }
-        std::cout << jsonSampleArray << std::endl;
+
         presetsFileContents[presetName] = jsonSampleArray;
     }
 
     std::ofstream presetsFile(std::string { PATH_TO_PRESETS_FILE });
 
-    // if (!presetsFile.is_open()) {
-    //     std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
-    // } else {
-    //     Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
-    //     presetsFile << Json::writeString(presetFileWriter, presetsFileContents) << std::endl;
-    //     presetsFile.close();
-    // }
+    if (!presetsFile.is_open()) {
+        std::cerr << "Presets file could not be open: " << PATH_TO_PRESETS_FILE << std::endl;
+    } else {
+        Json::StreamWriterBuilder presetFileWriter; // writer["indentation"] = "\t";
+        presetsFile << Json::writeString(presetFileWriter, presetsFileContents) << std::endl;
+        presetsFile.close();
+    }
 }
 
 std::vector<std::string> getPresetNames()
@@ -134,7 +134,7 @@ void savePreset(std::string presetName, const SampleSet& samples)
 {
     logs::debug("saving new preset: " + presetName);
     std::string uniqueName { presetName };
-
+    
     for (int numDuplicates = 0; presetExists(uniqueName); numDuplicates++)
       uniqueName = presetName + std::to_string(numDuplicates);
 

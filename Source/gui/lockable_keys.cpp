@@ -22,8 +22,8 @@ static const float WHITE_KEY_WIDTH = 40.0;
 
 static const float BLACK_KEY_WIDTH_RATIO = 1.0;
 
-LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange toggleLock)
-    : juce::MidiKeyboardComponent(state, DEFAULT_ORIENTATION)
+LockableKeys::LockableKeys(AudioProcessor& processor)
+    : juce::MidiKeyboardComponent(processor.getKeyboardState(), DEFAULT_ORIENTATION)
 {
     setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
     setScrollButtonsVisible(false);
@@ -33,12 +33,18 @@ LockableKeys::LockableKeys(juce::MidiKeyboardState& state, OnKeyLockStateChange 
 
     for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
         juce::String lockButtonName = juce::String("lock-button") + juce::String(note);
-        
         auto lockButton = ImageButtonPointer(new juce::ImageButton(lockButtonName));
         lockButton->setComponentID(juce::String { note });
         lockButton->setToggleable(true);
         lockButton->setClickingTogglesState(true);
-        lockButton->onClick = [note, toggleLock]() { toggleLock(note); };
+
+        lockButton->onClick = [note, &processor=processor]() { 
+           if (processor.sampler.isKeyLocked(note)) {
+                processor.sampler.unlockKey(note);
+            } else {
+                processor.sampler.lockKey(note);
+            }
+        };
         
         lockButtons.insert(std::pair<Note, ImageButtonPointer>(note, lockButton));
         setLockButtonImage(lockButton, note);
