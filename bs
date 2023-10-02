@@ -1,30 +1,40 @@
 #!/bin/bash
 
-#
-#
-# Piano960 Build script 
-#
-#
+# ============================================================================= #
+# ============================================================================= #
+#                                                                               #
+#                   ##########################################                  #
+#                   ## <><><><><><><><><><><><><><><><><><> ##                  #
+#                   ## <><><> MySampler Build Script <><><> ##                  #
+#                   ## <><><><><><><><><><><><><><><><><><> ##                  #
+#                   ##########################################                  #
+#                                                                               #
+# ============================================================================= #
+# ============================================================================= #
 
-PROJECT_NAME="Piano960"
+# ----------------------------------- CONFIG -----------------------------------
 
-PIANO960_REPO=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd );
+PROJECT_NAME="MySampler"
 
-ALL_BUILDS_DIRECTORY=$PIANO960_REPO/Builds
+MYSAMPLER_REPO=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd );
+
+ALL_BUILDS_DIRECTORY=$MYSAMPLER_REPO/Builds
 
 DEBUG_BUILD_DIRECTORY=$ALL_BUILDS_DIRECTORY/debug-build
 
 PRODUCTION_BUILD_DIRECTORY=$ALL_BUILDS_DIRECTORY/production-build
 
-PIANO960_INSTALL_PREFIX=/usr/local
+MYSAMPLER_INSTALL_PREFIX=/usr/local
 
-VERBOSE=false; # cli option
+# ----------------------------------- OPTIONS -----------------------------------
 
-SILENT=false; # cli option
+VERBOSE=false;
+
+SILENT=false;
 
 BUILD=false;
 
-CLEAN_BUILD=false; # cli option
+CLEAN_BUILD=false;
 
 PITCH_DETECTION_ALGO="YIN";
 
@@ -32,7 +42,7 @@ DEBUG_BUILD=true;
 
 ENABLE_GPU=false;
 
-USE_GCC=false; # defaults to Clang
+USE_GCC=false; # Clang is the default compiler
 
 ABORT_AFTER_FIRST_TEST_FAILURE=false;
 
@@ -44,10 +54,6 @@ LIST_TESTS=false;
 
 USE_LOG=false;
 
-CATCH2_ARGS="";
-
-MAKE_PARAMETERS="Piano960Plugin";
-
 ###########################################################################################
 # stdout helper functions
 ###########################################################################################
@@ -55,62 +61,74 @@ MAKE_PARAMETERS="Piano960Plugin";
 print()
 {
     if [ "$SILENT" = false ]; then
-        echo " # [BUILD::INFO] | $@"; 
-        echo;
-    fi
+        echo "$@"; 
+    fi 
 }
 
-verbose_print() 
+print_newline()
+{
+    print;
+}
+
+print_build_info()
+{
+    print " # [BUILD::INFO] | $@"; 
+    print_newline;
+}
+
+verbose_print_build_info() 
 {
     if [ "$VERBOSE" = true ]; then 
-        print "$@";
+        print_build_info "$@";
     fi
 }
 
-verbose_print_command()
+verbose_print_stdin_command()
 {
     if [ "$VERBOSE" = true ]; then
-        echo " # [BUILD::STDIN] | $@"; echo;
+        echo " # [BUILD::STDIN] | $@"; 
+        print_newline;
     fi
 }
 
 print_n_times()
 {
-    for i in $(seq $1); do echo -n $2; done
+    if [ "$SILENT" = false ]; then
+        for i in $(seq $1); 
+            do echo -n $2; 
+        done;
+    fi
 }
 
 print_divider()
 {
-    print_n_times 50 "<>"; echo;
+    print_n_times 50 "<>"; 
+    print_newline;
 }
 
 print_header_message()
 {
-    header_message="$@";
-    message_length=${#header_message};
-    line_length=100;
-    indent=$((($line_length-$message_length-2)/2));
-
     if [ "$SILENT" = false ]; then
-        echo;
-        # print_n_times $line_length "-"; echo;
+        header_message="$@";
+        message_length=${#header_message};
+        line_length=100;
+        indent=$((($line_length-$message_length-2)/2));
+
+        print_newline;
         echo -n "|";
         print_n_times $indent "-";
         echo -n " $header_message ";
         print_n_times $indent "-"; echo "|";
-        # print_n_times $line_length "-"; echo;
-        echo;
+        print_newline;
     fi
 }
 
 exit_with_error_message() 
 {
-    if [ "$SILENT" = false ]; then
-        echo; 
-        echo " # [BUILD::ERROR] | $@";
-        echo; 
-        exit;
-    fi;
+    print_newline; 
+    echo " # [BUILD::ERROR] | $@";
+    print_newline; 
+    exit;
 }
 
 print_help_message() 
@@ -118,26 +136,37 @@ print_help_message()
     echo "options:";
     echo "v   Print out verbose information";
     echo "s   Supress cmake output";
-    echo "t   Build and run unit tests";
-    echo "i   Add 'install' to the cmake command to install the samples";
-    echo "c   Clean any existing and build the plugin from scratch";
-    echo "2   use spice model for pitch detection";
-    echo "3   use crepe model for pitch detection";
-    echo "d   sets the CMAKE build type to Debug";
-    echo "e   enables GPU for tensorflow operations";
-    echo "g   compile with GCC";
-    echo "f   only run fast tests (i.e. no pitch detection tests)";
-    echo "l   turns on the logger, which writes verbose messages to a logfile";
-    echo "u   can be used to pass arguments into unit test build";
+    echo "b   Configure build environment (re-runs the 'cmake' command)";
+    echo "t   Build and run the unit tests executable";
+    echo "i   Install the plugin (samples / presets / pitch detection models)";
+    echo "c   Clean any existing CMake files and build the plugin from scratch";
+    echo "2   Use SPICE model for pitch detection";
+    echo "3   Use CREPE model for pitch detection";
+    echo "p   Sets the CMake build type to 'Production' (default is 'Debug')";
+    echo "e   Enables GPU for tensorflow operations (applicable for SPICE/CREPE pitch detection models)";
+    echo "g   Compile with GCC (default is Clang)";
+    echo "f   Only run fast tests (i.e. no pitch detection tests)";
+    echo "l   Use the debug log, which writes verbose messages to a local logfile";
+    echo "u   Can be used to pass Catch2 CLI arguments into the unit test executable";
+    echo "n   Clear terminal window and scrollback before building"
+    echo "h   Print out a build script help message";
 }
 
 ###########################################################################################
-# build functions
+# CMake Functions
 ###########################################################################################
+
+# ------------------------------- BUILD ARGUMENTS -------------------------------
+
+catch2_args="";
+
+make_parameters="MySamplerPlugin";
+
+# ------------------------------- BUILD FUNCTIONS -------------------------------
 
 cmake_piano960() 
 {
-    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$PIANO960_INSTALL_PREFIX -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
+    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$MYSAMPLER_INSTALL_PREFIX -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
 
     if [ "$ENABLE_GPU" = true ]; then
         cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
@@ -160,24 +189,24 @@ cmake_piano960()
     # ------------------------------
 
     if [ "$SILENT" = true ]; then
-        cmake $PIANO960_REPO $cmake_command_arguments > /dev/null;
+        cmake $MYSAMPLER_REPO $cmake_command_arguments > /dev/null;
     else
-        verbose_print_command "cmake $PIANO960_REPO $cmake_command_arguments";
-        cmake $PIANO960_REPO $cmake_command_arguments;
+        verbose_print_stdin_command "cmake $MYSAMPLER_REPO $cmake_command_arguments";
+        cmake $MYSAMPLER_REPO $cmake_command_arguments;
     fi
 
     if [ $? -ne 0 ]; then
-        exit_with_error_message "'cmake' command failed ('cmake $PIANO960_REPO'). Exiting.";
+        exit_with_error_message "'cmake' command failed ('cmake $MYSAMPLER_REPO'). Exiting.";
     fi
 }
 
 make_piano960()
 {
     if [ "$SILENT" = true ]; then
-        make $MAKE_PARAMETERS > /dev/null;
+        make $make_parameters > /dev/null;
     else
-        verbose_print_command "make $MAKE_PARAMETERS";
-        make $MAKE_PARAMETERS;
+        verbose_print_stdin_command "make $make_parameters";
+        make $make_parameters;
     fi
 
     if [ $? -ne 0 ]; then
@@ -189,16 +218,16 @@ make_piano960()
 # build setps
 ###########################################################################################
 
-# 1) ================== parse cli options ==================
+# 1) ================================= Parse CLI Options =================================
 
-while getopts "vscit23pegatfalu:xbh" option; do
+while getopts "vscit23pegatfalu:xbhn" option; do
     case $option in
       b) BUILD=true;;
       v) VERBOSE=true;;
       s) SILENT=true;;
       c) CLEAN_BUILD=true;;
-      i) MAKE_PARAMETERS="${MAKE_PARAMETERS} install";;
-      t) MAKE_PARAMETERS="${MAKE_PARAMETERS} unit-tests"; RUN_TESTS=true;;
+      i) make_parameters="${make_parameters} install";;
+      t) make_parameters="${make_parameters} unit-tests"; RUN_TESTS=true;;
       2) PITCH_DETECTION_ALGO="SPICE";;
       3) PITCH_DETECTION_ALGO="CREPE";;
       p) PRODUCTION=true;;
@@ -207,8 +236,8 @@ while getopts "vscit23pegatfalu:xbh" option; do
       a) ABORT_AFTER_FIRST_TEST_FAILURE=true;;
       f) ONLY_RUN_FAST_TESTS=true;;
       l) USE_LOG=true;;
-      u) CATCH2_ARGS=${OPTARG};;
-      n) bash $PIANO960_REPO/Scripts/clear_terminal.sh;;
+      u) catch2_args=${OPTARG};;
+      n) bash $MYSAMPLER_REPO/Scripts/clear_terminal.sh;;
       h) print_help_message; exit;;
     esac
 done
@@ -223,77 +252,97 @@ else
     BUILD_TYPE="Debug";
 fi
 
-# 2) ================== print header message ==================
+# 2) ============================== Print Build Info Header ==============================
 
-echo;
-print_n_times 105 "="; echo;
-echo "|<><><><><><><><><><><><><><><><><><><><><><> Piano960 <><><><><><><><><><><><><><><><><><><><><><><><><> "
-# print_n_times 100 "-"; echo;
-echo "| ";
-echo "| - Build Type: '$BUILD_TYPE'";
-echo "| "
-echo "| - Output Directory: '$BUILD_DIRECTORY'";
-echo "| ";
-echo -n "|"; print_n_times 52 "<>"; echo;
-print_n_times 105 "="; echo;
-echo;
+if [ "$USE_GCC" = true ]; then
+    COMPILER_NAME="GCC";
+else
+    COMPILER_NAME="Clang"
+fi
 
-# 3) ================== setup build directory ==================
+if [ "$RUN_TESTS" = true ]; then
+    BUILD_TARGETS="Source, Tests";
+else
+    BUILD_TARGETS="Source";
+fi
+
+print_newline;
+print_n_times 101 "="; print_newline;
+print "|<><><><><><><><><><><><><><><><><><><><><><> My Sampler <><><><><><><><><><><><><><><><><><><><><><>"
+print "| ";
+print "| - Build Type: $BUILD_TYPE";
+print "| "
+print "| - Compiler: $COMPILER_NAME";
+print "| ";
+print "| - Build Targets: $BUILD_TARGETS";
+print "| ";
+print "| - Build Directory: $BUILD_DIRECTORY";
+print "| ";
+print "| - Pitch Detection Algorithm: $PITCH_DETECTION_ALGO";
+print "| ";
+print -n "|"; print_n_times 50 "<>"; print_newline;
+print_n_times 101 "="; print_newline;
+print_newline;
+
+# 3) =============================== Setup Build Directory ===============================
 
 if [ ! -d "$ALL_BUILDS_DIRECTORY" ]; then
-    print "Creating Parent Directory For All Builds: $ALL_BUILDS_DIRECTORY"
-    verbose_print_command "mkdir $ALL_BUILDS_DIRECTORY";
+    print_build_info "Creating Parent Directory For All Builds: $ALL_BUILDS_DIRECTORY"
+    verbose_print_stdin_command "mkdir $ALL_BUILDS_DIRECTORY";
     mkdir $ALL_BUILDS_DIRECTORY;
 fi
 
 if [ "$CLEAN_BUILD" = true ]; then
-    print "Deleting Existing Build Directory: $BUILD_DIRECTORY"
-    verbose_print_command "rm -rf $BUILD_DIRECTORY";
+    print_build_info "Deleting Existing Build Directory: $BUILD_DIRECTORY"
+    verbose_print_stdin_command "rm -rf $BUILD_DIRECTORY";
     rm -rf $BUILD_DIRECTORY;
 fi
 
 if [ ! -d "$BUILD_DIRECTORY" ]; then
-    print "Creating Build Directory: $BUILD_DIRECTORY"
-    verbose_print_command "mkdir $BUILD_DIRECTORY";
+    print_build_info "Creating Build Directory: $BUILD_DIRECTORY"
+    verbose_print_stdin_command "mkdir $BUILD_DIRECTORY";
     mkdir $BUILD_DIRECTORY;
     BUILD=true;
 fi
 
-# 4) ================== build the plugin ==================
-
-print_header_message "Configuring Build Environment"
+# 4) ========================= Configure CMake Build Environment =========================
 
 working_directory=$(pwd);
-verbose_print_command "cd $BUILD_DIRECTORY";
+verbose_print_stdin_command "cd $BUILD_DIRECTORY";
 cd $BUILD_DIRECTORY;
 
 if [ "$BUILD" = true ]; then
+    print_header_message "Configuring CMake Build Environment"
     cmake_piano960;
 fi
 
-print_header_message "Building Plugin Executable"
+# 5) ============================= Build Plugin Executable(s) =============================
+
+print_header_message "Building Plugin Executable(s)"
 make_piano960 $make_parameters;
 
 if [ $? -eq 0 ]; then
-    print "Successfully built Piano960 to $BUILD_DIRECTORY";
+    print_newline;
+    verbose_print_build_info "Successfully built MySampler to $BUILD_DIRECTORY";
 else
-    print "Failed to build Piano960 to $BUILD_DIRECTORY";
+    print_newline;
+    verbose_print_build_info "Failed to build MySampler to $BUILD_DIRECTORY";
     exit;
 fi
 
-verbose_print_command "cd $working_directory";
+verbose_print_stdin_command "cd $working_directory";
 cd $working_directory;
 
-# 5) ================== run the unit tests (if '-t' cli option was set) ==================
+# 6) =================================== Run Unit Tests ===================================
 
 if [ "$RUN_TESTS" = true ]; then
 
-    print_header_message "Running Unit Test Build"
+    print_header_message "Running Unit Tests"
 
-    testQuery=$CATCH2_ARGS;
+    testQuery=$catch2_args;
 
     if [ "$ONLY_RUN_FAST_TESTS" = true ]; then
-        testQuery="$CATCH2_ARGS~[slow]";
+        testQuery="$catch2_args~[slow]";
     fi
 
     testArgs=$testQuery;
@@ -305,7 +354,7 @@ if [ "$RUN_TESTS" = true ]; then
         testArgs="$testArgs --list-tests";
     fi
 
-    verbose_print_command "$BUILD_DIRECTORY/Tests/unit-tests $testArgs";
+    verbose_print_stdin_command "$BUILD_DIRECTORY/Tests/unit-tests $testArgs";
     $BUILD_DIRECTORY/Tests/unit-tests $testArgs
 fi
 
