@@ -6,7 +6,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "pitch_detection/notes.h"
+#include "pitch_detection/pitch_detection.h"
 #include "presets.h"
 #include "samples.h"
 

@@ -5,8 +5,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "pitch_detection/notes.h"
+#include "notes.h"
 #include "presets.h"
+#include "pitch_detection/pitch_detection.h"
 
 const std::vector<std::string> DEFAULT_PRESET_NAMES = { "default-preset-1", "default-preset-2", "default-preset-3" };
 

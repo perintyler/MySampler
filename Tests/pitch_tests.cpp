@@ -10,8 +10,9 @@
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
 
-#include "pitch_detection/pitch.h"
+#include "notes.h"
 #include "paths.h"
+#include "pitch_detection/pitch_detection.h"
 
 #define NO_PITCH_DETECTION_CACHE
 
@@ -53,22 +54,22 @@ TEST_CASE("Semitone Test #1: get semitone from note", "[pitch][semitone][note]")
 
 TEST_CASE("Pitch Detection Test #1: lower frequency than lowest note", "[pitch_detection][slow]")
 {
-    REQUIRE_THROWS_AS(matchNoteToFrequency(10.0), NoteDoesNotExistException);
+    REQUIRE_THROWS_AS(getNoteForFrequency(10.0), NoteDoesNotExistException);
 }
 
 TEST_CASE("Pitch Detection Test #2: inbetween B3 and C4", "[pitch_detection][slow]") 
 {
-    REQUIRE(matchNoteToFrequency(250.7) == 59);
+    REQUIRE(getNoteForFrequency(250.7) == 59);
 }
 
-TEST_CASE("Pitch Detection Test #3: G4", "[matchNoteToFrequency]") 
+TEST_CASE("Pitch Detection Test #3: G4", "[getNoteForFrequency]") 
 {
-    REQUIRE(matchNoteToFrequency(392.0) == 67);
+    REQUIRE(getNoteForFrequency(392.0) == 67);
 }
 
 TEST_CASE("Pitch Detection Test #4: close to Csharp6", "[pitch_detection][slow]") 
 {
-    REQUIRE(matchNoteToFrequency(1100.8) == 85);
+    REQUIRE(getNoteForFrequency(1100.8) == 85);
 }
 
 TEST_CASE("Pitch Detection Test #5: Female Vocal: G5", "[pitch_detection][slow]") 
@@ -81,7 +82,7 @@ TEST_CASE("Pitch Detection Test #5: Female Vocal: G5", "[pitch_detection][slow]"
         REQUIRE(frequency < 196.00);
     }
 
-    REQUIRE(getSemitone(frequency) == G);
+    REQUIRE(getSemitoneForFrequency(frequency) == G);
 }
 
 TEST_CASE("Pitch Detection Test #6: Female Vocal: G#3", "[pitch_detection][slow]") 
@@ -93,7 +94,7 @@ TEST_CASE("Pitch Detection Test #6: Female Vocal: G#3", "[pitch_detection][slow]
         REQUIRE(frequency < 830.61);
     }
 
-    REQUIRE(getSemitone(frequency) == Gsharp);
+    REQUIRE(getSemitoneForFrequency(frequency) == Gsharp);
 }
 
 TEST_CASE("Pitch Detection Test #7: Male Vocal: A4", "[pitch_detection][slow]") 
@@ -105,7 +106,7 @@ TEST_CASE("Pitch Detection Test #7: Male Vocal: A4", "[pitch_detection][slow]")
         REQUIRE(frequency < 466.16);
     }
 
-    REQUIRE(getSemitone(frequency) == A);
+    REQUIRE(getSemitoneForFrequency(frequency) == A);
 }
 
 TEST_CASE("Pitch Detection Test #8: Acoustic Bass: C3", "[pitch_detection][slow]") 
@@ -117,7 +118,7 @@ TEST_CASE("Pitch Detection Test #8: Acoustic Bass: C3", "[pitch_detection][slow]
         REQUIRE(frequency < 138.59);
     }
 
-    REQUIRE(getSemitone(frequency) == C);
+    REQUIRE(getSemitoneForFrequency(frequency) == C);
 }
 
 TEST_CASE("Pitch Detection Test #9: Guitar: A2", "[pitch_detection][slow]") 
@@ -132,7 +133,7 @@ TEST_CASE("Pitch Detection Test #10: Keyboard: C6", "[pitch_detection][slow]")
         REQUIRE(frequency < 1108.73);
     }
 
-    REQUIRE(getSemitone(frequency) == C);
+    REQUIRE(getSemitoneForFrequency(frequency) == C);
 }
 
 TEST_CASE("Pitch Detection Test #11: Upright Bass: C2", "[pitch_detection][slow]") 
@@ -144,7 +145,7 @@ TEST_CASE("Pitch Detection Test #11: Upright Bass: C2", "[pitch_detection][slow]
         REQUIRE(frequency < 69.30);
     }
 
-    REQUIRE(getSemitone(frequency) == C);
+    REQUIRE(getSemitoneForFrequency(frequency) == C);
 }
 
 /************************************************************
@@ -159,7 +160,7 @@ TEST_CASE("Pitch Detection Test #12: Guitar: C3", "[pitch_detection][slow]")
         REQUIRE(frequency < 138.59);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::C);
 }
 
@@ -172,7 +173,7 @@ TEST_CASE("Pitch Detection Test #13: Exchange Bass: C4", "[pitch_detection][slow
         REQUIRE(frequency < 277.18);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::C);
 }
 
@@ -185,7 +186,7 @@ TEST_CASE("Pitch Detection Test #14: Piano: G3", "[pitch_detection][slow]")
         REQUIRE(frequency < 207.65);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::G);
 }
 
@@ -198,7 +199,7 @@ TEST_CASE("Pitch Detection Test #15: Guitar: E4", "[pitch_detection][slow]")
         REQUIRE(frequency < 349.23);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::E);
 }
 
@@ -211,7 +212,7 @@ TEST_CASE("Pitch Detection Test #16: Keyboard: C5", "[pitch_detection][slow]")
         REQUIRE(frequency < 554.37);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::C);
 }
 
@@ -224,7 +225,7 @@ TEST_CASE("Pitch Detection Test #17: Piano: C6", "[pitch_detection][slow]")
         REQUIRE(frequency < 1108.73);
     }
 
-    Semitone semitone = getSemitone(frequency);
+    Semitone semitone = getSemitoneForFrequency(frequency);
     REQUIRE(semitone == midi::C);
 }
 
