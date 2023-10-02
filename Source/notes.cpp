@@ -1,5 +1,7 @@
 /*** Piano960 | pitch_detection/notes.cpp ***/
 
+#include <algorithm>
+
 #include "notes.h"
 
 const int NUM_SEMITONES = 12;
