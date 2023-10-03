@@ -10,10 +10,6 @@ const bool AUTO_FOCUS = false;
 
 // TODO: put margin constants in App and put the margins around MainView
 
-const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
-
-const int VERTICAL_MARGIN_SIZE = 5; // pixels
-
 const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
@@ -68,36 +64,36 @@ void MainView::resized()
     //  get rid of all these margin constants and apply the margins when adding MainView to App
     //
 
-    int presetsMenuXCoord = HORIZONTAL_MARGIN_SIZE;
-    int presetsMenuYCoord = VERTICAL_MARGIN_SIZE;
+    int presetsMenuXCoord = 0;
+    int presetsMenuYCoord = 0;
     int presetsMenuWidth = 100;
     int presetsMenuHeight = 30;
 
-    int keyboardXCoord = HORIZONTAL_MARGIN_SIZE;
-    int keyboardYCoord = VERTICAL_MARGIN_SIZE + presetsMenuHeight + 5;
+    int saveButtonXCoord = presetsMenuWidth + 10;
+    int saveButtonYCoord = 0;
+    int saveButtonHeight = presetsMenuHeight;
+    int saveButtonWidth = 150;
+
+    int keyboardXCoord = 0;
+    int keyboardYCoord = presetsMenuHeight + 5;
     int keyboardWidth = getMinimumWidth();
     int keyboardHeight = 200;
 
-    int randomizeButtonHeight = 40;
-    int randomizeButtonWidth = 0.5*keyboardWidth;
-    int randomizeButtonXCoord = HORIZONTAL_MARGIN_SIZE;
-    int randomizeButtonYCoord = keyboardYCoord + keyboardHeight + 5;
-
-    int saveButtonXCoord = randomizeButtonXCoord + randomizeButtonWidth + 5;
-    int saveButtonYCoord = randomizeButtonYCoord;
-    int saveButtonHeight = randomizeButtonHeight;
-    int saveButtonWidth = 0.5*keyboardWidth - 5;
-
-    int categoryGridHeight = 40;
+    int categoryGridHeight = 35;
     int categoryGridWidth = getLocalBounds().getWidth();
-    int categoryGridXCoord = HORIZONTAL_MARGIN_SIZE;
-    int categoryGridYCoord = saveButtonYCoord+saveButtonHeight+5;
+    int categoryGridXCoord = 0;
+    int categoryGridYCoord = keyboardYCoord + keyboardHeight + 5;
 
-    keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
+    int randomizeButtonHeight = 40;
+    int randomizeButtonWidth = categoryGridWidth;
+    int randomizeButtonXCoord = 0;
+    int randomizeButtonYCoord = categoryGridYCoord + categoryGridHeight + 10;
+
     presetsMenu    ->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
-    randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
     saveButton->setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
+    keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
     categoryGrid->setBounds(categoryGridXCoord, categoryGridYCoord, categoryGridWidth, categoryGridHeight);
+    randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
 }
 
 void MainView::timerCallback()

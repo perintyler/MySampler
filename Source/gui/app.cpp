@@ -10,9 +10,11 @@
 
 const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
-const int HORIZONTAL_MARGIN_SIZE = 10; // pixels
+const int VERTICAL_MARGIN_SIZE = 8; // pixels
 
-const float PLUGIN_HEIGHT = 500.0;
+const int HORIZONTAL_MARGIN_SIZE = 15; // pixels
+
+const float PLUGIN_HEIGHT = 360.0;
 
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
@@ -38,5 +40,9 @@ void App::paint(juce::Graphics& g)
 /*** Lays out subcomponents ***/
 void App::resized()
 {
-    view->setBounds(getLocalBounds());
+    int xCoord = HORIZONTAL_MARGIN_SIZE;
+    int yCoord = VERTICAL_MARGIN_SIZE;
+    int width = getLocalBounds().getWidth() - 2*HORIZONTAL_MARGIN_SIZE;
+    int height = getLocalBounds().getHeight() - 2*VERTICAL_MARGIN_SIZE;
+    view->setBounds(xCoord, yCoord, width, height);
 }
