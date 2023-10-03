@@ -4,8 +4,6 @@
 
 MySampler is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
 
-![plugin demo GIF](Assets/readme/demo.gif "MySampler Plugin Demo")
-
 ---
 
 <div align="center">
