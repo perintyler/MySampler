@@ -33,13 +33,13 @@ enum class SoundSource: int
     KEYBOARD
 };
 
-const SoundSource FIRST_CATEGORY = SoundSource::PIANO;
-const SoundSource LAST_CATEGORY = SoundSource::KEYBOARD;
+const SoundSource FIRST_SOUND_SOURCE = SoundSource::PIANO;
+const SoundSource LAST_SOUND_SOURCE = SoundSource::KEYBOARD;
 
-std::set<SoundSource> getAllCategories();
+std::set<SoundSource> getAllSoundSources();
 
 SoundSource getNextSoundSource(SoundSource);
 
-std::string sampleCategoryToString(SoundSource);
+std::string soundSourceToString(SoundSource);
 
 SoundSource getSoundSource(std::string);

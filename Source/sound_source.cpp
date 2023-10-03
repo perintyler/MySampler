@@ -6,7 +6,7 @@
 
 #include "sound_source.h"
 
-const std::vector<std::string> CATEGORY_STRINGS {
+const std::vector<std::string> SOUND_SOURCE_STRINGS {
     "None",
     "Piano",
     "Cello",
@@ -31,40 +31,40 @@ const std::vector<std::string> CATEGORY_STRINGS {
     "Keyboard"
 };
 
-SoundSource getNextSoundSource(SoundSource category)
+SoundSource getNextSoundSource(SoundSource soundsource)
 {
-    int indexOfNextCategory = static_cast<int>(category) + 1;
+    int indexOfNextCategory = static_cast<int>(soundsource) + 1;
     return static_cast<SoundSource>(indexOfNextCategory);
 }
 
-std::string sampleCategoryToString(SoundSource category)
+std::string soundSourceToString(SoundSource soundsource)
 {
-    assert(category >= SoundSource::NONE && category <= SoundSource::KEYBOARD);
-    return CATEGORY_STRINGS.at(static_cast<int>(category));
+    assert(soundsource >= SoundSource::NONE && soundsource <= SoundSource::KEYBOARD);
+    return SOUND_SOURCE_STRINGS.at(static_cast<int>(soundsource));
 }
 
-std::set<SoundSource> getAllCategories()
+std::set<SoundSource> getAllSoundSources()
 {
     std::set<SoundSource> categories;
 
-    for (SoundSource category = FIRST_CATEGORY
-       ; category <= LAST_CATEGORY
-       ; category = getNextSoundSource(category)
+    for (SoundSource soundsource = FIRST_SOUND_SOURCE
+       ; soundsource <= LAST_SOUND_SOURCE
+       ; soundsource = getNextSoundSource(soundsource)
     ){
-        categories.insert(category);
+        categories.insert(soundsource);
     }
 
     return categories;
 }
 
-SoundSource getSoundSource(std::string categoryAsString)
+SoundSource getSoundSource(std::string soundsourceAsString)
 {
-    auto iterator = std::find(CATEGORY_STRINGS.begin(), CATEGORY_STRINGS.end(), categoryAsString);
-    if (iterator == CATEGORY_STRINGS.end()) {
+    auto iterator = std::find(SOUND_SOURCE_STRINGS.begin(), SOUND_SOURCE_STRINGS.end(), soundsourceAsString);
+    if (iterator == SOUND_SOURCE_STRINGS.end()) {
         return SoundSource::NONE;
     } else {
-        int categoryIndex = iterator - CATEGORY_STRINGS.begin();
-        return static_cast<SoundSource>(categoryIndex);
+        int soundsourceIndex = iterator - SOUND_SOURCE_STRINGS.begin();
+        return static_cast<SoundSource>(soundsourceIndex);
     }
 }
 

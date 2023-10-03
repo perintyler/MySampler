@@ -161,7 +161,7 @@ void RandomSampler::randomize(bool pitch_shift /* = true */)
             bool foundValidSample = false;
 
             while (!foundValidSample) {
-                pathToFile = getPathToRandomSample(getAllCategories());
+                pathToFile = getPathToRandomSample(getAllSoundSources());
                 sampleName = pathToFile.toStdString();
                 juce::File randomSample(pathToFile);
                 

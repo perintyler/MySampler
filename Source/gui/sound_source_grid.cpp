@@ -4,14 +4,14 @@
 
 SoundSourceGrid::SoundSourceGrid()
 {
-    for (SoundSource category = FIRST_CATEGORY
-       ; category <= LAST_CATEGORY
+    for (SoundSource category = FIRST_SOUND_SOURCE
+       ; category <= LAST_SOUND_SOURCE
        ; category = getNextSoundSource(category)
     ){
         selected[category] = true;
 
         CategoryButtonPointer button = CategoryButtonPointer(
-          new juce::ToggleButton(sampleCategoryToString(category))
+          new juce::ToggleButton(soundSourceToString(category))
         );
 
         buttons.push_back(button);
@@ -39,12 +39,12 @@ void SoundSourceGrid::resized()
     juce::FlexBox flexbox;
 
     flexbox.flexWrap = juce::FlexBox::Wrap::wrap;
-    flexbox.justifyContent = juce::FlexBox::JustifyContent::flexStart;
+    flexbox.justifyContent = juce::FlexBox::JustifyContent::center;
     flexbox.alignContent = juce::FlexBox::AlignContent::stretch;
 
     for (Component* child : getChildren()) {
         flexbox.items.add(
-            juce::FlexItem(*child).withMinWidth(75.0f).withMinHeight(50.0f)
+            juce::FlexItem(*child).withMinWidth(75.0f).withMinHeight(35.0f)
         );
     }
 

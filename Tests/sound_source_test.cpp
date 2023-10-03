@@ -13,28 +13,28 @@ TEST_CASE("SoundSource Test #1: category to int")
 
 TEST_CASE("SoundSource Test #2: category to string", "[sample_categories]")
 {
-    REQUIRE(sampleCategoryToString(SoundSource::NONE) == "None");
-    REQUIRE(sampleCategoryToString(SoundSource::PIANO) == "Piano");
-    REQUIRE(sampleCategoryToString(SoundSource::CELLO) == "Cello");
-    REQUIRE(sampleCategoryToString(SoundSource::TROMBONE) == "Trombone");
-    REQUIRE(sampleCategoryToString(SoundSource::ORGAN) == "Organ");
-    REQUIRE(sampleCategoryToString(SoundSource::WOODWIND) == "Woodwind");
-    REQUIRE(sampleCategoryToString(SoundSource::TRUMPET) == "Trumpet");
-    REQUIRE(sampleCategoryToString(SoundSource::GLOCKENSPIEL) == "Glockenspiel");
-    REQUIRE(sampleCategoryToString(SoundSource::SFX) == "SFX");
-    REQUIRE(sampleCategoryToString(SoundSource::GUITAR) == "Guitar");
-    REQUIRE(sampleCategoryToString(SoundSource::PLUCK) == "Pluck");
-    REQUIRE(sampleCategoryToString(SoundSource::WORLD) == "World");
-    REQUIRE(sampleCategoryToString(SoundSource::BRASS) == "Brass");
-    REQUIRE(sampleCategoryToString(SoundSource::BASS) == "Bass");
-    REQUIRE(sampleCategoryToString(SoundSource::VOCAL) == "Vocal");
-    REQUIRE(sampleCategoryToString(SoundSource::PAD) == "Pad");
-    REQUIRE(sampleCategoryToString(SoundSource::SYNTH) == "Synth");
-    REQUIRE(sampleCategoryToString(SoundSource::BELL) == "Bell");
-    REQUIRE(sampleCategoryToString(SoundSource::VOILIN) == "Voilin");
-    REQUIRE(sampleCategoryToString(SoundSource::ARP) == "Arp");
-    REQUIRE(sampleCategoryToString(SoundSource::FLUTE) == "Flute");
-    REQUIRE(sampleCategoryToString(SoundSource::KEYBOARD) == "Keyboard");
+    REQUIRE(soundSourceToString(SoundSource::NONE) == "None");
+    REQUIRE(soundSourceToString(SoundSource::PIANO) == "Piano");
+    REQUIRE(soundSourceToString(SoundSource::CELLO) == "Cello");
+    REQUIRE(soundSourceToString(SoundSource::TROMBONE) == "Trombone");
+    REQUIRE(soundSourceToString(SoundSource::ORGAN) == "Organ");
+    REQUIRE(soundSourceToString(SoundSource::WOODWIND) == "Woodwind");
+    REQUIRE(soundSourceToString(SoundSource::TRUMPET) == "Trumpet");
+    REQUIRE(soundSourceToString(SoundSource::GLOCKENSPIEL) == "Glockenspiel");
+    REQUIRE(soundSourceToString(SoundSource::SFX) == "SFX");
+    REQUIRE(soundSourceToString(SoundSource::GUITAR) == "Guitar");
+    REQUIRE(soundSourceToString(SoundSource::PLUCK) == "Pluck");
+    REQUIRE(soundSourceToString(SoundSource::WORLD) == "World");
+    REQUIRE(soundSourceToString(SoundSource::BRASS) == "Brass");
+    REQUIRE(soundSourceToString(SoundSource::BASS) == "Bass");
+    REQUIRE(soundSourceToString(SoundSource::VOCAL) == "Vocal");
+    REQUIRE(soundSourceToString(SoundSource::PAD) == "Pad");
+    REQUIRE(soundSourceToString(SoundSource::SYNTH) == "Synth");
+    REQUIRE(soundSourceToString(SoundSource::BELL) == "Bell");
+    REQUIRE(soundSourceToString(SoundSource::VOILIN) == "Voilin");
+    REQUIRE(soundSourceToString(SoundSource::ARP) == "Arp");
+    REQUIRE(soundSourceToString(SoundSource::FLUTE) == "Flute");
+    REQUIRE(soundSourceToString(SoundSource::KEYBOARD) == "Keyboard");
 }
 
 TEST_CASE("SoundSource Test #3: string to category", "[sample_categories]")
