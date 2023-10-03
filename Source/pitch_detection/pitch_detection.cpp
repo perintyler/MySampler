@@ -1,4 +1,4 @@
-/*** pitch_detection/pitch_detection.cpp ***/
+/*** MySampler | Source/pitch_detection/pitch_detection.cpp ***/
 
 #include <iostream>
 #include <filesystem>
@@ -24,6 +24,7 @@
 
 #ifndef PITCH_DETECTION_CACHE_FILE
     #define NO_PITCH_DETECTION_CACHE
+//    logs::debug("'PITCH_DETECTION_CACHE_FILE' precompiler variable is not set, so a cache will not be used.")
 #endif
 
 // the pitch detection cache is stored as a JSON file in the installation directory
@@ -94,17 +95,17 @@ void loadPitchDetectionModel()
     #endif
 }
 
-float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
+float detectFrequency(juce::AudioBuffer<float>& buffer, int sampleRate, int startSample)
 {
-    return pitch_detection::getFundementalFrequency(buffer, sampleRate);
+    return pitch_detection::getFundementalFrequency(buffer, sampleRate, startSample);
 }
 
-Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate, std::string sampleName /* = "" */)
+Note detectNote(juce::AudioBuffer<float>& buffer, int sampleRate, int startSample, std::string sampleName /* = "" */)
 {    
     if (!sampleName.empty() && __pitch_detection_cache__.count(sampleName) != 0)
         return __pitch_detection_cache__.at(sampleName);
 
-    Note detectedNote = getNoteForFrequency(detectFrequency(buffer, sampleRate));
+    Note detectedNote = getNoteForFrequency(detectFrequency(buffer, sampleRate, startSample));
 
     #ifndef NO_PITCH_DETECTION_CACHE
       if (!sampleName.empty()) { cache_pitch_detection(sampleName, detectedNote); }

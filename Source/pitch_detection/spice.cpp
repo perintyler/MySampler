@@ -150,7 +150,7 @@ float* runModel(juce::AudioBuffer<float>& buffer, int sampleRate)
     return interpreter->typed_output_tensor<float>(0);
 }
 
-float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
+float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate, int startFrame)
 {
     if (sampleRate < SPICE_MODEL_SAMPLE_RATE) { // audio quality isn't high enough.
         throw pitch_detection::FrequencyNotDetectedException();

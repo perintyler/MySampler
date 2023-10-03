@@ -99,15 +99,15 @@ float detectPitchWithYIN(const float* signal, int bufferSize, int startSample, i
     return convertToHz(peakPosition, sampleRate);
 }
 
-float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
+float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate, int startFrame)
 {
-    int frameSize = std::min((int)(0.10*sampleRate), (int) (0.50*buffer.getNumSamples()));
+    int frameSize = std::min((int)(0.10*sampleRate), (int)(buffer.getNumSamples()-startFrame));
     
     std::vector<float> channelFrequencies;
     channelFrequencies.reserve(buffer.getNumChannels());
     
     for (int channel = 0; channel < buffer.getNumChannels(); channel++) {
-        float frequency = detectPitchWithYIN(buffer.getReadPointer(0), frameSize, 0, sampleRate);
+        float frequency = detectPitchWithYIN(buffer.getReadPointer(startFrame), frameSize, startFrame, sampleRate);
         
         if (!isValidNote(frequency))
             throw FrequencyNotDetectedException();

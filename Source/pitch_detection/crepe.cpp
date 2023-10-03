@@ -443,7 +443,7 @@ float convertModelOutputToFrequency()
     return salienceSum / weightedSum;
 }
 
-float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate)
+float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer, int sampleRate, int startFrame)
 {
     if (!model_is_loaded()) { load_model(); }
 

@@ -14,7 +14,7 @@ namespace pitch_detection
 
     void load_model();
    
-    float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
+    float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate, int startFrame=0);
 
     // ------ the functions below are only exposed for testing purposes ------
    

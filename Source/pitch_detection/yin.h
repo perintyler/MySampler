@@ -9,5 +9,5 @@ namespace pitch_detection
 {
     static const float TOLERANCE = 0.10f;
 
-    float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate);
+    float getFundementalFrequency(juce::AudioBuffer<float>&, int sampleRate, int startFrame=0);
 }

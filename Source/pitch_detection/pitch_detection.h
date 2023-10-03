@@ -12,6 +12,6 @@ void loadPitchDetectionModel();
 
 void printPitchDetectionInfo();
 
-float detectFrequency(juce::AudioBuffer<float>&, int sampleRate);
+float detectFrequency(juce::AudioBuffer<float>&, int sampleRate, int startSample=0);
 
-Note detectNote(juce::AudioBuffer<float>&, int sampleRate, std::string sampleName = "");
+Note detectNote(juce::AudioBuffer<float>&, int sampleRate, int startSample = 0, std::string sampleName = "");
