@@ -4,6 +4,8 @@
 
 MySampler is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
 
+<img width="1472" alt="my-sampler-preview" src="https://github.com/perintyler/MySampler/assets/19389561/11695ce0-a140-49a9-8ad5-d545936825e8">
+
 ---
 
 <div align="center">
@@ -28,7 +30,7 @@ To build the plugin with CMake:
 
 ```bash
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+cmake ..
 make install
 ```
 
