@@ -30,7 +30,7 @@ To build the plugin with CMake:
 
 ```bash
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+cmake ..
 make install
 ```
 
