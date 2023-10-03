@@ -73,24 +73,6 @@ Use the build script with a `-t` option to build and run the Unit Tests executab
 ```bash
 % ./bs -t
 
-=====================================================================================================
-|<><><><><><><><><><><><><><><><><><><><><><> My Sampler <><><><><><><><><><><><><><><><><><><><><><>
-| 
-| - Build Type: Debug
-| 
-| - Compiler: Clang
-| 
-| - Build Targets: Source, Tests
-| 
-| - Build Directory: /Users/tylerperin/garage/MySampler/Builds/debug-build
-| 
-| - Pitch Detection Algorithm: YIN
-| 
-|<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-=====================================================================================================
-
-|---------------------------------- Building Plugin Executable(s) ----------------------------------|
-
 [ 16%] Built target MySamplerPluginBinaryData
 [100%] Built target MySamplerPlugin
 [ 64%] Built target Catch2
@@ -98,14 +80,10 @@ Use the build script with a `-t` option to build and run the Unit Tests executab
 [ 92%] Built target MySamplerPlugin
 [100%] Built target unit-tests
 
-
-|---------------------------------------- Running Unit Tests ----------------------------------------|
-
 Randomness seeded to: 2180487896
 
 ===============================================================================
 All tests passed (287 assertions in 47 test cases)
-
 ```
 
 > The pitch detection tests are relatively slow, but you can use a `-tf` option to exclude the slow tests.
