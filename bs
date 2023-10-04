@@ -18,7 +18,7 @@ PROJECT_NAME="MySampler"
 
 MYSAMPLER_REPO=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd );
 
-ALL_BUILDS_DIRECTORY=$MYSAMPLER_REPO/Builds
+ALL_BUILDS_DIRECTORY=$MYSAMPLER_REPO/mysampler-builds
 
 DEBUG_BUILD_DIRECTORY=$ALL_BUILDS_DIRECTORY/debug-build
 
@@ -160,7 +160,7 @@ print_help_message()
 
 catch2_args="";
 
-make_parameters="MySamplerPlugin";
+make_parameters="plugin";
 
 # ------------------------------- BUILD FUNCTIONS -------------------------------
 
@@ -261,9 +261,9 @@ else
 fi
 
 if [ "$RUN_TESTS" = true ]; then
-    BUILD_TARGETS="Source, Tests";
+    BUILD_TARGETS="plugin, unit-tests";
 else
-    BUILD_TARGETS="Source";
+    BUILD_TARGETS="plugin";
 fi
 
 print_newline;
@@ -274,7 +274,7 @@ print "| - Build Type: $BUILD_TYPE";
 print "| "
 print "| - Compiler: $COMPILER_NAME";
 print "| ";
-print "| - Build Targets: $BUILD_TARGETS";
+print "| - Build Target(s): $BUILD_TARGETS";
 print "| ";
 print "| - Build Directory: $BUILD_DIRECTORY";
 print "| ";
@@ -287,22 +287,24 @@ print_newline;
 # 3) =============================== Setup Build Directory ===============================
 
 if [ ! -d "$ALL_BUILDS_DIRECTORY" ]; then
+    BUILD=true;
     print_build_info "Creating Parent Directory For All Builds: $ALL_BUILDS_DIRECTORY"
     verbose_print_stdin_command "mkdir $ALL_BUILDS_DIRECTORY";
     mkdir $ALL_BUILDS_DIRECTORY;
 fi
 
 if [ "$CLEAN_BUILD" = true ]; then
+    BUILD=true;
     print_build_info "Deleting Existing Build Directory: $BUILD_DIRECTORY"
     verbose_print_stdin_command "rm -rf $BUILD_DIRECTORY";
     rm -rf $BUILD_DIRECTORY;
 fi
 
 if [ ! -d "$BUILD_DIRECTORY" ]; then
+    BUILD=true;
     print_build_info "Creating Build Directory: $BUILD_DIRECTORY"
     verbose_print_stdin_command "mkdir $BUILD_DIRECTORY";
     mkdir $BUILD_DIRECTORY;
-    BUILD=true;
 fi
 
 # 4) ========================= Configure CMake Build Environment =========================
