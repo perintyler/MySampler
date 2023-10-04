@@ -1,9 +1,8 @@
-"""
-  Piano960/Scripts/normalize_samples.py
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""MySampler | Scripts/normalize_samples.py
 
-This script normalizes the volume levels for all installed samples.
+This script normalizes volume levels of all samples inside 'Assets/samples'
 """
+
 
 import sys
 import os
@@ -26,12 +25,16 @@ def generate_sample_paths(sample_packs_directory):
     random_index = random.randint(0, len(sample_paths) - 1)
     yield sample_paths.pop(random_index)
 
-def normalize_samples(directory, target_volume, print_details=False):
+def normalize_samples(directory, target_volume, verbose=False):
   for file_path in generate_sample_paths(directory):
-    # file_path = os.path.join(directory, file_name)
     sound = AudioSegment.from_wav(file_path) # TODO: support all audio files
     gain = target_volume - sound.dBFS
-    if print_details: print(f'{file_path} is {gain} decibels off from the target volume of {target_volume}')
+    
+    if gain == 0: 
+      continue
+    elif verbose: 
+      print(f'{file_path} is {gain} decibels off from the target volume of {target_volume}')
+
     normalized_sound = sound.apply_gain(gain)
     normalized_sound.export(file_path, format="wav") # overwrite file
 
