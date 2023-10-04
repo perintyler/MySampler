@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(MySampler C CXX)
 
-
-# ============= Define Compiler Flags ===============
-
+# ============================ Define Compiler Flags ==============================
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
@@ -14,7 +12,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
-# ================== Installation ====================
+# ================================= Installation ===================================
 
 set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
 
@@ -56,8 +54,7 @@ install(
   DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-# ============= Define Pre-Compiler Variables ===============
-
+# =========================== Define Pre-Compiler Variables =============================
 
 if(PITCH_DETECTION STREQUAL "CREPE")
   add_compile_definitions(CREPE_MODEL)
@@ -67,23 +64,19 @@ else()
   add_compile_definitions(YIN_ALGO)
 endif()
 
-
-# ================== Configuration Files ====================
+# ================================= Configuration Files ===================================
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
 include_directories(${CMAKE_BINARY_DIR})
 
-# =============== Build JUCE framework =================
-
+# ================================= Build JUCE framework ===================================
 
 # TODO: only build the individual/neccessary JUCE modules that are used by the plugin
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/JUCE EXCLUDE_FROM_ALL)
 juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 
-
-# =============== Build Tensorflow =================
-
+# =================================== Build Tensorflow =====================================
 
 if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     add_subdirectory(
@@ -93,29 +86,23 @@ if(PITCH_DETECTION STREQUAL "CREPE" OR PITCH_DETECTION STREQUAL "SPICE")
     )
 endif()
 
-
-# =============== Build libsoxr (Resampling Library) =================
-
+# ==================================== Build libsoxr ======================================
 
 if(PITCH_DETECTION STREQUAL "CREPE")
     list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/Libraries/soxr/cmake/Modules)
     add_subdirectory("${CMAKE_SOURCE_DIR}/Libraries/soxr" EXCLUDE_FROM_ALL)
 endif()
 
-
-# ====================== Print CMake Variables ====================
-
+# =================================== Print CMake Variables =================================
 
 include(CMakePrintHelpers)
 cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
 
-# ====================== Build Plugin  ====================
-
+# ======================================= Build Plugin  =====================================
 
 add_subdirectory(Source)
 
-
-# =================== Build Unit Tests ===================
+# ===================================== Build Unit Tests =====================================
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 enable_testing()
