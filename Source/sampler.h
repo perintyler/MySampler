@@ -9,6 +9,7 @@
 #include "notes.h"
 #include "sample.h"
 #include "sample_set.h"
+#include "sound_source.h"
 
 /***
  ** A synthesizer that generates a sound source for each key using a different 
@@ -34,6 +35,10 @@ public:
 
     const Sample& getSample(Note) const;
 
+    void addSoundSource(SoundSource);
+
+    void removeSoundSource(SoundSource);
+
     void randomize(bool pitch_shift = true);
 
     bool isReady() const;
@@ -49,4 +54,5 @@ private:
     Note lastNote;
     SampleSet samples {};
     std::map<Note, bool> lockedKeys {};
+    std::set<SoundSource> sound_sources {};
 };
