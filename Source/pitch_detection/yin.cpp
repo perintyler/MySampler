@@ -107,14 +107,14 @@ float pitch_detection::getFundementalFrequency(juce::AudioBuffer<float>& buffer,
     channelFrequencies.reserve(buffer.getNumChannels());
     
     for (int channel = 0; channel < buffer.getNumChannels(); channel++) {
-        float frequency = detectPitchWithYIN(buffer.getReadPointer(startFrame), frameSize, startFrame, sampleRate);
+        float frequency = detectPitchWithYIN(buffer.getReadPointer(0), frameSize, startFrame, sampleRate);
         
         if (!isValidNote(frequency))
             throw FrequencyNotDetectedException();
 
         channelFrequencies.push_back(frequency);
     }
-    
+
     int fundementalFrequency = std::reduce(channelFrequencies.begin(), channelFrequencies.end()) / buffer.getNumChannels();
     
     if (!isValidNote(fundementalFrequency))
