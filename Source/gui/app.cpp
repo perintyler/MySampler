@@ -14,20 +14,23 @@ const int VERTICAL_MARGIN_SIZE = 8; // pixels
 
 const int HORIZONTAL_MARGIN_SIZE = 15; // pixels
 
-const float PLUGIN_HEIGHT = 360.0;
-
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
     , processor (audioProcessor)
     , view (std::make_unique<MainView>(processor))
 {
-    setSize(view->getMinimumWidth() + 2*HORIZONTAL_MARGIN_SIZE, PLUGIN_HEIGHT);
+    setSize(
+        view->getMinimumWidth() + 2*HORIZONTAL_MARGIN_SIZE, 
+        MainView::getHeight() + 2*VERTICAL_MARGIN_SIZE
+    );
 
     addAndMakeVisible(view.get());
 
     setResizable(false, false);
     
+    #ifndef TESTMODE
     processor.randomizeSamples();
+    #endif
 }
 
 /*** Renders the UI ***/
