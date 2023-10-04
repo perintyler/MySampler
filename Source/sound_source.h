@@ -9,28 +9,39 @@
 
 enum class SoundSource: int
 {
-    NONE = 0,
+    NONE=0,
     PIANO,
     CELLO,
+    STRINGS,
     TROMBONE,
+    BASSOON,
+    CLARINET,
     ORGAN,
+    OBOE,
     WOODWIND,
     TRUMPET,
     GLOCKENSPIEL,
     SFX,
+    MALLET,
+    OTHER,
     GUITAR,
     PLUCK,
     WORLD,
+    NATURE,
     BRASS,
     BASS,
     VOCAL,
     PAD,
+    SAXOPHONE,
     SYNTH,
+    TUBA,
     BELL,
+    TEXTURE,
     VOILIN,
+    HORN,
     ARP,
     FLUTE,
-    KEYBOARD
+    KEYBOARD,
 };
 
 const SoundSource FIRST_SOUND_SOURCE = SoundSource::PIANO;

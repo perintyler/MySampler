@@ -10,25 +10,36 @@ const std::vector<std::string> SOUND_SOURCE_STRINGS {
     "None",
     "Piano",
     "Cello",
+    "Strings",
     "Trombone",
+    "Bassoon",
+    "Clarinet",
     "Organ",
+    "Oboe",
     "Woodwind",
     "Trumpet",
     "Glockenspiel",
     "SFX",
+    "Mallet",
+    "Other",
     "Guitar",
     "Pluck",
     "World",
+    "Nature",
     "Brass",
     "Bass",
     "Vocal",
     "Pad",
+    "Saxophone",
     "Synth",
+    "Tuba",
     "Bell",
+    "Texture",
     "Voilin",
+    "Horn",
     "Arp",
     "Flute",
-    "Keyboard"
+    "Keyboard",
 };
 
 SoundSource getNextSoundSource(SoundSource soundsource)
@@ -63,7 +74,7 @@ SoundSource getSoundSource(std::string soundsourceAsString)
     if (iterator == SOUND_SOURCE_STRINGS.end()) {
         return SoundSource::NONE;
     } else {
-        int soundsourceIndex = iterator - SOUND_SOURCE_STRINGS.begin();
+        int soundsourceIndex = static_cast<int>(iterator - SOUND_SOURCE_STRINGS.begin());
         return static_cast<SoundSource>(soundsourceIndex);
     }
 }
