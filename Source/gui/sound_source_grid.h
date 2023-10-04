@@ -6,21 +6,23 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../sound_source.h"
+#include "../audio_processor.h"
 
-using CategoryButtonPointer = juce::Component::SafePointer<juce::ToggleButton>;
+using SoundSourceButtonPointer = juce::Component::SafePointer<juce::ToggleButton>;
 
 class SoundSourceGrid: public juce::Component {
 public:
-    SoundSourceGrid();
+    SoundSourceGrid(AudioProcessor&);
     ~SoundSourceGrid() override;
 
+    static float getHeight();
 
     std::set<SoundSource> getSelectedCategories() const;
 
     void resized() override;
 
 private:
-    std::vector<CategoryButtonPointer> buttons {};
+    std::vector<SoundSourceButtonPointer> buttons {};
 
     std::map<SoundSource, bool> selected {};
 
