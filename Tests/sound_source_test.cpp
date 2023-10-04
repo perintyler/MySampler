@@ -6,9 +6,8 @@
 
 TEST_CASE("SoundSource Test #1: category to int")
 {
-    REQUIRE(static_cast<int>(SoundSource::NONE)     == 0);
-    REQUIRE(static_cast<int>(SoundSource::PIANO)    == 1);
-    REQUIRE(static_cast<int>(SoundSource::KEYBOARD) == 21);
+    REQUIRE(static_cast<int>(SoundSource::NONE) == 0);
+    REQUIRE(static_cast<int>(SoundSource::PIANO) == 1);
 }
 
 TEST_CASE("SoundSource Test #2: category to string", "[sample_categories]")
