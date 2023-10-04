@@ -58,6 +58,7 @@ SAMPLE_CATEGORIES = {
 
 CATEGORIES_TO_AVOID = (
   'Accent',
+  'Percussion',
   'Other'
 )
 
