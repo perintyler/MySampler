@@ -14,18 +14,26 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
+const float KEYBOARD_HEIGHT = 200;
+
+const float PRESETS_MENU_HEIGHT = 30;
+
+const float MARGIN_SIZE = 10;
+
+const float RANDOMIZE_BUTTON_HEIGHT = 40;
+
 MainView::MainView(AudioProcessor& processor)
   : randomizeButton (std::make_unique<juce::TextButton>(RANDOMIZE_BUTTON_LABEL))
   , saveButton      (std::make_unique<juce::TextButton>(SAVE_BUTTON_LABEL))
   , keyboard        (std::make_unique<LockableKeys>(processor))
   , presetsMenu     (std::make_unique<PresetsDropdownMenu>(processor))
-  , categoryGrid    (std::make_unique<SoundSourceGrid>())
+  , soundSourceGrid    (std::make_unique<SoundSourceGrid>(processor))
 {
     randomizeButton->onClick = [&processor=processor]() {
         processor.sampler.randomize(); 
     };
 
-    saveButton->onClick = [&processor=processor, &presetsMenu    =presetsMenu    ](){ 
+    saveButton->onClick = [&processor=processor, &presetsMenu=presetsMenu](){ 
         NewPresetDialog::show(processor, presetsMenu    );
     };
 
@@ -33,7 +41,7 @@ MainView::MainView(AudioProcessor& processor)
     addAndMakeVisible(randomizeButton.get());
     addAndMakeVisible(keyboard.get());
     addAndMakeVisible(presetsMenu    .get());
-    addAndMakeVisible(categoryGrid.get());
+    addAndMakeVisible(soundSourceGrid.get());
 
     // set IDs for testing purposes
     setComponentID("app");
@@ -45,6 +53,14 @@ MainView::MainView(AudioProcessor& processor)
     if (AUTO_FOCUS) { 
         startTimer(400); 
     }
+}
+
+float MainView::getHeight()
+{
+    return PRESETS_MENU_HEIGHT 
+         + MARGIN_SIZE + KEYBOARD_HEIGHT 
+         + MARGIN_SIZE + SoundSourceGrid::getHeight() 
+         + MARGIN_SIZE + RANDOMIZE_BUTTON_HEIGHT + MARGIN_SIZE;
 }
 
 /** Since the keyboard component's keys have fixed widths/lengths, a MainView component
@@ -67,32 +83,32 @@ void MainView::resized()
     int presetsMenuXCoord = 0;
     int presetsMenuYCoord = 0;
     int presetsMenuWidth = 100;
-    int presetsMenuHeight = 30;
+    int presetsMenuHeight = PRESETS_MENU_HEIGHT;
 
-    int saveButtonXCoord = presetsMenuWidth + 10;
+    int saveButtonXCoord = presetsMenuWidth + MARGIN_SIZE;
     int saveButtonYCoord = 0;
     int saveButtonHeight = presetsMenuHeight;
     int saveButtonWidth = 150;
 
     int keyboardXCoord = 0;
-    int keyboardYCoord = presetsMenuHeight + 5;
+    int keyboardYCoord = presetsMenuHeight + MARGIN_SIZE;
     int keyboardWidth = getMinimumWidth();
-    int keyboardHeight = 200;
+    int keyboardHeight = KEYBOARD_HEIGHT;
 
-    int categoryGridHeight = 35;
-    int categoryGridWidth = getLocalBounds().getWidth();
-    int categoryGridXCoord = 0;
-    int categoryGridYCoord = keyboardYCoord + keyboardHeight + 5;
+    int soundSourceGridHeight = SoundSourceGrid::getHeight();
+    int soundSourceGridWidth = getLocalBounds().getWidth();
+    int soundSourceGridXCoord = 0;
+    int soundSourceGridYCoord = keyboardYCoord + keyboardHeight + MARGIN_SIZE;
 
-    int randomizeButtonHeight = 40;
-    int randomizeButtonWidth = categoryGridWidth;
+    int randomizeButtonHeight = RANDOMIZE_BUTTON_HEIGHT;
+    int randomizeButtonWidth = soundSourceGridWidth;
     int randomizeButtonXCoord = 0;
-    int randomizeButtonYCoord = categoryGridYCoord + categoryGridHeight + 10;
+    int randomizeButtonYCoord = soundSourceGridYCoord + soundSourceGridHeight + MARGIN_SIZE;
 
-    presetsMenu    ->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
+    presetsMenu->setBounds(presetsMenuXCoord, presetsMenuYCoord, presetsMenuWidth, presetsMenuHeight);
     saveButton->setBounds(saveButtonXCoord, saveButtonYCoord, saveButtonWidth, saveButtonHeight);
     keyboard->setBounds(keyboardXCoord, keyboardYCoord, keyboardWidth, keyboardHeight);
-    categoryGrid->setBounds(categoryGridXCoord, categoryGridYCoord, categoryGridWidth, categoryGridHeight);
+    soundSourceGrid->setBounds(soundSourceGridXCoord, soundSourceGridYCoord, soundSourceGridWidth, soundSourceGridHeight);
     randomizeButton->setBounds(randomizeButtonXCoord, randomizeButtonYCoord, randomizeButtonWidth, randomizeButtonHeight);
 }
 

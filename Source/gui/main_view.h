@@ -19,6 +19,8 @@ public:
     
     ~MainView() override = default;
 
+    static float getHeight();
+
     void resized() override;
 
     float getMinimumWidth() const;
@@ -35,7 +37,7 @@ private:
 
     std::unique_ptr<PresetsDropdownMenu> presetsMenu;
 
-    std::unique_ptr<SoundSourceGrid> categoryGrid;
+    std::unique_ptr<SoundSourceGrid> soundSourceGrid;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainView)
 };
