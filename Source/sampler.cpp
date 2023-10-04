@@ -36,26 +36,40 @@ static std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0); // 
 // Randomly selects a file from a nested directory of sample-packs
 //  - https://stackoverflow.com/questions/58400066/how-to-quickly-pick-a-random-file-from-a-folder-tree
 //
-juce::String getPathToRandomSample(std::set<SoundSource> categories)
+juce::String getPathToRandomSample(const std::set<SoundSource>& sound_sources)
 {
-    std::string path;
-    int numFilesTraversed = 1;
-    std::filesystem::recursive_directory_iterator fileIterator(PATH_TO_SAMPLES_DIRECTORY);
+    assert(!sound_sources.empty());
+    SoundSource soundsource = std::vector<SoundSource>(sound_sources.begin(), sound_sources.end()).at(
+        static_cast<int>(uniformDistribution(numberGenerator) * sound_sources.size())
+    );
     
-    for (const std::filesystem::directory_entry &entry: fileIterator) 
-    {
-        if (!std::filesystem::is_directory(entry)) 
-        {
-            std::string nameOfParentDirectory = entry.path().parent_path().filename().string();
-            SoundSource category = getSoundSource(nameOfParentDirectory);
+    std::filesystem::path soundsource_directory = 
+        std::filesystem::path(PATH_TO_SAMPLES_DIRECTORY)
+      / std::filesystem::path(soundSourceToString(soundsource)
+    );
 
-            if ((categories.find(category) != categories.end())
-              && (uniformDistribution(numberGenerator) < (1.0 / numFilesTraversed))
-            ) {
+    using directory_iterator = std::filesystem::recursive_directory_iterator;
+    int numSamplesInDirectory = 0;
+    
+    for (const std::filesystem::directory_entry& entry : directory_iterator(soundsource_directory)) {
+        if (entry.path().extension() == ".wav") {
+            numSamplesInDirectory++;
+        }
+    }
+    
+    std::string path;
+    int numSamplesTraversed = 0;
+    int randomSampleIndex = static_cast<int>(uniformDistribution(numberGenerator) * numSamplesInDirectory);
+    assert(randomSampleIndex < numSamplesInDirectory);
+
+    for (const std::filesystem::directory_entry &entry: directory_iterator(soundsource_directory)) {
+        if (entry.path().extension() == ".wav") {
+            if (numSamplesTraversed == randomSampleIndex) {
                 path = entry.path().string();
+                break;
+            } else {
+                numSamplesTraversed++;
             }
-
-            numFilesTraversed++;
         }
     }
 
@@ -84,6 +98,9 @@ RandomSampler::RandomSampler(Note firstNote, Note lastNote)
     , firstNote(firstNote)
     , lastNote(lastNote)
 {
+    for (SoundSource soundsource : DEFAULT_SOUND_SOURCES)
+        sound_sources.insert(soundsource);
+
     for (int midiNumber = FIRST_MIDI_NOTE; midiNumber <= LAST_MIDI_NOTE; midiNumber++)
         lockedKeys[midiNumber] = false;
 
@@ -99,6 +116,23 @@ const Sample& RandomSampler::getSample(Note note) const
 {
     return samples.get(note);
 }
+    
+void RandomSampler::addSoundSource(SoundSource soundsource)
+{
+    sound_sources.insert(soundsource);
+}
+
+void RandomSampler::removeSoundSource(SoundSource soundsource)
+{
+    std::set<SoundSource>::iterator iterator = sound_sources.find(soundsource);
+
+    if (iterator != sound_sources.end()) {
+        sound_sources.erase(iterator);
+    } else {
+        std::cerr << "tried to erase a sound source that doesn't exist";
+    }
+}
+
 
 bool RandomSampler::isKeyLocked(Note note) const
 {
@@ -161,7 +195,7 @@ void RandomSampler::randomize(bool pitch_shift /* = true */)
             bool foundValidSample = false;
 
             while (!foundValidSample) {
-                pathToFile = getPathToRandomSample(getAllSoundSources());
+                pathToFile = getPathToRandomSample(note < C3 ? std::set{SoundSource::BASS} : sound_sources);
                 sampleName = pathToFile.toStdString();
                 juce::File randomSample(pathToFile);
                 
@@ -178,10 +212,23 @@ void RandomSampler::randomize(bool pitch_shift /* = true */)
                 int bufferSize = static_cast<int>(audioReader->lengthInSamples);
                 buffer.setSize(audioReader->numChannels, bufferSize);
                 audioReader->read(&buffer, 0, bufferSize, 0, true, true);
-                
+
                 if (pitch_shift) {
                     try {
-                        rootNoteOfSample = detectNote(buffer, audioReader->sampleRate, sampleName);
+                        rootNoteOfSample = detectNote(buffer, audioReader->sampleRate, 0, sampleName);
+                        
+                        if (
+                            DOUBLE_CHECK_PITCH_DETECTION 
+                            && rootNoteOfSample != detectNote(
+                                                      buffer, 
+                                                      audioReader->sampleRate, 
+                                                      static_cast<int>(0.075*audioReader->sampleRate), 
+                                                      sampleName
+                                                   )
+                        ) {
+                            throw PitchDetectionException();
+                        }
+
                         foundValidSample = true;
                     } catch (PitchDetectionException) {
                         logs::newBadSample(pathToFile);
