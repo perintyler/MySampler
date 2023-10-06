@@ -25,10 +25,32 @@ bool isBlackKey(Note note)
     return isBlackKey(getSemitone(note));
 }
 
+bool isHighEnd(Note note)
+{
+    return note >= C4;
+}
+
+bool isLowEnd(Note note)
+{
+    return note <= C2;
+}
+
+int getOctave(Note note)
+{
+    return static_cast<int>((note - A0) / OCTAVE_SIZE);
+}
+
 std::string getSemitoneString(Semitone semitone)
 {
     int semitoneIndex = static_cast<int>(semitone);
-    assert(semitoneIndex > 0 && semitoneIndex < 12);
+    assert(semitoneIndex >= 0 && semitoneIndex < 12);
     return SEMITONE_STRINGS[semitoneIndex];
+}
+
+std::string noteToString(Note note)
+{
+    Semitone semitone = getSemitone(note);
+    int octave = getOctave(note);
+    return getSemitoneString(semitone) + std::to_string(octave);
 }
 
