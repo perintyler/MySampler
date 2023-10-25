@@ -41,7 +41,6 @@ TEST_CASE("RandomSampler Test #3: get sample", "[samples][sampler]")
 TEST_CASE("RandomSampler Test #4: randomize samples", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C5);
-  sampler.randomize(false);
   std::string originalSampleName = sampler.getSample(C4).name;
   sampler.randomize(false);
   std::string updatedSampleName = sampler.getSample(C4).name;
