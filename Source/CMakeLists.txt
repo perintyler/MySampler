@@ -29,6 +29,10 @@ juce_add_binary_data(pluginBinaryData SOURCES
     ../Assets/icons/locked-white.png
     ../Assets/icons/unlocked-black.png 
     ../Assets/icons/unlocked-white.png
+    ../Assets/icons/delete_icon.png
+    ../Assets/icons/upload_icon.png
+    ../Assets/icons/heart_icon.png
+    ../Assets/icons/shuffle_icon.png
 )
 
 file(GLOB plugin_SOURCES 
