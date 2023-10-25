@@ -1,8 +1,11 @@
-/*** Piano960 | lockable_keys.cpp */
+/*** Piano960 | Source/gui/keyboard.cpp */
 
 #include <assert.h>
+#include <utility>
+#include <utility>
+#include <memory>
 
-#include "lockable_keys.h"
+#include "./lockable_keys.h"
 #include "BinaryData.h"
 #include "../notes.h"
 #include "../logs.h"
@@ -16,105 +19,175 @@ static const juce::Colour BLACK = juce::Colour::fromRGB(
 static const juce::Colour WHITE = juce::Colour::fromRGB(
     juce::uint8(0), juce::uint8(0), juce::uint8(0));
 
-static const int LOCK_BUTTON_OFFSET = 0; // 2; // pixels
+static const BinaryResource SHUFFLE_ICON {BinaryData::shuffle_icon_png, BinaryData::shuffle_icon_pngSize};
 
-static const float WHITE_KEY_WIDTH = 40.0;
+static const BinaryResource LOCKED_ICON {BinaryData::lockedblack_png, BinaryData::lockedblack_pngSize};
 
-static const float BLACK_KEY_WIDTH_RATIO = 1.0;
+static const BinaryResource UNLOCKED_ICON {BinaryData::unlockedblack_png, BinaryData::unlockedblack_pngSize};
+
+static const BinaryResource HEART_ICON {BinaryData::heart_icon_png, BinaryData::heart_icon_pngSize};
+
+static const BinaryResource DELETE_ICON {BinaryData::delete_icon_png, BinaryData::delete_icon_pngSize};
+
+static const BinaryResource UPLOAD_ICON {BinaryData::upload_icon_png, BinaryData::upload_icon_pngSize};
+
+// -----------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
+
+KeyToolbar::KeyToolbar(Note note, AudioProcessor& p)
+        : key (note)
+        , processor (p)
+        , shuffleButton(new juce::ImageButton())
+        , lockButton(new juce::ImageButton())
+        , likeButton(new juce::ImageButton())
+        , deleteButton(new juce::ImageButton())
+        , uploadButton(new juce::ImageButton())
+{
+    lockButton->setToggleable(true);
+//    lockButton->setClickingTogglesState(true);
+
+    shuffleButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
+    lockButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
+    likeButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
+    deleteButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
+    uploadButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
+
+    loadIcons();
+    setCallbacks();
+
+
+    addAndMakeVisible(shuffleButton);
+    addAndMakeVisible(lockButton);
+    addAndMakeVisible(likeButton);
+    addAndMakeVisible(deleteButton);
+    addAndMakeVisible(uploadButton);
+}
+
+void KeyToolbar::setCallbacks()
+{
+    shuffleButton->onClick = [&key=key, &processor=processor]() {
+        processor.sampler.randomizeSound(key);
+    };
+
+    lockButton->onClick = [&key=key, &processor=processor]() { 
+        processor.sampler.toggleLock(key);
+    };
+
+    likeButton->onClick = [&key=key, &processor=processor]() {
+        logGoodSample(processor.sampler.getSample(key).filepath.string());
+    };
+
+    deleteButton->onClick = [&key=key, &processor=processor]() {
+        logBadSample(processor.sampler.getSample(key).filepath.string());
+    };
+
+    uploadButton->onClick = [&key=key, &processor=processor]() {
+        // TODO
+    };
+}
+
+void KeyToolbar::loadIcons()
+{
+   setButtonIcon(shuffleButton, BLACK, SHUFFLE_ICON);
+
+   setToggleButtonIcons(lockButton, BLACK, LOCKED_ICON, UNLOCKED_ICON);
+
+   setButtonIcon(likeButton, BLACK, HEART_ICON);
+
+   setButtonIcon(deleteButton, BLACK, DELETE_ICON);
+
+   setButtonIcon(uploadButton, BLACK, UPLOAD_ICON);
+}
+
+KeyToolbar::~KeyToolbar()
+{
+    shuffleButton.deleteAndZero();
+    lockButton.deleteAndZero();
+    deleteButton.deleteAndZero();
+    likeButton.deleteAndZero();
+    uploadButton.deleteAndZero();
+}
+
+void KeyToolbar::resized()
+{
+    juce::FlexBox flexbox;
+    
+    flexbox.flexDirection = juce::FlexBox::Direction::column;
+    flexbox.flexWrap = juce::FlexBox::Wrap::wrap;
+    flexbox.justifyContent = juce::FlexBox::JustifyContent::spaceAround;
+    flexbox.alignContent = juce::FlexBox::AlignContent::center;
+
+    for (const auto child : getChildren()) {
+        flexbox.items.add(
+            juce::FlexItem(*child)
+                .withMinWidth(KeyToolbar::BUTTON_SIZE)
+                .withMinHeight(KeyToolbar::BUTTON_SIZE)
+        );
+    }
+
+    flexbox.performLayout(juce::Rectangle<int>{
+        0, 0, KeyToolbar::WIDTH, KeyToolbar::HEIGHT
+    });
+}
+
+void KeyToolbar::paint(juce::Graphics& graphics)
+{
+    graphics.fillAll(juce::Colours::burlywood);
+}
+
+// -----------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
 
 LockableKeys::LockableKeys(AudioProcessor& processor)
     : juce::MidiKeyboardComponent(processor.getKeyboardState(), DEFAULT_ORIENTATION)
 {
-    setAvailableRange(FIRST_MIDI_NOTE, LAST_MIDI_NOTE);
+    setAvailableRange(FIRST_NOTE, LAST_NOTE);
     setScrollButtonsVisible(false);
-    setKeyWidth(WHITE_KEY_WIDTH);
-    setBlackNoteWidthProportion(BLACK_KEY_WIDTH_RATIO);
+    setKeyWidth(LockableKeys::WHITE_KEY_WIDTH);
+    setBlackNoteWidthProportion(LockableKeys::BLACK_KEY_WIDTH_RATIO);
     setBufferedToImage(true);
 
-    for (Note note = FIRST_MIDI_NOTE; note <= LAST_MIDI_NOTE; note++) {
-        juce::String lockButtonName = juce::String("lock-button") + juce::String(note);
-        auto lockButton = ImageButtonPointer(new juce::ImageButton(lockButtonName));
-        lockButton->setComponentID(juce::String { note });
-        lockButton->setToggleable(true);
-        lockButton->setClickingTogglesState(true);
-
-        lockButton->onClick = [note, &processor=processor]() { 
-           if (processor.sampler.isKeyLocked(note)) {
-                processor.sampler.unlockKey(note);
-            } else {
-                processor.sampler.lockKey(note);
-            }
-        };
+    for (Note note = FIRST_NOTE; note <= LAST_NOTE; note++) 
+    {
+        std::unique_ptr<KeyToolbar> keyToolbar = std::make_unique<KeyToolbar>(note, processor);
         
-        lockButtons.insert(std::pair<Note, ImageButtonPointer>(note, lockButton));
-        setLockButtonImage(lockButton, note);
-        addAndMakeVisible(std::move(lockButton));
+        toolbars[note] = std::make_unique<KeyToolbar>(note, processor);
+        toolbars[note]->setComponentID(noteToString(note) + "-toolbar");
+        
+        addAndMakeVisible(toolbars[note].get());
     }
 }
 
 LockableKeys::~LockableKeys()
 {
     // removeAllChangeListeners();
-    for (auto &[note, lockButton]: lockButtons) {
-        lockButton.deleteAndZero();
+    for (auto &[note, keyToolbar]: toolbars) {
+        keyToolbar.reset();
     }
-    lockButtons.clear();
+    toolbars.clear();
     clearKeyMappings();
 }
 
-void LockableKeys::setLockButtonImage(ImageButtonPointer& lockButton, Note note)
+void LockableKeys::layoutToolbar(Note key, std::unique_ptr<KeyToolbar>& toolbar)
 {
-   juce::Image unlockedImage = juce::ImageFileFormat::loadFrom(
-        BinaryData::unlockedwhite_png,
-        BinaryData::unlockedwhite_pngSize
-    ).convertedToFormat(juce::Image::PixelFormat::RGB);
+    const juce::Rectangle keyBounds = getRectangleForKey(key);
+
+    float xCoord, yCoord;
+    if (isBlackKey(key)) {
+        xCoord = keyBounds.getX() + keyBounds.getWidth()/2 - KeyToolbar::WIDTH/2 - 1;
+        yCoord = keyBounds.getY();
+    } else {
+        xCoord = keyBounds.getX() + 1;
+        yCoord = keyBounds.getY() + keyBounds.getHeight() - KeyToolbar::HEIGHT;
+    }
     
-    juce::Image lockedImage = juce::ImageFileFormat::loadFrom(
-        BinaryData::lockedwhite_png,
-        BinaryData::lockedwhite_pngSize
-    ).convertedToFormat(juce::Image::PixelFormat::RGB);
-    
-    juce::Colour color = WHITE; // isBlack ? BLACK : WHITE;
-
-    lockButton->setImages(
-        true,            // resizeButtonNowToFitThisImage
-        true,            // rescaleImagesWhenButtonSizeChanges
-        true,            // preserveImageProportions
-        unlockedImage,   // normal image
-        1.0,             // imageOpacityWhenNormal
-        color,           // overlayColourWhenNormal
-        unlockedImage,   // overImage
-        0.5,             // imageOpacityWhenOver
-        color,           // overlayColourWhenOver
-        lockedImage,     // downImage
-        1.0,             // imageOpacityWhenDown
-        color,           // overlayColourWhenDown
-        false            // hitTestAlphaThreshold
-    );
-}
-
-void LockableKeys::layoutLockButton(ImageButtonPointer& lockButton, Note note)
-{
-    const juce::Rectangle keyBounds = getRectangleForKey(note);
-    bool keyIsBlack = isBlackKey(note);
-
-    float keyXCoord = keyBounds.getX();
-    float keyYCoord = keyBounds.getY();
-    float keyWidth  = keyIsBlack ? getBlackNoteWidth() : keyBounds.getWidth();
-    float keyHeight = keyIsBlack ? getBlackNoteLength() : keyBounds.getHeight();
-    float buttonSize = 0.25*keyWidth;
-    float xCoord = keyXCoord + 0.5*(keyWidth-buttonSize) - LOCK_BUTTON_OFFSET;
-    float yCoord = keyIsBlack ? keyYCoord + 0.12*getBlackNoteLength()
-                              : getBlackNoteLength() + 0.5*(keyHeight-getBlackNoteLength()) - 0.5*buttonSize;
-
-    lockButton->setSize(buttonSize, buttonSize);
-    lockButton->setCentrePosition(xCoord, yCoord);
+    toolbar->setBounds(xCoord, yCoord, KeyToolbar::WIDTH, KeyToolbar::HEIGHT);
 }
 
 void LockableKeys::resized()
 {
     juce::MidiKeyboardComponent::resized();
-    for (auto &[note, lockButton]: lockButtons) {
-        layoutLockButton(lockButton, note);
+    for (auto &[key, keyToolbar]: toolbars) {
+        layoutToolbar(key, keyToolbar);
     }
 }
