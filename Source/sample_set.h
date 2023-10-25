@@ -7,6 +7,7 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <juce_audio_formats/juce_audio_formats.h>
 
 #include "notes.h"
 #include "sample.h"
