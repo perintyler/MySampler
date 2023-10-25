@@ -1,49 +1,60 @@
 /*** MySampler | Source/logs.cpp ***/
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <map>
+
 #include "logs.h"
+#include "paths.h"
 
-#if defined(TESTMODE) && !defined(NO_LOG)
-  #define NO_LOG
-#endif
+static void writeToLogfile(std::string message)
+{
+    #ifdef LOGFILE_PATH
+      std::ofstream logfile;
+      logfile.open(LOGFILE_PATH);
+      logfile << message << std::endl;
+      logfile.close();
+    #endif
+}
 
-/** A `NonDebugLogger`  is just like a `juce::FileLogger`, except log messages don't
- ** get written to the debug stream (i.e. stdout)
- **/
-class NonDebugLogger: public juce::FileLogger {
-public:
-    NonDebugLogger(juce::String pathToFile, const juce::String& welcomeMessage = "")
-        : juce::FileLogger(juce::File { pathToFile }, welcomeMessage)
-    {}
-
-    void logMessage (const juce::String& message) override
-    {
-        juce::FileOutputStream out (getLogFile().getFullPathName(), 256);
-        out << message << juce::newLine;
+static void logJSON(std::string messageType, std::map<std::string, std::string> content)
+{
+    std::stringstream stringstream;
+    stringstream << "{\"type\": \"" << messageType << "\"";
+    assert(!content.empty());
+    
+    for (const auto& [jsonKey, jsonValue] : content) {
+        stringstream << ", \"" << jsonKey << "\": \"" << jsonValue << "\"";
     }
-};
 
-#ifndef NO_LOG
-static NonDebugLogger goodSampleLogger("/var/log/MySampler/good-samples.txt");
-static NonDebugLogger badSampleLogger("/var/log/MySampler/bad-samples.txt");
-#endif
+    stringstream << "}";
+    
+    writeToLogfile(stringstream.str());
+}
 
-void logs::newGoodSample(const juce::String& sampleName)
+void debug(std::vector<std::string> messages)
 {
-    #ifndef NO_LOG
-    goodSampleLogger.logMessage(sampleName);
+    #if defined(DEBUG) && defined(VERBOSE)
+      for (const std::string& msg : messages) {
+        std::cout << msg;
+      }
+      std::cout << std::endl;
     #endif
 }
 
-void logs::newBadSample(const juce::String& sampleName)
+void debug(std::string message)
 {
-    #ifndef NO_LOG
-    badSampleLogger.logMessage(sampleName);
-    #endif
+    debug({message});
 }
 
-void logs::debug(const juce::String& message)
+void logBadSample(std::string path)
 {
-    #if !defined(NO_LOG) && !defined(PRODUCTION)
-    juce::Logger::outputDebugString(message);
-    #endif
+    logJSON("bad sample", {{"path", path}});
 }
+
+void logGoodSample(std::string path)
+{
+    logJSON("good sample", {{"path", path}});
+}
+

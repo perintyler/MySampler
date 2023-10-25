@@ -2,10 +2,13 @@
 
 #pragma once
 
-#include <juce_core/juce_core.h>
+#include <string>
+#include <vector>
 
-namespace logs {
-    void newGoodSample (const juce::String& sampleName);
-    void newBadSample  (const juce::String& sampleName);
-    void debug         (const juce::String& message);
-}
+void debug(std::string);
+
+void debug(std::vector<std::string>);
+
+void logBadSample(std::string);
+
+void logGoodSample(std::string);

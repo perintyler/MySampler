@@ -2,7 +2,7 @@
 
 #include "sound_source_grid.h"
 
-const int NUM_BUTTONS_PER_ROW = 14;
+const int NUM_BUTTONS_PER_ROW = 10;
 
 const float BUTTON_HEIGHT = 35;
 
