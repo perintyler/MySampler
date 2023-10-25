@@ -27,19 +27,25 @@ public:
 
     RandomSampler();
 
-    bool isKeyLocked(Note) const;
+    ~RandomSampler();
 
+    void toggleLock(Note);
+    
     void lockKey(Note);
 
     void unlockKey(Note);
-
+    
+    bool isKeyLocked(Note) const;
+    
     const Sample& getSample(Note) const;
 
     void addSoundSource(SoundSource);
 
     void removeSoundSource(SoundSource);
 
-    void randomize(bool pitch_shift = true);
+    void randomizeSound(Note key, bool pitch_shift = true);
+
+    void randomizeAll(bool pitch_shift = true);
 
     bool isReady() const;
 
@@ -50,9 +56,14 @@ public:
     void setSamples(const SampleSet&);
 
 private:
+    std::set<SoundSource> getSoundSourcesForKey(Note key);
+
     Note firstNote;
     Note lastNote;
     SampleSet samples {};
     std::map<Note, bool> lockedKeys {};
     std::set<SoundSource> sound_sources {};
+    // std::vector<std::unique_ptr<juce::SamplerVoice>> voices {};
+
+    std::vector<juce::SynthesiserSound::Ptr> sounds {};
 };
