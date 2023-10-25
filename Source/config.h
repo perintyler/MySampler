@@ -12,13 +12,15 @@
 
 const std::string PLUGIN_NAME { "MySampler" };
 
-const Note FIRST_MIDI_NOTE = C1;
+const Note FIRST_NOTE = C1;
 
-const Note LAST_MIDI_NOTE = C6;
+const Note LAST_NOTE = C6;
 
-const int NUM_KEYS = LAST_MIDI_NOTE - FIRST_MIDI_NOTE + 1;
+const int FIRST_PERCUSSION_NOTE = C4;
 
-const double ATTACK = 0.1; // seconds
+const int NUM_KEYS = FIRST_NOTE - LAST_NOTE + 1;
+
+const double ATTACK = 0.00; // seconds
 
 const double RELEASE = 0.1; // seconds
 
