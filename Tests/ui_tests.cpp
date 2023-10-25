@@ -64,7 +64,7 @@ TEST_CASE("UI Test #3: lockable keys", "[ui][lockable_keys]")
     AudioProcessor processor {};
     processor.suspendProcessing(true);
     LockableKeys keyboard(processor);
-    int numKeys = LAST_MIDI_NOTE - FIRST_MIDI_NOTE;
+    int numKeys = LAST_NOTE - FIRST_NOTE;
     REQUIRE(keyboard.getNumChildComponents() > numKeys);
     // TODO: require that each lock button is on the key with the same index 
 }
