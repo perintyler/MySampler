@@ -12,7 +12,7 @@ const juce::Colour BACKGROUND_COLOR = juce::Colours::grey;
 
 const int VERTICAL_MARGIN_SIZE = 8; // pixels
 
-const int HORIZONTAL_MARGIN_SIZE = 15; // pixels
+const int HORIZONTAL_MARGIN_SIZE = 50; // pixels
 
 App::App(AudioProcessor& audioProcessor) 
     : AudioProcessorEditor (&audioProcessor)
@@ -27,10 +27,6 @@ App::App(AudioProcessor& audioProcessor)
     addAndMakeVisible(view.get());
 
     setResizable(false, false);
-    
-    #ifndef TESTMODE
-    processor.randomizeSamples();
-    #endif
 }
 
 /*** Renders the UI ***/

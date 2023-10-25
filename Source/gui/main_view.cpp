@@ -14,7 +14,7 @@ const juce::String RANDOMIZE_BUTTON_LABEL { "randomize" };
 
 const juce::String SAVE_BUTTON_LABEL { "save" };
 
-const float KEYBOARD_HEIGHT = 200;
+const float KEYBOARD_HEIGHT = 400;
 
 const float PRESETS_MENU_HEIGHT = 30;
 
@@ -30,7 +30,7 @@ MainView::MainView(AudioProcessor& processor)
   , soundSourceGrid    (std::make_unique<SoundSourceGrid>(processor))
 {
     randomizeButton->onClick = [&processor=processor]() {
-        processor.sampler.randomize(); 
+        processor.sampler.randomizeAll(); 
     };
 
     saveButton->onClick = [&processor=processor, &presetsMenu=presetsMenu](){ 
@@ -57,10 +57,11 @@ MainView::MainView(AudioProcessor& processor)
 
 float MainView::getHeight()
 {
-    return PRESETS_MENU_HEIGHT 
+    return MARGIN_SIZE + PRESETS_MENU_HEIGHT
          + MARGIN_SIZE + KEYBOARD_HEIGHT 
          + MARGIN_SIZE + SoundSourceGrid::getHeight() 
-         + MARGIN_SIZE + RANDOMIZE_BUTTON_HEIGHT + MARGIN_SIZE;
+         + MARGIN_SIZE + RANDOMIZE_BUTTON_HEIGHT
+         + MARGIN_SIZE;
 }
 
 /** Since the keyboard component's keys have fixed widths/lengths, a MainView component
