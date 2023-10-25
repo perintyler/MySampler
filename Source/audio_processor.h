@@ -30,6 +30,10 @@ public:
     
     ~AudioProcessor() override = default;
     
+//    int getNumInputChannels() const override { return 0; }
+
+    // int getNumOutputChannels() const override { return 2; }
+
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     
     void releaseResources() override;
@@ -70,9 +74,9 @@ public:
     
     juce::Synthesiser& synthesiser() { return sampler.synthesiser; }
 
-    void randomizeSamples() { sampler.randomize(); }
+    // void randomizeSamples() { sampler.randomize(); }
     
-    void logSamples() const;
+    // void logSamples() const;
 
 private:
 

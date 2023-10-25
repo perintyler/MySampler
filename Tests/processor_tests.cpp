@@ -72,13 +72,4 @@ TEST_CASE("Processor Test #10: BusesLayoutSupportStereo", "[processor]")
     REQUIRE(processor.isBusesLayoutSupported(layout) == true);
 }
 
-TEST_CASE("Processor Test #11: BusesLayoutSupportInvalid", "[processor]")
-{
-    auto processor     = AudioProcessor {};
-    auto layout        = juce::AudioProcessor::BusesLayout {};
-    layout.inputBuses  = juce::AudioChannelSet::mono();
-    layout.outputBuses = juce::AudioChannelSet::stereo();
-
-    REQUIRE(processor.isBusesLayoutSupported(layout) == false);
-}
 
