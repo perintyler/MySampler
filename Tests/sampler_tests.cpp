@@ -30,7 +30,7 @@ TEST_CASE("RandomSampler Test #2: locking / unlocking keys", "[samples][sampler]
 TEST_CASE("RandomSampler Test #3: get sample", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C4+1);
-  sampler.randomize();
+  sampler.randomizeAll();
   const Sample& sample = sampler.getSample(C4);
   REQUIRE(!sample.name.empty());
   REQUIRE(std::filesystem::exists(sample.filepath));
@@ -42,7 +42,7 @@ TEST_CASE("RandomSampler Test #4: randomize samples", "[samples][sampler]")
 {
   RandomSampler sampler(C4, C5);
   std::string originalSampleName = sampler.getSample(C4).name;
-  sampler.randomize(false);
+  sampler.randomizeAll(false);
   std::string updatedSampleName = sampler.getSample(C4).name;
   REQUIRE(originalSampleName != updatedSampleName);
 }
