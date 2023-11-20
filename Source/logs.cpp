@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <assert.h>
 
 #include "logs.h"
 #include "paths.h"
