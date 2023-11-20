@@ -34,7 +34,7 @@ cmake ..
 make install
 ```
 
-Or, to quickly build and install MySampler, use the `build.sh` convencience script with an `-i` option. (you might have to change the file permision: `chmod +x ./bs` ).
+Or, to quickly build and install MySampler, use the `./bs` bash script with an `-i` option.
 
 For Ubuntu/Debian-like distributions, the JUCE framework has couple of dependencies that must be installed.
 
