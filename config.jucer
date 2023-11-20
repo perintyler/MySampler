@@ -79,14 +79,10 @@
     <FILE id="FiEPff" name="upload_icon.png" compile="0" resource="1" file="Assets/icons/upload_icon.png"/>
     <FILE id="iJGzzW" name="shuffle_icon.png" compile="0" resource="1"
           file="Assets/icons/shuffle_icon.png"/>
-    <FILE id="En5OBp" name="locked-white.png" compile="0" resource="1"
-          file="Assets/icons/locked-white.png"/>
-    <FILE id="Mwe4fj" name="locked-black.png" compile="0" resource="1"
-          file="Assets/icons/locked-black.png"/>
-    <FILE id="Z2dmo4" name="unlocked-white.png" compile="0" resource="1"
-          file="Assets/icons/unlocked-white.png"/>
-    <FILE id="HFRWBo" name="unlocked-black.png" compile="0" resource="1"
-          file="Assets/icons/unlocked-black.png"/>
+    <FILE id="Mwe4fj" name="locked_black_icon.png" compile="0" resource="1"
+          file="Assets/icons/unlocked_black_icon.png"/>
+    <FILE id="HFRWBo" name="unlocked_black_icon.png" compile="0" resource="1"
+          file="Assets/icons/unlocked_black_icon.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
