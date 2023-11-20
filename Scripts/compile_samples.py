@@ -97,11 +97,9 @@ def get_categories(sample_path) -> list:
 def getCategoryDirectory(category, compilation_directory):
   return pathlib.Path(compilation_directory).joinpath(compilation_directory, category)
 
-def compile_samples(installation_directory, sample_packs_directory, print_details=False):
+def compile_samples(installation_directory, sample_packs_directory, verbose=False):
   """
-  This function recursively crawls through sample packs and installs them to the given 
-  installation directory. Each of the installed files will have a unique ID. The new file 
-  names will follow this format: `<Sample-Number>.wav`.
+  This function recursively crawls through sample packs to find samples for each category
   """
   numSamplesConsidered = 0
   numCompiledSamples = 0
@@ -110,7 +108,7 @@ def compile_samples(installation_directory, sample_packs_directory, print_detail
     numSamplesConsidered += 1
     categories = get_categories(path_to_sample)
 
-    if print_details:
+    if verbose:
       print(f' | #{numSamplesConsidered} sample path: {path_to_sample.relative_to(sample_packs_directory)}')
       print('\n'.join(f' | - {category}' for category in categories))
       print()
@@ -122,7 +120,7 @@ def compile_samples(installation_directory, sample_packs_directory, print_detail
         compiled_file_name = '.'.join(path_components)
         compiled_file_path = pathlib.Path(installation_directory).joinpath(category, compiled_file_name)
         
-        if print_details: 
+        if verbose:
           print(f' <> Copying {category} Sample:')
           print(f" <> - from : '{path_to_sample.relative_to(ROOT_REPO)}')")
           print(f" <> -   to : '{compiled_file_path.relative_to(ROOT_REPO)}'")
@@ -133,7 +131,7 @@ def compile_samples(installation_directory, sample_packs_directory, print_detail
         CATEGORY_SAMPLE_COUNTS[category] += 1
         break
 
-  if print_details:
+  if verbose:
     print('\n --- Category Counts ---')
     print('\n'.join(f'   <> ({category}: {count})' for category, count in CATEGORY_SAMPLE_COUNTS.items()))
 
@@ -191,7 +189,7 @@ def main():
     print(f'sample pack path is not a directory ({sample_packs_directory})')
   else:
     count_existing_samples(compilation_directory)
-    compile_samples(compilation_directory, args.sample_packs, print_details=args.verbose)
+    compile_samples(compilation_directory, args.sample_packs, verbose=args.verbose)
 
   for category in SAMPLE_CATEGORIES.keys():
     category_directory = os.path.join(compilation_directory, category)
