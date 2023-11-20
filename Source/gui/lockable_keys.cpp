@@ -21,9 +21,9 @@ static const juce::Colour WHITE = juce::Colour::fromRGB(
 
 static const BinaryResource SHUFFLE_ICON {BinaryData::shuffle_icon_png, BinaryData::shuffle_icon_pngSize};
 
-static const BinaryResource LOCKED_ICON {BinaryData::lockedblack_png, BinaryData::lockedblack_pngSize};
+static const BinaryResource LOCKED_ICON {BinaryData::locked_black_icon_png, BinaryData::locked_black_icon_pngSize};
 
-static const BinaryResource UNLOCKED_ICON {BinaryData::unlockedblack_png, BinaryData::unlockedblack_pngSize};
+static const BinaryResource UNLOCKED_ICON {BinaryData::unlocked_black_icon_png, BinaryData::unlocked_black_icon_pngSize};
 
 static const BinaryResource HEART_ICON {BinaryData::heart_icon_png, BinaryData::heart_icon_pngSize};
 
