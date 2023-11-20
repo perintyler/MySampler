@@ -12,15 +12,9 @@
 #include "paths.h"
 #include "logs.h"
 
-//
-// Note:
-//  Default presets are currently stored in the same JSON file as custom presets.
-//  The default presets should probably be in the source code, or maybe they should
-//  be embedded into the binary) 
-//
-
 #ifndef PATH_TO_PRESETS_FILE
   #define PATH_TO_PRESETS_FILE "/usr/local/include/MySampler/presets.json"
+//  logs::debug("PATH_TO_PRESETS_FILE precompiler variable is not set; using default value.");
 #endif
 
 /**
@@ -132,7 +126,7 @@ SampleSet getSamplesForPreset(std::string presetName)
 
 void savePreset(std::string presetName, const SampleSet& samples) 
 {
-    logs::debug("saving new preset: " + presetName);
+    debug({"saving new preset: ", presetName});
     std::string uniqueName { presetName };
     
     for (int numDuplicates = 0; presetExists(uniqueName); numDuplicates++)
