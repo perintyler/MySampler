@@ -1,4 +1,4 @@
-name: Validate Default Presets
+name: Validate Presets
 on: [push]
 jobs:
   validate-presets:
