@@ -1,0 +1,30 @@
+name: Build & Test (GCC)
+on: [push]
+jobs:
+  build-and-tests-with-gnu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install Dependencies
+      run: sudo apt-get install -y libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
+    - name: Create Build Directory
+      run: mkdir ${{github.workspace}}/build
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}/build
+      run: cmake ${{github.workspace}} -DCMAKE_C_COMPILER=/usr/bin/gcc \
+                                       -DCMAKE_CXX_COMPILER=/usr/bin/g++ \
+                                       -DCMAKE_INSTALL_PREFIX=/usr/local
+    - name: Build Plugin & Unit-Tests and Install Samples
+      working-directory: ${{github.workspace}}/build
+      run: sudo make install mysampler unit-tests
+    - name: Validate Default/Installed Presets
+      working-directory: ${{github.workspace}}
+      run: Scripts/validate_presets.py
+    - name: Run Unit-Tests
+      working-directory: ${{github.workspace}}/build
+      run: ./Tests/unit-tests
+    - name: Cancelling parallel jobs
+      if: failure()
+      uses: andymckay/cancel-action@0.2
