@@ -1,0 +1,12 @@
+name: Validate Default Presets
+on: [push]
+jobs:
+  validate-presets:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Validate Presets Files
+      working-directory: ${{github.workspace}}
+      run: python3 Scripts/validate_presets.py -f presets.json
