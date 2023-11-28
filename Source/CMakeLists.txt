@@ -66,6 +66,7 @@ target_compile_definitions(plugin
 
 set(plugin_LIBRARIES
     pluginBinaryData
+    juce::juce_gui_extra
     juce::juce_audio_utils
     juce::juce_dsp
     ff_meters
