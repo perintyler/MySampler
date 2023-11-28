@@ -10,11 +10,11 @@ endif()
 
 juce_add_plugin(plugin
     VERSION 0.0.1
-    FORMATS AU VST3
+    FORMATS AU VST3 Standalone
     PRODUCT_NAME PRODUCT_NAME
     COMPANY_NAME "Sound Voyager"
     COMPANY_WEBSITE "soundvoyager.xyz"
-    PLUGIN_MANUFACTURER_CODE Svyg # A four-character manufacturer id with at least one upper-case character.
+    PLUGIN_MANUFACTURER_CODE Svyg
     IS_SYNTH TRUE
     NEEDS_MIDI_INPUT TRUE
     NEEDS_MIDI_OUTPUT FALSE
