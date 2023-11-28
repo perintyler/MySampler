@@ -1,6 +1,10 @@
 # MySampler
 
-![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/tests.yml/badge.svg)
+![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/build-and-tests.yml/badge.svg)(https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml)
+
+![Validate Presets](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml/badge.svg)
+
+[![PRs Welcome :)](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/perintyler/MySampler/pulls)
 
 MySampler is a cross platform audio plugin: a virtual keyboard where every key plays a different, random audio clip. Each of these audio clips is pitch shifted to match the frequency of the note for the corresponding key.
 
