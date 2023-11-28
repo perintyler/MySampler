@@ -8,7 +8,7 @@ else()
     set(PRODUCT_NAME "MySampler-Debug")
 endif()
 
-juce_add_mysampler(mysampler
+juce_add_plugin(mysampler
     VERSION 0.0.1
     FORMATS AU VST3 Standalone
     PRODUCT_NAME PRODUCT_NAME
