@@ -160,7 +160,7 @@ print_help_message()
 
 catch2_args="";
 
-make_parameters="plugin";
+make_parameters="mysampler";
 
 # ------------------------------- BUILD FUNCTIONS -------------------------------
 
@@ -261,9 +261,9 @@ else
 fi
 
 if [ "$RUN_TESTS" = true ]; then
-    BUILD_TARGETS="plugin, unit-tests";
+    BUILD_TARGETS="mysampler, unit-tests";
 else
-    BUILD_TARGETS="plugin";
+    BUILD_TARGETS="mysampler";
 fi
 
 print_newline;

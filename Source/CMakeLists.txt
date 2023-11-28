@@ -8,7 +8,7 @@ else()
     set(PRODUCT_NAME "MySampler-Debug")
 endif()
 
-juce_add_plugin(plugin
+juce_add_mysampler(mysampler
     VERSION 0.0.1
     FORMATS AU VST3 Standalone
     PRODUCT_NAME PRODUCT_NAME
@@ -24,7 +24,7 @@ juce_add_plugin(plugin
     COPY_PLUGIN_AFTER_BUILD TRUE # TODO: only set this to true for apple OS
 )
 
-juce_add_binary_data(pluginBinaryData SOURCES
+juce_add_binary_data(mysamplerBinaryData SOURCES
     ../Assets/icons/locked_icon.png
     ../Assets/icons/unlocked_icon.png 
     ../Assets/icons/delete_icon.png
@@ -33,39 +33,39 @@ juce_add_binary_data(pluginBinaryData SOURCES
     ../Assets/icons/shuffle_icon.png
 )
 
-file(GLOB plugin_SOURCES 
+file(GLOB mysampler_SOURCES 
     "*.h" "*.cpp" "pitch_detection/*.h" "pitch_detection/*.cpp" "gui/*.h" "gui/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
 
 if(PITCH_DETECTION STREQUAL "YIN")
-    list(APPEND plugin_SOURCES "pitch_detection/yin.h")
-    list(APPEND plugin_SOURCES "pitch_detection/yin.cpp")
+    list(APPEND mysampler_SOURCES "pitch_detection/yin.h")
+    list(APPEND mysampler_SOURCES "pitch_detection/yin.cpp")
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-    list(APPEND plugin_SOURCES "pitch_detection/spice.h")
-    list(APPEND plugin_SOURCES "pitch_detection/spice.cpp")
+    list(APPEND mysampler_SOURCES "pitch_detection/spice.h")
+    list(APPEND mysampler_SOURCES "pitch_detection/spice.cpp")
 else()
-    list(APPEND plugin_SOURCES "pitch_detection/crepe.h")
-    list(APPEND plugin_SOURCES "pitch_detection/crepe.cpp")
+    list(APPEND mysampler_SOURCES "pitch_detection/crepe.h")
+    list(APPEND mysampler_SOURCES "pitch_detection/crepe.cpp")
 endif()
 
 include(CMakePrintHelpers)
-cmake_print_variables(plugin_SOURCES)
+cmake_print_variables(mysampler_SOURCES)
 
-target_sources(plugin PRIVATE ${plugin_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${plugin_SOURCES})
+target_sources(mysampler PRIVATE ${mysampler_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${mysampler_SOURCES})
 
-target_include_directories(plugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(plugin PUBLIC ${CMAKE_SOURCE_DIR}/Libraries)
-target_include_directories(plugin PUBLIC ${CMAKE_SOURCE_DIR}/Libraries/JUCE/modules)
+target_include_directories(mysampler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(mysampler PUBLIC ${CMAKE_SOURCE_DIR}/Libraries)
+target_include_directories(mysampler PUBLIC ${CMAKE_SOURCE_DIR}/Libraries/JUCE/modules)
 
-target_compile_definitions(plugin
+target_compile_definitions(mysampler
     PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-set(plugin_LIBRARIES
-    pluginBinaryData
+set(mysampler_LIBRARIES
+    mysamplerBinaryData
     juce::juce_gui_extra
     juce::juce_audio_utils
     juce::juce_dsp
@@ -73,14 +73,14 @@ set(plugin_LIBRARIES
 )
 
 if(PITCH_DETECTION STREQUAL "CREPE")
-    list(APPEND plugin_LIBRARIES "tensorflow-lite")
-    list(APPEND plugin_LIBRARIES "soxr")
-    list(APPEND plugin_LIBRARIES "soxr-lsr")
+    list(APPEND mysampler_LIBRARIES "tensorflow-lite")
+    list(APPEND mysampler_LIBRARIES "soxr")
+    list(APPEND mysampler_LIBRARIES "soxr-lsr")
 elseif(PITCH_DETECTION STREQUAL "SPICE")
-    list(APPEND plugin_LIBRARIES "tensorflow-lite")
+    list(APPEND mysampler_LIBRARIES "tensorflow-lite")
 endif()
 
-cmake_print_variables(plugin_LIBRARIES)
+cmake_print_variables(mysampler_LIBRARIES)
 
-target_link_libraries(plugin PRIVATE ${plugin_LIBRARIES})
+target_link_libraries(mysampler PRIVATE ${mysampler_LIBRARIES})
 
