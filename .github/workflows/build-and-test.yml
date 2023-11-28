@@ -13,16 +13,19 @@ jobs:
       run: mkdir ${{github.workspace}}/build
     - name: Configure CMake
       working-directory: ${{github.workspace}}/build
-      run: cmake ${{github.workspace}} -DPITCH_DETECTION=YIN
+      run: cmake ${{github.workspace}} -DCMAKE_INSTALL_PREFIX=/usr/local
     - name: Build Plugin & Unit-Tests and Install Samples
       working-directory: ${{github.workspace}}/build
       run: sudo make install plugin unit-tests
     - name: Validate Installed Presets
       working-directory: ${{github.workspace}}
-      run: ./Scripts/validate_presets.py
+      run: Scripts/validate_presets.py -f /usr/local/include/MySampler/presets.json
     - name: Run Unit-Tests
       working-directory: ${{github.workspace}}/build
       run: ./Tests/unit-tests
+    - name: Cancelling parallel jobs
+      if: failure()
+      uses: andymckay/cancel-action@0.2
   build-and-tests-with-gcc:
     runs-on: ubuntu-latest
     steps:
@@ -35,13 +38,13 @@ jobs:
       run: mkdir ${{github.workspace}}/build
     - name: Configure CMake
       working-directory: ${{github.workspace}}/build
-      run: cmake ${{github.workspace}} -DPITCH_DETECTION=YIN -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++
+      run: cmake ${{github.workspace}} -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++
     - name: Build Plugin & Unit-Tests and Install Samples
       working-directory: ${{github.workspace}}/build
       run: sudo make install plugin unit-tests
     - name: Validate Installed Presets
       working-directory: ${{github.workspace}}
-      run: ./Scripts/validate_presets.py
+      run: Scripts/validate_presets.py -f /usr/local/include/MySampler/presets.json
     - name: Run Unit-Tests
       working-directory: ${{github.workspace}}/build
       run: ./Tests/unit-tests 
