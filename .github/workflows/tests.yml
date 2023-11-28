@@ -1,32 +1,52 @@
 name: Unit Tests
 on: [push]
 jobs:
-  tests:
+  validate-presets:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
-
-    - name: Install Dependencies
-      run: sudo apt-get install -y libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
-
-    - name: Create Build Directory
-      run: mkdir ${{github.workspace}}/build
-
-    - name: Configure CMake
-      working-directory: ${{github.workspace}}/build
-      run: cmake ${{github.workspace}} -DPITCH_DETECTION=YIN
-
-    - name: Build Plugin & Unit-Tests and Install Samples
-      working-directory: ${{github.workspace}}/build
-      run: sudo make install unit-tests
-
     - name: Validate Presets Files
       working-directory: ${{github.workspace}}
       run: python3 Scripts/validate_presets.py
 
+  build-and-tests-with-gcc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install Dependencies
+      run: sudo apt-get install -y libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
+    - name: Create Build Directory
+      run: mkdir ${{github.workspace}}/build
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}/build
+      run: cmake ${{github.workspace}} -DPITCH_DETECTION=YIN -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++
+    - name: Build Plugin & Unit-Tests and Install Samples
+      working-directory: ${{github.workspace}}/build
+      run: sudo make install unit-tests
+    - name: Run Unit-Tests
+      working-directory: ${{github.workspace}}/build
+      run: ./Tests/unit-tests 
+
+  build-and-tests-with-gnu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install Dependencies
+      run: sudo apt-get install -y libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev
+    - name: Create Build Directory
+      run: mkdir ${{github.workspace}}/build
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}/build
+      run: cmake ${{github.workspace}} -DPITCH_DETECTION=YIN
+    - name: Build Plugin & Unit-Tests and Install Samples
+      working-directory: ${{github.workspace}}/build
+      run: sudo make install unit-tests
     - name: Run Unit-Tests
       working-directory: ${{github.workspace}}/build
       run: ./Tests/unit-tests
