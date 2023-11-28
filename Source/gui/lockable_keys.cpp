@@ -11,28 +11,17 @@
 #include "../logs.h"
 
 static const juce::MidiKeyboardComponent::Orientation DEFAULT_ORIENTATION 
-    = juce::MidiKeyboardComponent::horizontalKeyboard;
+  = juce::MidiKeyboardComponent::horizontalKeyboard;
 
 static const juce::Colour BLACK = juce::Colour::fromRGB(
-    juce::uint8(256), juce::uint8(256), juce::uint8(256));
+  juce::uint8(256), juce::uint8(256), juce::uint8(256)
+);
 
 static const juce::Colour WHITE = juce::Colour::fromRGB(
-    juce::uint8(0), juce::uint8(0), juce::uint8(0));
+  juce::uint8(0), juce::uint8(0), juce::uint8(0)
+);
 
-static const BinaryResource SHUFFLE_ICON {BinaryData::shuffle_icon_png, BinaryData::shuffle_icon_pngSize};
-
-static const BinaryResource LOCKED_ICON {BinaryData::locked_black_icon_png, BinaryData::locked_black_icon_pngSize};
-
-static const BinaryResource UNLOCKED_ICON {BinaryData::unlocked_black_icon_png, BinaryData::unlocked_black_icon_pngSize};
-
-static const BinaryResource HEART_ICON {BinaryData::heart_icon_png, BinaryData::heart_icon_pngSize};
-
-static const BinaryResource DELETE_ICON {BinaryData::delete_icon_png, BinaryData::delete_icon_pngSize};
-
-static const BinaryResource UPLOAD_ICON {BinaryData::upload_icon_png, BinaryData::upload_icon_pngSize};
-
-// -----------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
 KeyToolbar::KeyToolbar(Note note, AudioProcessor& p)
         : key (note)
@@ -44,7 +33,7 @@ KeyToolbar::KeyToolbar(Note note, AudioProcessor& p)
         , uploadButton(new juce::ImageButton())
 {
     lockButton->setToggleable(true);
-//    lockButton->setClickingTogglesState(true);
+    lockButton->setClickingTogglesState(true);
 
     shuffleButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
     lockButton->setSize(KeyToolbar::BUTTON_SIZE, KeyToolbar::BUTTON_SIZE);
@@ -54,7 +43,6 @@ KeyToolbar::KeyToolbar(Note note, AudioProcessor& p)
 
     loadIcons();
     setCallbacks();
-
 
     addAndMakeVisible(shuffleButton);
     addAndMakeVisible(lockButton);
@@ -88,15 +76,26 @@ void KeyToolbar::setCallbacks()
 
 void KeyToolbar::loadIcons()
 {
-   setButtonIcon(shuffleButton, BLACK, SHUFFLE_ICON);
+    setButtonIcon(shuffleButton, BLACK, {
+      BinaryData::shuffle_icon_png, BinaryData::shuffle_icon_pngSize
+    });
 
-   setToggleButtonIcons(lockButton, BLACK, LOCKED_ICON, UNLOCKED_ICON);
+    setToggleButtonIcons(lockButton, BLACK, 
+      {BinaryData::locked_black_icon_png, BinaryData::locked_black_icon_pngSize}, 
+      {BinaryData::unlocked_black_icon_png, BinaryData::unlocked_black_icon_pngSize}
+    );
 
-   setButtonIcon(likeButton, BLACK, HEART_ICON);
+    setButtonIcon(likeButton, BLACK,
+      {BinaryData::heart_icon_png, BinaryData::heart_icon_pngSize}
+    );
 
-   setButtonIcon(deleteButton, BLACK, DELETE_ICON);
+    setButtonIcon(deleteButton, BLACK,
+      {BinaryData::delete_icon_png, BinaryData::delete_icon_pngSize}
+    );
 
-   setButtonIcon(uploadButton, BLACK, UPLOAD_ICON);
+    setButtonIcon(uploadButton, BLACK,
+      {BinaryData::upload_icon_png, BinaryData::upload_icon_pngSize}
+    );
 }
 
 KeyToolbar::~KeyToolbar()
@@ -135,8 +134,7 @@ void KeyToolbar::paint(juce::Graphics& graphics)
     graphics.fillAll(juce::Colours::burlywood);
 }
 
-// -----------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
 LockableKeys::LockableKeys(AudioProcessor& processor)
     : juce::MidiKeyboardComponent(processor.getKeyboardState(), DEFAULT_ORIENTATION)
