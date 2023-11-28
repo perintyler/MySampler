@@ -25,8 +25,8 @@ juce_add_plugin(plugin
 )
 
 juce_add_binary_data(pluginBinaryData SOURCES
-    ../Assets/icons/locked_black_icon.png
-    ../Assets/icons/unlocked_black_icon.png 
+    ../Assets/icons/locked_icon.png
+    ../Assets/icons/unlocked_icon.png 
     ../Assets/icons/delete_icon.png
     ../Assets/icons/upload_icon.png
     ../Assets/icons/heart_icon.png

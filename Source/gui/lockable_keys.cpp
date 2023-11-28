@@ -81,8 +81,8 @@ void KeyToolbar::loadIcons()
     });
 
     setToggleButtonIcons(lockButton, BLACK, 
-      {BinaryData::locked_black_icon_png, BinaryData::locked_black_icon_pngSize}, 
-      {BinaryData::unlocked_black_icon_png, BinaryData::unlocked_black_icon_pngSize}
+      {BinaryData::locked_icon_png, BinaryData::locked_icon_pngSize}, 
+      {BinaryData::unlocked_icon_png, BinaryData::unlocked_icon_pngSize}
     );
 
     setButtonIcon(likeButton, BLACK,
