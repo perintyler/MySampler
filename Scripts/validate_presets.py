@@ -57,7 +57,7 @@ if __name__ == '__main__':
   
   args = argument_parser.parse_args()
 
-  if args.presets_file:
+  if args.presets_file is not None:
     print(f'validating presets file: {args.presets_file}')
     validate_presets_file(args.presets_file)
   else:
