@@ -9,7 +9,7 @@
 using ImageButtonPointer = juce::Component::SafePointer<juce::ImageButton>;
 
 struct BinaryResource {
-    const char* address;
+    const char* &address;
     int size;
     
     juce::Image getImage() const;
