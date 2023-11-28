@@ -3,6 +3,7 @@
 import os
 import json
 import pathlib
+import argparse
 
 PATH_TO_PIANO960_REPO = pathlib.Path(__file__).parent.parent.absolute();
 DEFAULT_PRESETS_FILE = PATH_TO_PIANO960_REPO.absolute().joinpath('presets.json').absolute()
@@ -50,15 +51,27 @@ def validate_presets_file(filepath):
     raise InvalidPresetsFile(f'Invalid presets file: {filepath} | {exception}')
 
 if __name__ == '__main__':
-  print()
-  print('| ')
-  print('| Validating Presets Files')
-  print('| ')
-  validate_presets_file(DEFAULT_PRESETS_FILE)
-  print(f'| - Default presets file is valid ({DEFAULT_PRESETS_FILE})')
-  validate_presets_file(INSTALLED_PRESETS_FILE)
-  print(f'| - Installed presets file is valid ({INSTALLED_PRESETS_FILE})')
-  print('| ')
-  print()
+  argument_parser = argparse.ArgumentParser('A script for validating MySampler presets')
+
+  argument_parser.add_argument('-f', '--presets-file', default=None, help='a path to a presets file')
+  
+  args = argument_parser.parse_args()
+
+  if args.presets_file:
+    print(f'validating presets file: {args.presets_file}')
+    validate_presets_file(args.presets_file)
+  else:
+    # no presets file provided. validate the presets files (both default and installed) 
+    # that are stored in the default location.
+    print()
+    print('| ')
+    print('| Validating Presets Files')
+    print('| ')
+    validate_presets_file(DEFAULT_PRESETS_FILE)
+    print(f'| - Default presets file is valid ({DEFAULT_PRESETS_FILE})')
+    validate_presets_file(INSTALLED_PRESETS_FILE)
+    print(f'| - Installed presets file is valid ({INSTALLED_PRESETS_FILE})')
+    print('| ')
+    print()
 
 
