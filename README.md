@@ -1,8 +1,8 @@
 # MySampler
 
-![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/build-and-tests.yml/badge.svg)(https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml)
+[![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/build-and-tests.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml)
 
-![Validate Presets](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml/badge.svg)
+[![Validate Presets](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml)
 
 [![PRs Welcome :)](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/perintyler/MySampler/pulls)
 
