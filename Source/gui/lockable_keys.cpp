@@ -5,8 +5,10 @@
 #include <utility>
 #include <memory>
 
-#include "./lockable_keys.h"
+#include <juce_gui_extra/juce_gui_extra.h>
 #include "BinaryData.h"
+
+#include "./lockable_keys.h"
 #include "../notes.h"
 #include "../logs.h"
 
