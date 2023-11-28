@@ -1,6 +1,6 @@
 # MySampler
 
-[![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/build-and-tests.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml)
+[![Build & Test](https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test.yml)
 
 [![Validate Presets](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/validate-presets.yml)
 
