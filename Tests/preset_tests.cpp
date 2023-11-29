@@ -29,11 +29,7 @@ TEST_CASE("Preset Test #2: get preset", "[presets]")
         for (const auto& [note, sample] : samples) {
             REQUIRE(isValidNote(note));
             REQUIRE(isValidNote(sample.rootNote));
-
-            if (!std::filesystem::exists(sample.filepath)) {
-                std::cout << sample.filepath << std::endl;
-            }
-            // REQUIRE(std::filesystem::exists(sample.filepath));
+            REQUIRE(std::filesystem::exists(sample.filepath));
         }
     }
 }
