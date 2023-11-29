@@ -13,7 +13,7 @@ MySampler is a cross platform audio plugin: a virtual keyboard where every key p
 ---
 
 <div align="center">
-  <b> Here's a short audio clip demonstrating one example of what the instrument can sound like. </b>
+  <b> mysampler can have many sounds, but here's a short audio clip demonstrating an example of what it can sound like. </b>
   <br>
   <br>
 </div>
