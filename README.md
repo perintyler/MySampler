@@ -32,7 +32,9 @@ https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-
 - [Unity](https://en.wikipedia.org/wiki/Unity_(game_engine))
 - [Standalone](https://en.wikipedia.org/wiki/Audio_plug-in)
 
-## Requirements
+## Building the Plugin
+
+### Installing Requirements
 
 For Ubuntu/Debian-like distributions, a few dependenciess must be installed.
 
@@ -45,7 +47,7 @@ apt-get install libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound
 
 This shouldn't be neccessary for macOS. Disclaimer: I haven't tried building mysampler on Windows.
 
-## Building the Plugin
+### Fetching Libraries
 
 Before building the plugin, fetch the required libraries by initializing and updating this repositorie's git submodules.
 
@@ -53,7 +55,9 @@ Before building the plugin, fetch the required libraries by initializing and upd
 git submodule update --init --recursive
 ```
 
-Then build and install the plugin with CMake.
+### Using CMake
+
+To build and install the plugin with CMake:
 
 ```bash
 mkdir build && cd build
@@ -69,7 +73,7 @@ make audio-plugin -DMYSAMPLER_FORMATS "VST;Standalone"
 
 ### Using the Build Script
 
-You can also build mysampler with the build script: `./bs`. These are the supported cli options:
+You can also build mysampler with the build script: `./bs`. This is approach is recommended for convencience-sake. These are the supported build script cli options:
 
 - `v`: Print out verbose information
 - `s`: Supress cmake output
@@ -88,6 +92,12 @@ You can also build mysampler with the build script: `./bs`. These are the suppor
 - `n`: Clear terminal window and scrollback before building
 - `h`: Print out a build script help message
 - `f`: Can be used to specify which plugin formats to build (e.g. 'VST AU')
+
+### Xcode Integration
+
+To integrate and build the plugin with Xcode, use [Projucer](https://docs.juce.com/master/tutorial_new_projucer_project.html) along with the `MySampler.jucer` file, which can be found in the `Config` directory.
+
+This is completely optional, and unit testing is not supported by this build process.
 
 ### Unit Testing
 
@@ -108,12 +118,6 @@ Randomness seeded to: 2180487896
 ===============================================================================
 All tests passed (287 assertions in 47 test cases)
 ```
-
-### Xcode Integration
-
-To integrate and build the plugin with Xcode, use [Projucer](https://docs.juce.com/master/tutorial_new_projucer_project.html) along with the `MySampler.jucer` file, which can be found in the `Config` directory.
-
-This is completely optional, and unit testing is not supported by this build process.
 
 ## Samples
 
