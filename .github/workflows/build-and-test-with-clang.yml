@@ -1,7 +1,7 @@
 name: Build & Test (Clang)
 on: [push]
 jobs:
-  build-and-tests-with-gnu:
+  build-and-tests-with-clang:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
