@@ -90,11 +90,6 @@
       "pathToSample" : "/usr/local/include/MySampler/samples/Vocal/vocal-chops-by-t3jlzd.Cymatics Euphoria Vocal Chops.22 - A2.wav"
     },
     {
-      "assignedKey" : 68,
-      "detectedNote" : 72,
-      "pathToSample" : "/usr/local/include/MySampler/samples/Flute/instrument-oneshots-by-fredricch.leads.flute ~ salad.wav"
-    },
-    {
       "assignedKey" : 73,
       "detectedNote" : 68,
       "pathToSample" : "/usr/local/include/MySampler/samples/Vocal/vocal-chops-by-t3jlzd.Ariana Grande Vocal Chops.17 - A#.wav"
