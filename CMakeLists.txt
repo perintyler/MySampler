@@ -107,8 +107,6 @@ add_subdirectory(Source)
 # ===================================== Build Unit Tests =====================================
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
-enable_testing()
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
-include(CTest)
-include(Catch)
 add_subdirectory(Tests)

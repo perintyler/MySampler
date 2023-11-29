@@ -10,6 +10,11 @@ add_definitions(
   -dCATCH_ENABLE_WERROR=OFF
 )
 
+enable_testing()
+
+include(CTest)
+include(Catch)
+
 file(GLOB test_sources 
     "${CMAKE_SOURCE_DIR}/Tests/*.cpp" 
     "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/jsoncpp.cpp"
