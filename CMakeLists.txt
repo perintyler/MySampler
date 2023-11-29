@@ -6,7 +6,7 @@ project(MySampler C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# set(CMAKE_CXX_EXTENSIONS OFF)
 set(ABSL_PROPAGATE_CXX_STD 1)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -15,7 +15,7 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX /usr/local)
 
-set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+# set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 if(PITCH_DETECTION STREQUAL "CREPE")
   add_compile_definitions(CREPE_MODEL)
@@ -81,12 +81,7 @@ juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 
 # =========================== Build JsonCpp =============================
 
-#list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp")
-
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp EXCLUDE_FROM_ALL)
-
-#find_package(jsoncpp REQUIRED)
-#pkg_check_modules(jsoncpp jsoncpp)
 
 # get_target_property(
 #   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include 
@@ -94,12 +89,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp EXCLUDE_FROM_ALL)
 #   INTERFACE_INCLUDE_DIRECTORIES
 # )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include)
-
-# pkg_check_modules(JsonCpp jsoncpp)
-
-#link_libraries(${PkgConfig_LIBRARIES})
-
+# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include)
 
 # include_directories(
 #   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include
