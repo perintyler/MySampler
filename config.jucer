@@ -79,10 +79,9 @@
     <FILE id="FiEPff" name="upload_icon.png" compile="0" resource="1" file="Assets/icons/upload_icon.png"/>
     <FILE id="iJGzzW" name="shuffle_icon.png" compile="0" resource="1"
           file="Assets/icons/shuffle_icon.png"/>
-    <FILE id="Mwe4fj" name="locked_icon.png" compile="0" resource="1"
+    <FILE id="YEAlEB" name="unlocked_icon.png" compile="0" resource="1"
           file="Assets/icons/unlocked_icon.png"/>
-    <FILE id="HFRWBo" name="unlocked_icon.png" compile="0" resource="1"
-          file="Assets/icons/unlocked_icon.png"/>
+    <FILE id="K1RxBz" name="locked_icon.png" compile="0" resource="1" file="Assets/icons/locked_icon.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
