@@ -1,4 +1,6 @@
 #include <cstdint>
+#include <stdint.h>
+
 #include <catch2/catch_session.hpp>
 
 #ifndef TESTMODE
