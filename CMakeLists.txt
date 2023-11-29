@@ -124,7 +124,7 @@ include(CTest)
 target_compile_definitions(Catch2 PRIVATE CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PRIVATE CATCH_DEVELOPMENT_BUILD=ON)
 target_compile_definitions(Catch2 PRIVATE CATCH_BUILD_TESTING=ON)
-target_compile_definitions(Catch2 PRIVATE std=c++23)
+target_compile_features(Catch2 PRIVATE cxx_std_23)
 
 enable_testing()
 add_subdirectory(Tests)
