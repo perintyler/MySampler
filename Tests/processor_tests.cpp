@@ -1,6 +1,7 @@
 /*** MySampler | Tests/processor_tests.cpp ***/
 
 #include <catch2/catch_test_macros.hpp>
+#include <stdint.h>
 
 #include "audio_processor.h"
 

@@ -1,6 +1,8 @@
 /*** Piano960 Tests | ui_tests.cpp ***/
 
 #include <string>
+#include <stdint.h>
+
 #include <catch2/catch_test_macros.hpp>
 #include <juce_graphics/juce_graphics.h>
 
