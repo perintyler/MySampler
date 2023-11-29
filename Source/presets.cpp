@@ -6,7 +6,7 @@
 #include <string>
 #include <algorithm>
 
-#include "JsonCpp/json/json.h"
+#include <json/json.h>
 
 #include "presets.h"
 #include "paths.h"

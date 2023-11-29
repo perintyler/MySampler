@@ -2,11 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project("unit-tests")
 
-file(GLOB test_sources 
-    "${CMAKE_SOURCE_DIR}/Tests/*.cpp" 
-    "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/jsoncpp.cpp"
-    "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/json/*.h"
-)
+file(GLOB test_sources "${CMAKE_SOURCE_DIR}/Tests/*.cpp")
 
 target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
@@ -16,4 +12,5 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         audio-plugin
         Catch2::Catch2
+        jsoncpp_lib
 )

@@ -10,9 +10,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
-
 #include <juce_audio_formats/juce_audio_formats.h>
-#include "JsonCpp/json/json.h"
+#include <json/json.h>
 
 #include "pitch_detection/crepe.h"
 #include "config.h"

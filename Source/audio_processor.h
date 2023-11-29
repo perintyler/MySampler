@@ -19,6 +19,7 @@
 #include "config.h"
 #include "presets.h"
 #include "sampler.h"
+#include <json/json.h>
 
 class AudioProcessor: public juce::AudioProcessor 
 {

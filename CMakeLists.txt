@@ -17,6 +17,14 @@ set(CMAKE_INSTALL_PREFIX /usr/local)
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
+if(PITCH_DETECTION STREQUAL "CREPE")
+  add_compile_definitions(CREPE_MODEL)
+elseif(PITCH_DETECTION STREQUAL "SPICE")
+  add_compile_definitions(SPICE_MODEL)
+else()
+  add_compile_definitions(YIN_ALGO)
+endif()
+
 # ================================= Installation ===================================
 
 set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
@@ -59,16 +67,6 @@ install(
   DESTINATION ${MYSAMPLER_INSTALLATION_PATH}
 )
 
-# =========================== Define Pre-Compiler Variables =============================
-
-if(PITCH_DETECTION STREQUAL "CREPE")
-  add_compile_definitions(CREPE_MODEL)
-elseif(PITCH_DETECTION STREQUAL "SPICE")
-  add_compile_definitions(SPICE_MODEL)
-else()
-  add_compile_definitions(YIN_ALGO)
-endif()
-
 # ================================= Configuration Files ===================================
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Source/paths.h.in ${CMAKE_BINARY_DIR}/paths.h)
@@ -80,6 +78,33 @@ include_directories(${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/JUCE EXCLUDE_FROM_ALL)
 juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
+
+# =========================== Build JsonCpp =============================
+
+#list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp")
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp EXCLUDE_FROM_ALL)
+
+#find_package(jsoncpp REQUIRED)
+#pkg_check_modules(jsoncpp jsoncpp)
+
+# get_target_property(
+#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include 
+#   jsoncpp_lib 
+#   INTERFACE_INCLUDE_DIRECTORIES
+# )
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include)
+
+# pkg_check_modules(JsonCpp jsoncpp)
+
+#link_libraries(${PkgConfig_LIBRARIES})
+
+
+# include_directories(
+#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include
+#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/src
+# )
 
 # =================================== Build Tensorflow =====================================
 
@@ -111,12 +136,8 @@ add_subdirectory(Source)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 
-# set(CATCH_USE_STDLIB_MODULE ON)
-# set(CATCH_DEVELOPMENT_BUILD ON)
-# set(CATCH_BUILD_TESTING ON)
 # set(CATCH_BUILD_EXAMPLES ON)
 # set(CATCH_ENABLE_WERROR OFF)
-# add_definitions("-std=c++17")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
 include(Catch)

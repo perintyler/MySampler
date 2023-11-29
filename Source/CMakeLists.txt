@@ -62,7 +62,7 @@ target_compile_definitions(audio-plugin
 # ====================== Source Files ========================
 
 file(GLOB audio-plugin_SOURCES 
-    "*.h" "*.cpp" "pitch_detection/*.h" "pitch_detection/*.cpp" "gui/*.h" "gui/*.cpp" "JsonCpp/jsoncpp.cpp" "JsonCpp/json/*.h")
+    "*.h" "*.cpp" "pitch_detection/*.h" "pitch_detection/*.cpp" "gui/*.h" "gui/*.cpp")
 
 if(PITCH_DETECTION STREQUAL "YIN")
     list(APPEND audio-plugin_SOURCES "pitch_detection/yin.h")
@@ -92,6 +92,7 @@ set(audio-plugin_LIBRARIES
     juce::juce_audio_utils
     juce::juce_dsp
     ff_meters
+    jsoncpp_lib
 )
 
 if(PITCH_DETECTION STREQUAL "CREPE")

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "../JsonCpp/json/json.h"
+#include <json/json.h>
 
 #include "pitch_detection.h"
 #include "exceptions.h"
