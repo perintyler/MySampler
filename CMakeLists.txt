@@ -12,6 +12,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
+set(CMAKE_INSTALL_PREFIX /usr/local)
+
 # ================================= Installation ===================================
 
 set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
