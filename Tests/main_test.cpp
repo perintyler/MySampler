@@ -1,4 +1,7 @@
-import std;
+#include <cstdint>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 #include <catch2/catch_session.hpp>
 
