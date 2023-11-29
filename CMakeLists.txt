@@ -4,7 +4,7 @@ project(MySampler C CXX)
 
 # ============================ Define Compiler Flags ==============================
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(ABSL_PROPAGATE_CXX_STD 1)
 
@@ -124,7 +124,7 @@ include(CTest)
 target_compile_definitions(Catch2 PRIVATE CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PRIVATE CATCH_DEVELOPMENT_BUILD=ON)
 target_compile_definitions(Catch2 PRIVATE CATCH_BUILD_TESTING=ON)
-target_compile_definitions(Catch2 PRIVATE std=c++17)
+target_compile_definitions(Catch2 PRIVATE std=c++23)
 
 enable_testing()
 add_subdirectory(Tests)
