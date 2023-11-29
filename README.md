@@ -1,8 +1,8 @@
 # MySampler
 
-[![Build & Test GNU](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-gnu.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-gnu.yml)
+[![Build & Test (Clang)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-with-clang.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-with-clang.yml)
 
-[![Build & Test GCC](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-gcc.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-gcc.yml)
+[![Build & Test (GCC)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-with-gcc.yml/badge.svg)](https://github.com/perintyler/MySampler/actions/workflows/build-and-test-with-gcc.yml)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/perintyler/MySampler/pulls) &nbsp; 😀
 
