@@ -14,6 +14,8 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX /usr/local)
 
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
 # ================================= Installation ===================================
 
 set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
@@ -104,9 +106,20 @@ cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
 
 add_subdirectory(Source)
 
-# ===================================== Build Unit Tests =====================================
+# ===================================== Tests Subdirectory =====================================
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
+enable_testing()
+
+set(CATCH_USE_STDLIB_MODULE ON)
+set(CATCH_DEVELOPMENT_BUILD ON)
+set(CATCH_BUILD_TESTING ON)
+set(CATCH_BUILD_EXAMPLES ON)
+set(CATCH_ENABLE_WERROR OFF)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
+
+include(Catch)
+include(CTest)
+
 add_subdirectory(Tests)
