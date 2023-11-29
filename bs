@@ -54,6 +54,8 @@ LIST_TESTS=false;
 
 USE_LOG=false;
 
+PLUGIN_FORMATS="VST3;AU;Standalone"
+
 ###########################################################################################
 # stdout helper functions
 ###########################################################################################
@@ -145,11 +147,12 @@ print_help_message()
     echo "p   Sets the CMake build type to 'Production' (default is 'Debug')";
     echo "e   Enables GPU for tensorflow operations (applicable for SPICE/CREPE pitch detection models)";
     echo "g   Compile with GCC (default is Clang)";
-    echo "f   Only run fast tests (i.e. no pitch detection tests)";
+    echo "x   Only run fast tests (i.e. no pitch detection tests)";
     echo "l   Use the debug log, which writes verbose messages to a local logfile";
     echo "u   Can be used to pass Catch2 CLI arguments into the unit test executable";
     echo "n   Clear terminal window and scrollback before building"
     echo "h   Print out a build script help message";
+    echo "f   Can be used to specify which plugin formats to build (e.g. 'VST AU')"
 }
 
 ###########################################################################################
@@ -166,7 +169,10 @@ make_parameters="audio-plugin";
 
 cmake_piano960() 
 {
-    cmake_command_arguments="-DCMAKE_INSTALL_PREFIX=$MYSAMPLER_INSTALL_PREFIX -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
+    cmake_command_arguments=""
+    cmake_command_arguments="${cmake_command_arguments} -DCMAKE_INSTALL_PREFIX=$MYSAMPLER_INSTALL_PREFIX";
+    cmake_command_arguments="${cmake_command_arguments} -DPITCH_DETECTION=${PITCH_DETECTION_ALGO}";
+    cmake_command_arguments="${cmake_command_arguments} -DMYSAMPLER_FORMATS='${PLUGIN_FORMATS}'";
 
     if [ "$ENABLE_GPU" = true ]; then
         cmake_command_arguments="${cmake_command_arguments} -DTFLITE_ENABLE_GPU=ON";
@@ -220,7 +226,7 @@ make_piano960()
 
 # 1) ================================= Parse CLI Options =================================
 
-while getopts "vscit23pegatfalu:xbhn" option; do
+while getopts "vscit23pegatfalu:xbhnf:" option; do
     case $option in
       b) BUILD=true;;
       v) VERBOSE=true;;
@@ -234,11 +240,12 @@ while getopts "vscit23pegatfalu:xbhn" option; do
       e) ENABLE_GPU=true;;
       g) USE_GCC=true;;
       a) ABORT_AFTER_FIRST_TEST_FAILURE=true;;
-      f) ONLY_RUN_FAST_TESTS=true;;
+      x) ONLY_RUN_FAST_TESTS=true;;
       l) USE_LOG=true;;
       u) catch2_args=${OPTARG};;
       n) bash $MYSAMPLER_REPO/Scripts/clear_terminal.sh;;
       h) print_help_message; exit;;
+      f) PLUGIN_FORMATS=${OPTARG};;
     esac
 done
 
