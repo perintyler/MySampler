@@ -25,12 +25,12 @@ https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-
 ## Supported Formats:
 
 - [AU](https://en.wikipedia.org/wiki/Audio_Units)
-- [AUv3]()
-- [AAX]()
+- [AUv3](https://developer.apple.com/documentation/audiotoolbox/audio_unit_v3_plug-ins)
+- [AAX](https://apps.avid.com/aax-portal/)
 - [VST](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
 - [VST3](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
-- [Unity]()
-- [Standalone]()
+- [Unity](https://en.wikipedia.org/wiki/Unity_(game_engine))
+- [Standalone](https://en.wikipedia.org/wiki/Audio_plug-in)
 
 ## Requirements
 
