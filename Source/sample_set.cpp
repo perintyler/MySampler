@@ -2,14 +2,14 @@
 
 #include "sample_set.h"
 
-bool SampleSet::has(Note key) const
+bool SampleSet::has(Note note) const
 {
-    return find(key) != end();
+    return find(note) != end();
 }
 
 const Sample& SampleSet::get(Note note) const 
 {
-    assert(count(note) != 0);
+    assert(has(note));
     return at(note);
 }
 
@@ -18,10 +18,10 @@ int SampleSet::length() const
     return static_cast<int>(size());
 }
 
-void SampleSet::set(Note key, std::filesystem::path filepath, Note rootNote)
+void SampleSet::set(Note note, std::filesystem::path filepath, Note rootNote)
 {
     std::string sampleName = filepath.stem().string();
-    insert_or_assign(key, Sample{sampleName, filepath, rootNote});
+    insert_or_assign(note, Sample{sampleName, filepath, rootNote});
 }
 
 std::vector<NoteAndSample> SampleSet::asVector() const
