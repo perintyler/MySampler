@@ -8,13 +8,13 @@ file(GLOB test_sources
     "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/json/*.h"
 )
 
-target_compile_definitions(mysampler PRIVATE TESTMODE=1)
+target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
 add_executable(unit-tests ${test_sources})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        mysampler
+        audio-plugin
         Catch2::Catch2
 )
 
