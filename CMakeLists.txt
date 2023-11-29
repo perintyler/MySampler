@@ -6,16 +6,12 @@ project(MySampler C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-# set(CMAKE_CXX_EXTENSIONS OFF)
-# set(ABSL_PROPAGATE_CXX_STD 1)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
 set(CMAKE_INSTALL_PREFIX /usr/local)
-
-# set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 if(PITCH_DETECTION STREQUAL "CREPE")
   add_compile_definitions(CREPE_MODEL)
@@ -79,22 +75,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/JUCE EXCLUDE_FROM_ALL)
 juce_add_module(${CMAKE_SOURCE_DIR}/Libraries/ff_meters)
 
-# =========================== Build JsonCpp =============================
+# ====================================== JsonCpp ========================================
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp EXCLUDE_FROM_ALL)
-
-# get_target_property(
-#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include 
-#   jsoncpp_lib 
-#   INTERFACE_INCLUDE_DIRECTORIES
-# )
-
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include)
-
-# include_directories(
-#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/include
-#   ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/jsoncpp/src
-# )
 
 # =================================== Build Tensorflow =====================================
 
@@ -136,7 +119,6 @@ include(CTest)
 target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=ON)
-# target_compile_features(Catch2 PUBLIC cxx_std_23)
 
 enable_testing()
 add_subdirectory(Tests)
