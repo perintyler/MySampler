@@ -1,6 +1,7 @@
 /*** Piano960 Tests | sampler_tests.cpp ***/
 
 #include <filesystem>
+#include <stdint.h>
 
 #include <catch2/catch_test_macros.hpp>
 

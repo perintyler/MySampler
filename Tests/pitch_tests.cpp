@@ -6,6 +6,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <stdint.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <juce_audio_formats/juce_audio_formats.h>
