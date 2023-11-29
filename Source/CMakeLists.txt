@@ -54,6 +54,9 @@ target_compile_definitions(audio-plugin
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+    JUCE_LOG_ASSERTIONS=1
+    JUCE_STRICT_REFCOUNTEDPOINTER=1
 )
 
 # ====================== Source Files ========================
