@@ -4,7 +4,7 @@ project(MySampler C CXX)
 
 # ============================ Define Compiler Flags ==============================
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(ABSL_PROPAGATE_CXX_STD 1)
 
