@@ -82,5 +82,5 @@ endif()
 cmake_print_variables(audio-plugin_LIBRARIES)
 
 target_link_libraries(audio-plugin PRIVATE ${audio-plugin_LIBRARIES})
-set_target_properties(audio-pluginBinaryData audio-plugin POSITION_INDEPENDENT_CODE TRUE)
+set_target_properties(audio-pluginBinaryData PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
