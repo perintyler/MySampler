@@ -8,6 +8,8 @@ file(GLOB test_sources
     "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/json/*.h"
 )
 
+set(CATCH_USE_STDLIB_MODULE ON)
+
 target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
 add_executable(unit-tests ${test_sources})
@@ -17,4 +19,3 @@ target_link_libraries(${PROJECT_NAME}
         audio-plugin
         Catch2::Catch2
 )
-
