@@ -25,9 +25,12 @@ https://user-images.githubusercontent.com/19389561/207800053-8ebb1fd1-1be0-4011-
 ## Supported Formats:
 
 - [AU](https://en.wikipedia.org/wiki/Audio_Units)
+- [AUv3]()
+- [AAX]()
 - [VST](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
 - [VST3](https://en.wikipedia.org/wiki/Virtual_Studio_Technology)
-- Standalone
+- [Unity]()
+- [Standalone]()
 
 ## Requirements
 
@@ -58,6 +61,12 @@ cmake ..
 make install audio-plugin
 ```
 
+By default, this will build build a `VST3`, `AU`, and `Standalone` version of the plugin, but the formats can be specified with a `MYSAMPLER_FORMATS` cmake argument. (see supported formats section above). When specifying more than one format, use a semi-colon deliniated list.
+
+```bash
+make audio-plugin -DMYSAMPLER_FORMATS "VST;Standalone"
+```
+
 ### Using the Build Script
 
 You can also build mysampler with the build script: `./bs`. These are the supported cli options:
@@ -73,11 +82,12 @@ You can also build mysampler with the build script: `./bs`. These are the suppor
 - `p`: Sets the CMake build type to 'Production' (default is 'Debug')
 - `e`: Enables GPU for tensorflow operations (applicable for SPICE/CREPE pitch detection models)
 - `g`: Compile with GCC (default is Clang)
-- `f`: Only run fast tests (i.e. no pitch detection tests)
+- `x`: Only run fast tests (i.e. no pitch detection tests)
 - `l`: Use the debug log, which writes verbose messages to a local logfile
 - `u`: Can be used to pass Catch2 CLI arguments into the unit test executable
 - `n`: Clear terminal window and scrollback before building
 - `h`: Print out a build script help message
+- `f`: Can be used to specify which plugin formats to build (e.g. 'VST AU')
 
 ### Unit Testing
 
