@@ -110,7 +110,8 @@ add_subdirectory(Source)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 
-add_definitions("-std=c++11")
+add_definitions("-std=c++17")
+
 add_subdirectory(${CMAKE_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
 
 include(Catch)
