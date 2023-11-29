@@ -110,16 +110,11 @@ add_subdirectory(Source)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
 
-enable_testing()
-
-set(-DCATCH_USE_STDLIB_MODULE ON)
-set(-DCATCH_DEVELOPMENT_BUILD ON)
-set(-DCATCH_BUILD_TESTING ON)
-set(-DCATCH_BUILD_EXAMPLES ON)
-set(-DCATCH_ENABLE_WERROR OFF)
+add_definitions("-std=c++11")
 add_subdirectory(${CMAKE_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
 
 include(Catch)
 include(CTest)
 
+enable_testing()
 add_subdirectory(Tests)

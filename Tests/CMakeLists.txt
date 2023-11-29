@@ -8,8 +8,6 @@ file(GLOB test_sources
     "${CMAKE_SOURCE_DIR}/Tests/JsonCpp/json/*.h"
 )
 
-add_definitions("-std=c++11")
-
 target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
 add_executable(unit-tests ${test_sources})
