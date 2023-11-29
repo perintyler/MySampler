@@ -3,12 +3,7 @@
     {
       "assignedKey" : 42,
       "detectedNote" : 60,
-      "pathToSample" : "/usr/local/include/MySampler/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ coast.wav"
-    },
-    {
-      "assignedKey" : 52,
-      "detectedNote" : 65,
-      "pathToSample" : "/usr/local/include/MySampler/samples/Trumpet/instrument-oneshots-by-fredricch.leads.trumpet ~ broken.wav"
+      "pathToSample" : "/usr/local/include/MySampler/samples/Pad/instrument-oneshots-by-fredricch.pads.pad ~ tropical.wav"
     },
     {
       "assignedKey" : 54,
@@ -18,14 +13,14 @@
     {
       "assignedKey" : 58,
       "detectedNote" : 72,
-      "pathToSample" : "/usr/local/include/MySampler/samples/Vocal/oneshots-from-songs-by-allstar2x.Kodak, French Montana - Lockjaw VO (90BPM).wav"
+      "pathToSample" : "/usr/local/include/MySampler/samples/Guitar/eclipse-oneshots-by-kindobands.Guitars.Guitar (185).wav"
     }
   ],
   "default-preset-2": [
     {
       "assignedKey" : 59,
       "detectedNote" : 79,
-      "pathToSample" : "/usr/local/include/MySampler/samples/World/instruments-of-the-world.slur (m) G5.wav"
+      "pathToSample" : "/usr/local/include/MySampler/samples/Trumpet/oneshots-from-songs-by-allstar2x.Eminem, Joyner Lucas - Lucky You French Horn.wav"
     },
     {
       "assignedKey" : 60,
