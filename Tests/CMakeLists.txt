@@ -12,10 +12,6 @@ target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
 add_executable(unit-tests ${test_sources})
 
-target_compile_features(unit-tests PUBLIC cxx_std_23)
-set_target_properties(unit-tests PROPERTIES CXX_STANDARD_REQUIRED ON)
-set_target_properties(unit-tests PROPERTIES CXX_EXTENSIONS OFF)
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         audio-plugin
