@@ -267,12 +267,6 @@ else
     COMPILER_NAME="Clang"
 fi
 
-if [ "$RUN_TESTS" = true ]; then
-    BUILD_TARGETS="audio-plugin, unit-tests";
-else
-    BUILD_TARGETS="audio-plugin";
-fi
-
 print_newline;
 print_n_times 101 "="; print_newline;
 print "|<><><><><><><><><><><><><><><><><><><><><><> My Sampler <><><><><><><><><><><><><><><><><><><><><><>"
@@ -281,11 +275,13 @@ print "| - Build Type: $BUILD_TYPE";
 print "| "
 print "| - Compiler: $COMPILER_NAME";
 print "| ";
-print "| - Build Target(s): $BUILD_TARGETS";
+print "| - Build Target(s): ${make_parameters// /, }";
 print "| ";
 print "| - Build Directory: $BUILD_DIRECTORY";
 print "| ";
 print "| - Pitch Detection Algorithm: $PITCH_DETECTION_ALGO";
+print "| ";
+print "| - Build Format(s): ${PLUGIN_FORMATS//;/, }"
 print "| ";
 print -n "|"; print_n_times 50 "<>"; print_newline;
 print_n_times 101 "="; print_newline;
