@@ -12,7 +12,7 @@ target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
 
 add_executable(unit-tests ${test_sources})
 
-add_definitions("-std=c++17")
+add_definitions("-std=c++23")
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
