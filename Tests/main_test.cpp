@@ -1,3 +1,5 @@
+#define CATCH_CONFIG_MAIN
+
 #include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
