@@ -107,5 +107,9 @@ add_subdirectory(Source)
 
 # ===================================== Tests Subdirectory =====================================
 
+
 add_subdirectory(${CMAKE_SOURCE_DIR}/Libraries/Catch2 EXCLUDE_FROM_ALL)
+#set(Catch2_DIR ${CMAKE_SOURCE_DIR}/Libraries/Catch2)
+#find_package(Catch2 3 REQUIRED)
+
 add_subdirectory(Tests)
