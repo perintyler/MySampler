@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.16)
 
 project("unit-tests")
 
-list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
+# list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 # set(CATCH_BUILD_EXAMPLES ON)
 # set(CATCH_ENABLE_WERROR OFF)
 
 include(Catch)
-# include(CTest)
+include(CTest)
 
 target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
