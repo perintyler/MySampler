@@ -30,4 +30,5 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         audio-plugin
         jsoncpp_lib
+        Catch2::Catch2
 )
