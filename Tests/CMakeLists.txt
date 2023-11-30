@@ -11,7 +11,7 @@ project("unit-tests")
 # include(Catch)
 # include(CTest)
 
-# target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
+target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
 # target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
 # target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=ON)
 # target_compile_definitions(Catch2 PUBLIC CATCH_ENABLE_WERROR=OFF)
