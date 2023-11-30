@@ -21,6 +21,8 @@ else()
   add_compile_definitions(YIN_ALGO)
 endif()
 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+
 # ================================= Installation ===================================
 
 set(MYSAMPLER_INSTALLATION_PATH "include/${PROJECT_NAME}")
