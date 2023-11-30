@@ -18,7 +18,7 @@ target_compile_definitions(Catch2 PUBLIC CATCH_ENABLE_WERROR=OFF)
 
 # add_library(catch2 INTERFACE)
 
-# enable_testing()
+enable_testing()
 
 file(GLOB test_sources "${CMAKE_SOURCE_DIR}/Tests/*.cpp")
 
