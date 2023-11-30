@@ -13,6 +13,7 @@ include(CTest)
 target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=OFF)
+target_compile_definitions(Catch2 PUBLIC CATCH_ENABLE_WERROR=OFF 
 target_compile_features(Catch2 PRIVATE cxx_std_17)
 
 add_library(catch2 INTERFACE)
