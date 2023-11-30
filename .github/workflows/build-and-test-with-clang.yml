@@ -8,7 +8,7 @@ jobs:
       with:
         submodules: recursive
     - name: Install Dependencies
-      run: sudo apt-get install -y libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libasound2-dev libg++
+      run: sudo apt-get install -y libgcursor-dev libgrandr-dev libginerama-dev libgi-dev libasound2-dev libg++
 
     - name: Create Build Directory
       run: mkdir ${{github.workspace}}/build
