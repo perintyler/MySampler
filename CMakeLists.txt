@@ -5,7 +5,7 @@ project(MySampler C CXX)
 # ============================ Define Compiler Flags ==============================
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED YES)
+# set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -20,8 +20,6 @@ elseif(PITCH_DETECTION STREQUAL "SPICE")
 else()
   add_compile_definitions(YIN_ALGO)
 endif()
-
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
 
 # ================================= Installation ===================================
 
