@@ -2,6 +2,20 @@ cmake_minimum_required(VERSION 3.16)
 
 project("unit-tests")
 
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/contrib")
+
+# set(CATCH_BUILD_EXAMPLES ON)
+# set(CATCH_ENABLE_WERROR OFF)
+
+include(Catch)
+include(CTest)
+
+target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
+target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
+target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=OFF)
+
+enable_testing()
+
 file(GLOB test_sources "${CMAKE_SOURCE_DIR}/Tests/*.cpp")
 
 target_compile_definitions(audio-plugin PRIVATE TESTMODE=1)
