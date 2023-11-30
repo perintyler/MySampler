@@ -16,7 +16,7 @@ target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_ENABLE_WERROR=OFF)
 # target_compile_features(Catch2 PUBLIC cxx_std_17)
 
-add_library(catch2 INTERFACE)
+# add_library(catch2 INTERFACE)
 
 enable_testing()
 
