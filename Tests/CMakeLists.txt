@@ -7,7 +7,7 @@ list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/con
 # set(CATCH_BUILD_EXAMPLES ON)
 # set(CATCH_ENABLE_WERROR OFF)
 
-# include(Catch)
+include(Catch)
 # include(CTest)
 
 target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
