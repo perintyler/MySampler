@@ -8,13 +8,13 @@ list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/Catch2/con
 # set(CATCH_ENABLE_WERROR OFF)
 
 include(Catch)
-include(CTest)
+# include(CTest)
 
 target_compile_definitions(Catch2 PUBLIC CATCH_USE_STDLIB_MODULE=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_DEVELOPMENT_BUILD=ON)
-target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=OFF)
+target_compile_definitions(Catch2 PUBLIC CATCH_BUILD_TESTING=ON)
 target_compile_definitions(Catch2 PUBLIC CATCH_ENABLE_WERROR=OFF)
-target_compile_features(Catch2 PUBLIC cxx_std_17)
+# target_compile_features(Catch2 PUBLIC cxx_std_17)
 
 add_library(catch2 INTERFACE)
 
